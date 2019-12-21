@@ -1,4 +1,5 @@
 import random
+import numpy as np
 
 from GudhiExtension.alpha_complex_wrapper import alpha_complex_wrapper
 
@@ -16,6 +17,7 @@ class computation_handler:
             points.add(point)
 
         self.points=[list(elem) for elem in points]
+        self.compute_alpha()
         print("Genereated points: ")
         print(self.points)
         print('__________________________________________________________')
@@ -27,6 +29,7 @@ class computation_handler:
             points.add(point)
 
         self.points = [list(elem) for elem in points]
+        self.compute_alpha()
         print("Genereated points: ")
         print(self.points)
         print('__________________________________________________________')
@@ -38,3 +41,36 @@ class computation_handler:
     def compute_alpha(self):
         self.alpha = alpha_complex_wrapper(self.points)
         print("Generated alpha complex")
+
+    def column_algorithm(self, filtered_boundary_matrix):
+
+        algorithm_step_count = 0
+
+        n = filtered_boundary_matrix.shape[0]
+        reduced_mat = np.copy(filtered_boundary_matrix)
+        upper_tri = np.identity(n, dtype=int)
+
+        for i in range(n):
+            column_reduction = True
+            while column_reduction:
+                column_reduction = False
+
+                for k in range(i):
+                    low = self.lowest_index(reduced_mat[:, i])
+                    if low != -1 and self.lowest_index(filtered_boundary_matrix[:,k]) == low:
+                        reduced_mat[:,i] = (reduced_mat[:,k] - reduced_mat[:,i]) % 2
+                        upper_tri[:,i] -= upper_tri[:,k]
+                        column_reduction = True
+                        algorithm_step_count += 1
+
+        return algorithm_step_count
+
+
+    #Returns the index of the lowest 1 in a given column. Returns the index of the LAST row
+    def lowest_index(self, arr):
+        farr = np.flip(arr)
+        idx = np.where(farr == 1)
+        if(len(idx[0]) == 0):
+            return -1
+        else:
+            return len(arr) - idx[0][0] - 1

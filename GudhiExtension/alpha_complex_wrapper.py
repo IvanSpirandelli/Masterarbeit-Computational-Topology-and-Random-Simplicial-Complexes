@@ -27,13 +27,12 @@ class alpha_complex_wrapper():
             index_set[tuple(simplex)] = counter
             counter+=1
             if(dim > 0):
-                print(simplex)
                 for i in range(dim-1,0,-1):
                     for combi in it.combinations(simplex, i):
                         mat[index_set[combi], index_set[tuple(simplex)]] = 1
 
 
-        print(mat)
+        return mat
 
     def get_all_filtration_steps(self):
         simplices = [[]]
