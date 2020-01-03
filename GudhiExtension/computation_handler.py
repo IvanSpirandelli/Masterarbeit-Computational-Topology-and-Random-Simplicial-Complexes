@@ -1,5 +1,6 @@
 import random
 import numpy as np
+import itertools as it
 
 from GudhiExtension.alpha_complex_wrapper import alpha_complex_wrapper
 
@@ -18,9 +19,9 @@ class computation_handler:
 
         self.points=[list(elem) for elem in points]
         self.compute_alpha()
-        print("Genereated points: ")
-        print(self.points)
-        print('__________________________________________________________')
+        #print("Genereated points: ")
+        #print(self.points)
+        #print('__________________________________________________________')
 
     def generate_n_points(self, n, dim):
         points = set()
@@ -30,9 +31,9 @@ class computation_handler:
 
         self.points = [list(elem) for elem in points]
         self.compute_alpha()
-        print("Genereated points: ")
-        print(self.points)
-        print('__________________________________________________________')
+        #print("Genereated points: ")
+        #print(self.points)
+        #print('__________________________________________________________')
 
     def set_points(self, points):
         self.points = points
@@ -40,7 +41,7 @@ class computation_handler:
 
     def compute_alpha(self):
         self.alpha = alpha_complex_wrapper(self.points)
-        print("Generated alpha complex")
+        #print("Generated alpha complex")
 
     def column_algorithm(self, filtered_boundary_matrix):
 
@@ -65,7 +66,6 @@ class computation_handler:
 
         return algorithm_step_count
 
-
     #Returns the index of the lowest 1 in a given column. Returns the index of the LAST row
     def lowest_index(self, arr):
         farr = np.flip(arr)
@@ -74,3 +74,18 @@ class computation_handler:
             return -1
         else:
             return len(arr) - idx[0][0] - 1
+
+    def build_boundary_matrix_from_filtration(self, filtration):
+        mat = np.zeros(shape=(len(filtration), len(filtration)), dtype=int)
+        index_set = {(): -1}
+        counter = 0
+        for simplex in filtration:
+            dim = len(simplex)
+            index_set[tuple(simplex)] = counter
+            counter += 1
+            if (dim > 0):
+                for i in range(dim - 1, 0, -1):
+                    for combi in it.combinations(simplex, i):
+                        mat[index_set[combi], index_set[tuple(simplex)]] = 1
+
+        return mat

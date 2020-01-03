@@ -17,7 +17,7 @@ class alpha_complex_wrapper():
 
         self.filtration = self.simplex_tree.get_filtration()
 
-    def build_boundary_matrix(self):
+    def get_boundary_matrix(self):
         mat = np.zeros(shape=(len(self.filtration),len(self.filtration)), dtype=int)
         index_set = {() : -1}
         counter = 0
@@ -81,20 +81,14 @@ class alpha_complex_wrapper():
         #Each next list in simplices contains the simplices added at distance 'dist_at_index'
         last_dist = dist_at_index
         while index != len(self.filtration):
-            #print("Index: ", index)
-            #print("Last_Dist ", last_dist)
+
             dist_at_index = self.filtration[index][1]
 
-            #print("Dist at Index ", dist_at_index)
-
-            #print("***************************************************")
             if(dist_at_index != last_dist):
                 last_dist = dist_at_index
                 filtration_step +=1
                 simplices.append([])
 
-            #print("Appended Simplex: ", self.filtration[index][0])
-            #print("In filtration step: ", filtration_step)
             simplices[filtration_step].append(self.filtration[index][0])
             index+=1
         #Cutting off last empty list and returning
