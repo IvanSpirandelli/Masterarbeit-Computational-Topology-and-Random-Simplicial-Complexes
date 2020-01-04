@@ -6,7 +6,8 @@ from PySide2.QtCore import QCoreApplication
 from CustomQWidgets.filtration_tab_widget import FiltrationTabWidget
 from CustomQWidgets.persistence_graphs_tab_widget import PersistenceGraphsTabWidget
 from CustomQWidgets.setup_tab_widget import SetupTabWidget
-from GudhiExtension.computation_handler import computation_handler
+from GudhiExtension.alpha_complex_wrapper import alpha_complex_wrapper
+from GudhiExtension.point_cloud_generator import point_cloud_generator
 
 
 class PlotSliderWindow(QMainWindow):
@@ -16,7 +17,8 @@ class PlotSliderWindow(QMainWindow):
         self.setCentralWidget(self._main)
         self.setMinimumSize(800,800)
 
-        self.computation_handler = computation_handler(True)
+        self.point_cloud = point_cloud_generator()
+        self.alpha_complex = alpha_complex_wrapper()
 
         self.setup_tab = SetupTabWidget(self)
         self.persistence_graphs = PersistenceGraphsTabWidget(self)
@@ -26,7 +28,7 @@ class PlotSliderWindow(QMainWindow):
 
 
     def generate_filtration_tab(self):
-        filtration_tab = FiltrationTabWidget(self.computation_handler)
+        filtration_tab = FiltrationTabWidget(self.alpha_complex)
         self._main.addTab(filtration_tab, "Filtration")
 
     def update_persistence_graphs(self):

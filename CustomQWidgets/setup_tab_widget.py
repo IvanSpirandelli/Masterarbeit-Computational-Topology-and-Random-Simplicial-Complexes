@@ -16,8 +16,8 @@ class SetupTabWidget(QWidget):
 
         point_set_generation_box = QGroupBox("Point Set Generation")
         point_set_generation_layout = QVBoxLayout(point_set_generation_box)
-        point_cloud_generator = PointCloudGenerationWidget(self, self.main_ui.computation_handler)
-        point_set_generation_layout.addWidget(point_cloud_generator)
+        point_cloud_widget = PointCloudGenerationWidget(self, self.main_ui.point_cloud, self.main_ui.alpha_complex)
+        point_set_generation_layout.addWidget(point_cloud_widget)
         point_set_generation_box.setMaximumWidth(200)
         point_set_generation_box.setMaximumHeight(250)
         self.layout.addWidget(point_set_generation_box)

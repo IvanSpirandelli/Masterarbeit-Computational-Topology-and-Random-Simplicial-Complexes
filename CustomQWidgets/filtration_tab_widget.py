@@ -10,11 +10,11 @@ from CustomQWidgets.filtration_stack_widget import FiltrationStackWidget
 
 
 class FiltrationTabWidget(QWidget):
-    def __init__(self, comp_handler):
+    def __init__(self, alpha_complex):
         super().__init__()
-        self.comp_handler = comp_handler
+        self.alpha_complex = alpha_complex
 
-        self.canvas_stack = FiltrationStackWidget(self, self.comp_handler.points, self.comp_handler.alpha.simplex_tree)
+        self.canvas_stack = FiltrationStackWidget(self, self.alpha_complex.points, self.alpha_complex.simplex_tree)
 
         self.slider = QSlider(Qt.Horizontal)
         self.slider.setMinimum(0)

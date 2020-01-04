@@ -7,7 +7,6 @@ class alpha_complex_wrapper():
         self.points = points
         self.complex = gudhi.AlphaComplex(self.points)
         self.simplex_tree = self.complex.create_simplex_tree()
-
         self.computed_persistence = compute_persistance_on_init;
 
         if(self.computed_persistence):

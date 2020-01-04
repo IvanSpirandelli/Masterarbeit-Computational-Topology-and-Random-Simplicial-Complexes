@@ -3,9 +3,9 @@ from datetime import datetime
 from subprocess import Popen, PIPE
 
 from GudhiExtension.alpha_complex_wrapper import alpha_complex_wrapper
-from GudhiExtension.computation_handler import computation_handler
+from GudhiExtension.point_cloud_generator import point_cloud_generator
 
-ch = computation_handler()
+ch = point_cloud_generator()
 outlines = []
 now = datetime.now()
 for i in range(5000):

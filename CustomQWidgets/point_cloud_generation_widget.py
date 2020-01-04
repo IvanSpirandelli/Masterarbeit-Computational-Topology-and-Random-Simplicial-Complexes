@@ -9,12 +9,14 @@ from PySide2.QtWidgets import (QVBoxLayout, QWidget, QSlider, QGridLayout, QLine
 from PySide2.QtCore import Slot, Qt, QSize
 
 from CustomQWidgets.filtration_stack_widget import FiltrationStackWidget
+from GudhiExtension.alpha_complex_wrapper import alpha_complex_wrapper
+
 
 class PointCloudGenerationWidget(QWidget):
-    def __init__(self, parent, comp_handle):
+    def __init__(self, parent, point_cloud_generator, alpha_complex):
         super().__init__()
         self.parent = parent
-        self.comp_handle = comp_handle
+        self.generator = point_cloud_generator
 
         self.setWindowTitle("Point generation")
 
@@ -71,15 +73,15 @@ class PointCloudGenerationWidget(QWidget):
 
     @Slot()
     def generate_points_clicked(self):
+
         if(self.grid_check.isChecked()):
-            self.comp_handle.generate_n_gridpoints_of_dim_with_dilation(
+            self.parent.main_ui.alpha_complex = alpha_complex_wrapper(self.generator.generate_n_gridpoints_of_dim_with_dilation(
                 int(self.num_of_points.text()),
                 int(self.dimension.text()),
-                int(self.dilation.text()))
-            self.comp_handle.compute_alpha()
+                int(self.dilation.text())))
         else:
-            self.comp_handle.generate_n_points(
+            self.parent.main_ui.alpha_complex = alpha_complex_wrapper(self.generator.generate_n_points(
                 int(self.num_of_points.text()),
-                int(self.dimension.text()))
-            self.comp_handle.compute_alpha()
+                int(self.dimension.text())))
+
         self.parent.main_ui.update_persistence_graphs()

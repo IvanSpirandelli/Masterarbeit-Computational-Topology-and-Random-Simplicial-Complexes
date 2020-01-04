@@ -3,7 +3,10 @@ import time
 from datetime import datetime
 from copy import deepcopy
 import itertools as it
-from GudhiExtension.computation_handler import computation_handler
+
+from GudhiExtension.alpha_complex_wrapper import alpha_complex_wrapper
+from GudhiExtension.column_algorithm import column_algorithm
+from GudhiExtension.point_cloud_generator import point_cloud_generator
 
 dunce_hat = [
     [0],[1],[2],[3],[4],[5],[6],[7],
@@ -51,7 +54,7 @@ def connect_shift_and_append_filtration(filtration, connection, shift, steps):
     return out_fil
 
 def analize_dunce_wedge():
-    ch = computation_handler()
+    ca = column_algorithm()
     fig, axs = plt.subplots(2)
     x = []
     sim = []
@@ -60,7 +63,7 @@ def analize_dunce_wedge():
     for i in range(20):
         dunce_wedge = connect_shift_and_append_filtration(dunce_hat, 0, 7,i)
         pre_algo = time.time()
-        steps = ch.column_algorithm(ch.build_boundary_matrix_from_filtration(dunce_wedge))
+        steps = ca.column_algorithm(ca.build_boundary_matrix_from_filtration(dunce_wedge))
         y.append(steps)
         post_algo = time.time()
 
@@ -77,9 +80,9 @@ def analize_dunce_wedge():
 
     plt.show()
 
-def analize_random_points():
-    ch = computation_handler()
-    outlines = []
+def analize_random_points(max_count):
+    pcg = point_cloud_generator()
+
     fig, axs = plt.subplots(2)
     x = []
     sim = []
@@ -87,7 +90,7 @@ def analize_random_points():
 
 
     with open("../Experiments/Results/greedy_analysis_" + str(datetime.now()) + ".txt", "w+") as file:
-        for i in range(3,70):
+        for i in range(3,max_count):
             ###
             stepline = "---"+ str(i) +"/125---"
             file.write(stepline)
@@ -95,19 +98,21 @@ def analize_random_points():
             curr_t = time.time()
             ###
 
-            ch.generate_n_points(i,3)
+            points = pcg.generate_n_points(i,3)
 
             ###
             point_t = time.time()
             pointline = str(i) + " points generated in " + str(point_t-curr_t) + " seconds: "
             file.write(pointline)
-            file.write(str(ch.points))
+            file.write(str(points))
             print(pointline)
-            print(ch.points)
+            print(points)
             ###
 
+            alpha = alpha_complex_wrapper(pcg.points)
+
             pre_algo = time.time()
-            steps = ch.column_algorithm(ch.alpha.get_boundary_matrix())
+            steps = column_algorithm(alpha.get_boundary_matrix())
             y.append(steps)
             post_algo = time.time()
 
@@ -116,11 +121,11 @@ def analize_random_points():
             print(res_line)
 
             x.append(i)
-            sim.append(len(ch.alpha.filtration))
+            sim.append(len(alpha.filtration))
 
     axs[0].scatter(x,y)
     axs[1].scatter(sim,y)
 
     plt.show()
 
-analize_dunce_wedge()
+analize_random_points(10)
