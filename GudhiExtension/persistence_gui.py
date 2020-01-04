@@ -7,7 +7,7 @@ from CustomQWidgets.filtration_tab_widget import FiltrationTabWidget
 from CustomQWidgets.persistence_graphs_tab_widget import PersistenceGraphsTabWidget
 from CustomQWidgets.setup_tab_widget import SetupTabWidget
 from GudhiExtension.alpha_complex_wrapper import alpha_complex_wrapper
-from GudhiExtension.point_cloud_generator import point_cloud_generator
+import GudhiExtension.point_cloud_generator
 
 
 class PlotSliderWindow(QMainWindow):
@@ -17,8 +17,8 @@ class PlotSliderWindow(QMainWindow):
         self.setCentralWidget(self._main)
         self.setMinimumSize(800,800)
 
-        self.point_cloud = point_cloud_generator()
-        self.alpha_complex = alpha_complex_wrapper()
+        self.point_cloud = [[0,0],[1,0],[0,1]]
+        self.alpha_complex = alpha_complex_wrapper(self.point_cloud)
 
         self.setup_tab = SetupTabWidget(self)
         self.persistence_graphs = PersistenceGraphsTabWidget(self)
@@ -34,6 +34,11 @@ class PlotSliderWindow(QMainWindow):
     def update_persistence_graphs(self):
         self.persistence_graphs.update()
         QCoreApplication.processEvents()
+
+    def set_point_cloud(self, points):
+        self.point_cloud = points
+        self.alpha_complex = alpha_complex_wrapper(self.point_cloud)
+        self.persistence_graphs.update()
 
 if __name__ == "__main__":
     qapp = QApplication(sys.argv)

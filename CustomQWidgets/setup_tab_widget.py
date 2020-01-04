@@ -50,4 +50,4 @@ class SetupTabWidget(QWidget):
     def pass_points(self):
         points = eval(self.in_field.text())
         print(points)
-        self.main_ui.computation_handler.set_points(points)
+        self.main_ui.set_point_cloud(points)

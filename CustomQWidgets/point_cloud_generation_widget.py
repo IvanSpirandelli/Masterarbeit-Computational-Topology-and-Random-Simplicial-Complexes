@@ -10,13 +10,13 @@ from PySide2.QtCore import Slot, Qt, QSize
 
 from CustomQWidgets.filtration_stack_widget import FiltrationStackWidget
 from GudhiExtension.alpha_complex_wrapper import alpha_complex_wrapper
+from GudhiExtension.point_cloud_generator import generate_n_gridpoints_of_dim_with_dilation, generate_n_points
 
 
 class PointCloudGenerationWidget(QWidget):
     def __init__(self, parent, point_cloud_generator, alpha_complex):
         super().__init__()
         self.parent = parent
-        self.generator = point_cloud_generator
 
         self.setWindowTitle("Point generation")
 
@@ -75,12 +75,12 @@ class PointCloudGenerationWidget(QWidget):
     def generate_points_clicked(self):
 
         if(self.grid_check.isChecked()):
-            self.parent.main_ui.alpha_complex = alpha_complex_wrapper(self.generator.generate_n_gridpoints_of_dim_with_dilation(
+            self.parent.main_ui.alpha_complex = alpha_complex_wrapper(generate_n_gridpoints_of_dim_with_dilation(
                 int(self.num_of_points.text()),
                 int(self.dimension.text()),
                 int(self.dilation.text())))
         else:
-            self.parent.main_ui.alpha_complex = alpha_complex_wrapper(self.generator.generate_n_points(
+            self.parent.main_ui.alpha_complex = alpha_complex_wrapper(generate_n_points(
                 int(self.num_of_points.text()),
                 int(self.dimension.text())))
 

@@ -6,7 +6,8 @@ import itertools as it
 
 from GudhiExtension.alpha_complex_wrapper import alpha_complex_wrapper
 from GudhiExtension.column_algorithm import column_algorithm
-from GudhiExtension.point_cloud_generator import point_cloud_generator
+import GudhiExtension.point_cloud_generator as pcg
+from Utilities.csv_file_container import csv_file_container
 
 dunce_hat = [
     [0],[1],[2],[3],[4],[5],[6],[7],
@@ -81,51 +82,33 @@ def analize_dunce_wedge():
     plt.show()
 
 def analize_random_points(max_count):
-    pcg = point_cloud_generator()
 
     fig, axs = plt.subplots(2)
     x = []
     sim = []
     y = []
 
+    cfc = csv_file_container("num_of_points;persistence_computation_steps;steps_div_by_vertices;computation_time;points")
 
-    with open("../Experiments/Results/greedy_analysis_" + str(datetime.now()) + ".txt", "w+") as file:
-        for i in range(3,max_count):
-            ###
-            stepline = "---"+ str(i) +"/125---"
-            file.write(stepline)
-            print(stepline)
-            curr_t = time.time()
-            ###
+    for i in range(3,max_count):
+        points = pcg.generate_n_points(i, 3)
+        alpha = alpha_complex_wrapper(points)
+        pre_algo = time.time()
+        steps = column_algorithm(alpha.get_boundary_matrix())
+        y.append(steps)
+        post_algo = time.time()
+        x.append(i)
+        sim.append(len(alpha.filtration))
 
-            points = pcg.generate_n_points(i,3)
+        print("RATE: " + str(steps/i))
 
-            ###
-            point_t = time.time()
-            pointline = str(i) + " points generated in " + str(point_t-curr_t) + " seconds: "
-            file.write(pointline)
-            file.write(str(points))
-            print(pointline)
-            print(points)
-            ###
+        cfc.add_row(str(i) + ";" + str(steps) + ";" + str(steps/i) + ";" + str(post_algo-pre_algo) + ";" + str(points))
 
-            alpha = alpha_complex_wrapper(pcg.points)
-
-            pre_algo = time.time()
-            steps = column_algorithm(alpha.get_boundary_matrix())
-            y.append(steps)
-            post_algo = time.time()
-
-            res_line = "Computed persistence in: " + str(steps) + " Steps.\n" + "Steps/Vertices = " + str(steps/i) + "\n" + "Took " + str(post_algo - pre_algo) + "seconds"
-            file.write(res_line)
-            print(res_line)
-
-            x.append(i)
-            sim.append(len(alpha.filtration))
+    cfc.write_to_file("../Experiments/Results/greedy_analysis_" + str(datetime.now()))
 
     axs[0].scatter(x,y)
     axs[1].scatter(sim,y)
 
     plt.show()
 
-analize_random_points(10)
+analize_random_points(50)
