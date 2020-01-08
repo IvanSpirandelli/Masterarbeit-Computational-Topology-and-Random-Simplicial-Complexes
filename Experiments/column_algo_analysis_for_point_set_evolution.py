@@ -1,5 +1,6 @@
 import random
 from copy import deepcopy
+from datetime import datetime
 
 from GudhiExtension.alpha_complex_wrapper import alpha_complex_wrapper
 from GudhiExtension.column_algorithm import column_algorithm
@@ -78,4 +79,16 @@ def evol_analysis(num_points, dim, num_sets, keep, iterations):
     axs[1].scatter(x, z)
     plt.show()
 
-evol_analysis(30, 2, 12, 3, 20)
+    with open("../Experiments/Results/evolutionary_greedy_analysis_" + str(num_points) + "points_" + str(datetime.now()) + ".csv", "w+") as file:
+        file.write("n: " + str(num_points) + "; dim: " + str(dim) + "; sets per iteration: " + str(num_sets) + "; kept per iteration: " + str(keep) + "; number of iterations: " +str(iterations)+ "\n")
+        file.write("Average algorithm steps: " + str(y)+ "\n")
+        file.write("Top algorithm steps: " + str(z)+ "\n")
+        file.write("---final_set---" + "\n")
+        for row in top:
+            print(row)
+            file.write(str(row) + "\n")
+
+
+for i in range(8,20):
+    for _ in range(7):
+        evol_analysis(i, 3, 12, 3, 50)

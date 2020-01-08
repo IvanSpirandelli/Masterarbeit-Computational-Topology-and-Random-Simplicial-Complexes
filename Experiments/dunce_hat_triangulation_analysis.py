@@ -94,7 +94,13 @@ def analize_random_points(max_count):
         points = pcg.generate_n_points(i, 3)
         alpha = alpha_complex_wrapper(points)
         pre_algo = time.time()
-        steps = column_algorithm(alpha.get_boundary_matrix())
+        mat = alpha.get_boundary_matrix()
+
+        print(mat)
+        print("-----")
+        print(alpha.filtration)
+
+        steps = column_algorithm(mat)
         y.append(steps)
         post_algo = time.time()
         x.append(i)
@@ -111,4 +117,4 @@ def analize_random_points(max_count):
 
     plt.show()
 
-analize_random_points(50)
+analize_random_points(4)

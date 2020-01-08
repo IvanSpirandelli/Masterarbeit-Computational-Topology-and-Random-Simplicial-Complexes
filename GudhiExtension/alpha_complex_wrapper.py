@@ -20,17 +20,21 @@ class alpha_complex_wrapper():
         mat = np.zeros(shape=(len(self.filtration),len(self.filtration)), dtype=int)
         index_set = {() : -1}
         counter = 0
+
         for elem in self.filtration:
             simplex = elem[0]
-            dim = len(simplex)
+            dim = len(simplex)-1
             index_set[tuple(simplex)] = counter
             counter+=1
-            if(dim > 0):
-                for i in range(dim-1,0,-1):
-                    for combi in it.combinations(simplex, i):
-                        mat[index_set[combi], index_set[tuple(simplex)]] = 1
+            if(0 < dim):
+                for combi in it.combinations(simplex, dim):
+                    mat[index_set[combi], index_set[tuple(simplex)]] = 1
 
 
+        #mat = mat[np.all(mat == 0, axis=0)]
+        mat = mat[~np.all(mat == 0, axis=1)]
+        idx = np.argwhere(np.all(mat[..., :] == 0, axis=0))
+        mat = np.delete(mat, idx, axis=1)
         return mat
 
     def get_all_filtration_steps(self):
