@@ -1,4 +1,6 @@
 import itertools
+from copy import deepcopy
+
 import numpy as np
 
 import GudhiExtension.column_algorithm as ca
@@ -24,15 +26,17 @@ def test_all_vertex_permutations(filtration):
     print(filtration_without_vertices)
 
     out = []
-
+    mats = []
+    kept_perms = []
     for perm in perms:
+        kept_perms.append(perm)
         permutation_weight = 0
         for i,p in enumerate(perm, start=1):
             permutation_weight += vertex_degrees[p] * i
 
         filtration = [[x] for x in perm] + filtration_without_vertices
-        mat = ca.build_boundary_matrix_from_filtration(filtration)
-        steps = ca.column_algorithm(mat)
+        mats.append(ca.build_boundary_matrix_from_filtration(filtration))
+        steps = ca.column_algorithm(mats[-1])
 
         out.append([steps, permutation_weight, filtration])
 
@@ -41,14 +45,29 @@ def test_all_vertex_permutations(filtration):
 
     print("Min steps: ", min_steps)
     print("Min weight: ", min_weight)
-    out.sort()
-    #print(out[0])
-    for line in out:
-        print(line)
+
+    double_check_out = deepcopy(out)
+    double_check_out.sort()
+
+    if(double_check_out[0][1] == min_weight):
+        points = pcg.generate_n_points(5, 3)
+        alpha = alpha_complex_wrapper(points)
+        filtration =[elem[0] for elem in alpha.filtration]
+        test_all_vertex_permutations(filtration)
+    else:
+        for num,line in enumerate(out,start=0):
+            if(line[0] == min_steps and line[1] != min_weight):
+                print('#############################')
+                print("Permutation: ", kept_perms[num])
+                print('#############################')
+                print(line)
+                print('#############################')
+                print(mats[num])
+                print('#############################')
 
 
 #filtration = [[0],[1],[2],[3],[0,1],[0,2],[1,2],[1,3],[2,3],[0,1,2]]
-points = pcg.generate_n_points(8, 3)
+points = pcg.generate_n_points(5, 2)
 alpha = alpha_complex_wrapper(points)
 filtration = [elem[0] for elem in alpha.filtration]
 test_all_vertex_permutations(filtration)

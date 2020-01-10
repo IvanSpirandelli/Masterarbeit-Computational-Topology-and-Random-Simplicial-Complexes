@@ -8,9 +8,8 @@ from PySide2.QtWidgets import (QVBoxLayout, QWidget, QSlider, QGridLayout, QLine
                                QPushButton)
 from PySide2.QtCore import Slot, Qt, QSize
 
-from CustomQWidgets.filtration_stack_widget import FiltrationStackWidget
 from GudhiExtension.alpha_complex_wrapper import alpha_complex_wrapper
-from GudhiExtension.point_cloud_generator import generate_n_gridpoints_of_dim_with_dilation, generate_n_points
+import GudhiExtension.point_cloud_generator as pcg
 
 
 class PointCloudGenerationWidget(QWidget):
@@ -75,13 +74,18 @@ class PointCloudGenerationWidget(QWidget):
     def generate_points_clicked(self):
 
         if(self.grid_check.isChecked()):
-            self.parent.main_ui.alpha_complex = alpha_complex_wrapper(generate_n_gridpoints_of_dim_with_dilation(
+            points = pcg.generate_n_gridpoints_of_dim_with_dilation(
                 int(self.num_of_points.text()),
                 int(self.dimension.text()),
-                int(self.dilation.text())))
+                int(self.dilation.text()))
+            self.parent.main_ui.set_point_cloud(points)
+            self.parent.main_ui.compute_alpha_complex()
+
         else:
-            self.parent.main_ui.alpha_complex = alpha_complex_wrapper(generate_n_points(
+            points = pcg.generate_n_points(
                 int(self.num_of_points.text()),
-                int(self.dimension.text())))
+                int(self.dimension.text()))
+            self.parent.main_ui.set_point_cloud(points)
+            self.parent.main_ui.compute_alpha_complex()
 
         self.parent.main_ui.update_persistence_graphs()

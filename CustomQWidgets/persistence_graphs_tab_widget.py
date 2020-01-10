@@ -1,6 +1,6 @@
+import numpy
 import gudhi
-import scipy
-import matplotlib
+
 from PySide2.QtCore import Slot
 
 from PySide2.QtWidgets import (QStackedWidget, QWidget, QVBoxLayout, QRadioButton, QHBoxLayout)
@@ -56,24 +56,24 @@ class PersistenceGraphsTabWidget(QWidget):
         self.figures.setCurrentIndex(2)
 
     def add_diagram_widgets(self):
-        plot = gudhi.plot_persistence_barcode(persistence=self.main_ui.alpha_complex.persistence, max_barcodes = 1000,
-                                              legend=True)
+        plot = gudhi.plot_persistence_barcode(persistence=self.main_ui.alpha_complex.persistence, max_intervals = 1000,
+                                              legend=False)
         barcode_canvas = FigureCanvas(plot.figure(1))
         plot.close()
 
         plot = gudhi.plot_persistence_diagram(persistence=self.main_ui.alpha_complex.persistence,
-                                              legend=True)
+                                              legend=False)
         diagram_canvas = FigureCanvas(plot.figure(1))
         plot.close()
 
-        density_canvas = FigureCanvas(Figure(figsize=(8, 8)))
+        density_canvas = FigureCanvas(plot.figure(1))
         try:
             plot = gudhi.plot_persistence_density(persistence=self.main_ui.alpha_complex.persistence,
-                                                  max_intervals=1000, dimension = 1,
-                                              legend=True)
+                                              max_intervals=1000, dimension = 1,
+                                          legend=True)
             plot.close()
         except:
-            print("Dat point set ain't generic.")
+            print("Density computation not possible")
 
         self.figures.addWidget(barcode_canvas)
         self.figures.addWidget(diagram_canvas)

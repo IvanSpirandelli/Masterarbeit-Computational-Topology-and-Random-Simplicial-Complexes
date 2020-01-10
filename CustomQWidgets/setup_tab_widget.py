@@ -2,9 +2,12 @@ import random
 
 import PySide2
 import gudhi
+from PySide2.QtGui import QPixmap, QIcon
 
 from PySide2.QtWidgets import (QVBoxLayout, QWidget, QPushButton, QGroupBox, QGridLayout, QLineEdit)
 from PySide2.QtCore import Slot
+
+
 from CustomQWidgets.point_cloud_generation_widget import PointCloudGenerationWidget
 
 
@@ -35,16 +38,11 @@ class SetupTabWidget(QWidget):
 
         self.layout.addWidget(point_set_pass_box)
 
-        generate_filtration_vis = QPushButton("Generate Filtration Visuals")
-        generate_filtration_vis.clicked.connect(self.generate_filtration_vis_clicked)
-        self.layout.addWidget(generate_filtration_vis)
+        self.generate_filtration_vis = QPushButton("Generate Filtration Visuals")
 
+        self.generate_filtration_vis.clicked.connect(self.main_ui.generate_filtration_tab)
+        self.layout.addWidget(self.generate_filtration_vis)
 
-
-
-    @Slot()
-    def generate_filtration_vis_clicked(self):
-        self.main_ui.generate_filtration_tab()
 
     @Slot()
     def pass_points(self):
