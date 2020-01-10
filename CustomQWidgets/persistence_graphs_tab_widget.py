@@ -56,7 +56,7 @@ class PersistenceGraphsTabWidget(QWidget):
         self.figures.setCurrentIndex(2)
 
     def add_diagram_widgets(self):
-        plot = gudhi.plot_persistence_barcode(persistence=self.main_ui.alpha_complex.persistence, max_intervals = 1000,
+        plot = gudhi.plot_persistence_barcode(persistence=self.main_ui.alpha_complex.persistence,
                                               legend=False)
         barcode_canvas = FigureCanvas(plot.figure(1))
         plot.close()
@@ -68,8 +68,7 @@ class PersistenceGraphsTabWidget(QWidget):
 
         density_canvas = FigureCanvas(plot.figure(1))
         try:
-            plot = gudhi.plot_persistence_density(persistence=self.main_ui.alpha_complex.persistence,
-                                              max_intervals=1000, dimension = 1,
+            plot = gudhi.plot_persistence_density(persistence=self.main_ui.alpha_complex.persistence, dimension = 1,
                                           legend=True)
             plot.close()
         except:
