@@ -25,17 +25,43 @@ dunce_hat = [
     [5,6,7]
 ]
 
-dunce_collapsible_delaunay = [
+dunce_collapsible_delaunay_tetraeder = [
     [0,1,2,4],[0,1,3,4],[0,1,3,7],[0,1,2,6],[0,1,6,7],[0,2,4,7],[0,2,5,6],[0,2,5,7],[0,3,4,7],[0,5,6,7],
     [1,2,3,4],[1,2,3,5],[1,2,5,6],[1,3,5,6],[2,3,4,5],[2,4,5,7],[1,3,6,7]
 ]
 
+delaunay_to_dunce_filtration = [[0], [1], [2], [4], [3], [7], [6], [5],
+                                [0, 1], [0, 2], [0, 4], [1, 2], [1, 4], [2, 4],
+                                [0, 3], [1, 3], [3, 4], [0, 7], [1, 7], [3, 7],
+                                [0, 6], [1, 6], [2, 6], [6, 7], [2, 7], [4, 7],
+                                [0, 5], [2, 5], [5, 6], [5, 7], [2, 3], [1, 5],
+                                [3, 5], [3, 6], [4, 5],
+                                [0, 1, 2], [0, 1, 4], [0, 2, 4], [1, 2, 4], [0, 1, 3],
+                                [0, 3, 4], [1, 3, 4], [0, 1, 7], [0, 3, 7],
+                                [0, 1, 6], [0, 2, 6], [1, 2, 6], [0, 6, 7], [1, 6, 7],
+                                [0, 2, 7], [0, 4, 7], [2, 4, 7], [0, 2, 5], [0, 5, 6],
+                                [2, 5, 6], [0, 5, 7], [2, 5, 7], [3, 4, 7], [5, 6, 7],
+                                [1, 2, 3],  [1, 2, 5], [1, 3, 5], [2, 3, 5],
+                                [1, 5, 6],  [3, 5, 6], [2, 4, 5], [3, 4, 5],
+                                [4, 5, 7], [3, 6, 7], [1, 3, 7], [1, 3, 6], [2, 3, 4],
+                                [0, 1, 3, 4], [1, 2, 3, 4], [1, 2, 3, 5], [2, 3, 4, 5],
+                                [2, 4, 5, 7], [0, 2, 5, 7], [0, 5, 6, 7], [0, 1, 6, 7],
+                                [0, 1, 2, 6], [0, 1, 2, 4], [0, 2, 4, 7], [0, 1, 3, 7],
+                                [0, 2, 5, 6], [0, 3, 4, 7], [1, 3, 6, 7], [1, 2, 5, 6], [1, 3, 5, 6]]
+
+
+
+
 def build_complex_from_triangulation(tria):
     dim = len(tria[0])
+    out = deepcopy(tria)
     for i in range(dim - 1, 0, -1):
         for simplex in tria:
             for combi in it.combinations(simplex, i):
-                print(combi)
+                if(not combi in out):
+                    out.append(combi)
+    out = sorted(out, key = len)
+    return [list(e) for e in out]
 
 def connect_shift_and_append_filtration(filtration, connection, shift, steps):
     out_fil = deepcopy(filtration)
@@ -117,4 +143,4 @@ def analize_random_points(max_count):
 
     plt.show()
 
-analize_random_points(4)
+print(build_complex_from_triangulation(dunce_collapsible_delaunay_tetraeder))

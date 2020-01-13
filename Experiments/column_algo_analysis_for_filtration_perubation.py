@@ -1,5 +1,8 @@
 import itertools
 from copy import deepcopy
+import matplotlib.pyplot as plt
+import math
+import numpy as np
 
 import numpy as np
 
@@ -50,28 +53,101 @@ def test_all_vertex_permutations(filtration):
     double_check_out.sort()
 
     if(double_check_out[0][1] == min_weight):
-        points = pcg.generate_n_points(5, 3)
+        points = pcg.generate_n_points(5, 2)
         alpha = alpha_complex_wrapper(points)
         filtration =[elem[0] for elem in alpha.filtration]
         test_all_vertex_permutations(filtration)
     else:
-        for num,line in enumerate(out,start=0):
-            if(line[0] == min_steps and line[1] != min_weight):
-                print('#############################')
-                print("Permutation: ", kept_perms[num])
-                print('#############################')
-                print(line)
-                print('#############################')
-                print(mats[num])
-                print('#############################')
+        for dline in double_check_out:
+            print(dline)
+        #for num,line in enumerate(out,start=0):
+        #    if(line[0] == min_steps and line[1] != min_weight):
+        #        print('#############################')
+        #        print("Permutation: ", kept_perms[num])
+        #        print('#############################')
+        #        print(line)
+        #        print('#############################')
+        #        print(mats[num])
+        #        print('#############################')
+
+def test_k_random_permutations_of_n_dim_simplices(filtration, n, k):
+    simplices_to_permute = []
+    start_index = 0;
+    last_index = len(filtration)-1
+    first_found = False
+    for i, simplex in enumerate(filtration):
+        if len(simplex)-1 == n:
+            if(not first_found):
+                first_found = True
+                start_index = i
+            simplices_to_permute.append(simplex)
+        elif len(simplex)-1 > n:
+            last_index = i-1
+            break
+
+    pre_simplices = filtration[:start_index]
+    post_simplices = filtration[last_index+1:]
+
+    x = [0]
+    y = [ca.column_algorithm(ca.build_boundary_matrix_from_filtration(filtration))]
+    iterations = 0
+    while iterations<k:
+        print(iterations,"/",k)
+        permuted_filtration = pre_simplices + [list(a) for a in np.random.permutation(simplices_to_permute)] + post_simplices
+        steps = ca.column_algorithm(ca.build_boundary_matrix_from_filtration(permuted_filtration))
+        x.append(1)
+        y.append(steps)
+        iterations+=1
+
+    fig, axs = plt.subplots(1)
+    axs.scatter(x,y)
+    plt.show()
 
 
-#filtration = [[0],[1],[2],[3],[0,1],[0,2],[1,2],[1,3],[2,3],[0,1,2]]
-points = pcg.generate_n_points(5, 2)
-alpha = alpha_complex_wrapper(points)
-filtration = [elem[0] for elem in alpha.filtration]
-test_all_vertex_permutations(filtration)
+def compare_filtrations(filtration_one, filtration_two):
+    mat1 = ca.build_boundary_matrix_from_filtration(filtration_one)
+    print(mat1)
+    print("#######################")
+    mat2 = ca.build_boundary_matrix_from_filtration(filtration_two)
+    print(mat2)
+    print("Filtration 1: ", ca.column_algorithm(mat1))
+    print("Filtration 2: ", ca.column_algorithm(mat2))
+
+delaunay_to_dunce_filtration = [[0], [1], [2], [4], [3], [7], [6], [5],
+                                [0, 1], [0, 2], [0, 4], [1, 2], [1, 4], [2, 4],
+                                [0, 3], [1, 3], [3, 4], [0, 7], [1, 7], [3, 7],
+                                [0, 6], [1, 6], [2, 6], [6, 7], [2, 7], [4, 7],
+                                [0, 5], [2, 5], [5, 6], [5, 7], [2, 3], [1, 5],
+                                [3, 5], [3, 6], [4, 5],
+                                [0, 1, 2], [0, 1, 4], [0, 2, 4], [1, 2, 4], [0, 1, 3],
+                                [0, 3, 4], [1, 3, 4], [0, 1, 7], [0, 3, 7],
+                                [0, 1, 6], [0, 2, 6], [1, 2, 6], [0, 6, 7], [1, 6, 7],
+                                [0, 2, 7], [0, 4, 7], [2, 4, 7], [0, 2, 5], [0, 5, 6],
+                                [2, 5, 6], [0, 5, 7], [2, 5, 7], [3, 4, 7], [5, 6, 7],
+                                [1, 2, 3],  [1, 2, 5], [1, 3, 5], [2, 3, 5],
+                                [1, 5, 6],  [3, 5, 6], [2, 4, 5], [3, 4, 5],
+                                [4, 5, 7], [3, 6, 7], [1, 3, 7], [1, 3, 6], [2, 3, 4],
+                                [0, 1, 3, 4], [1, 2, 3, 4], [1, 2, 3, 5], [2, 3, 4, 5],
+                                [2, 4, 5, 7], [0, 2, 5, 7], [0, 5, 6, 7], [0, 1, 6, 7],
+                                [0, 1, 2, 6], [0, 1, 2, 4], [0, 2, 4, 7], [0, 1, 3, 7],
+                                [0, 2, 5, 6], [0, 3, 4, 7], [1, 3, 6, 7], [1, 2, 5, 6], [1, 3, 5, 6]]
 
 
-#filtrations that does NOT fullfill what I hoped for!
-#filtration = [[0],[1],[2],[3],[4],[5],[3, 5], [0, 1], [1, 3], [1, 5], [1, 3, 5], [2, 5], [1, 2], [1, 2, 5], [2, 4], [0, 3], [0, 1, 3], [4, 5], [2, 4, 5], [0, 2], [0, 1, 2], [3, 4], [3, 4, 5]]
+test_k_random_permutations_of_n_dim_simplices(delaunay_to_dunce_filtration, 2, 200000)
+
+def you_cant_run_but_you_can_hide_bitch():
+    pass
+    # filtration1 = [[0],[1],[2],[3],[4],[5],[6],[7],[8],[9],[0,1],[0,2],[0,3],[0,4],[0,5],[0,6],[0,7],[0,8],[0,9]]
+    # compare_filtrations(filtration1,filtration2)
+    # points = pcg.generate_n_points(5, 2)
+    # alpha = alpha_complex_wrapper(points)
+    # filtration = [elem[0] for elem in alpha.filtration]
+
+    # snap = [[0],[1],[2],[3],[0,1],[0,2],[1,2],[1,3],[2,3],[0,1,2],[1,2,3]]
+    # filtration2 = [[1],[2],[3],[4],[5],[6],[7],[8],[9],[0],[0,1],[0,2],[0,3],[0,4],[0,5],[0,6],[0,7],[0,8],[0,9]]
+    # filtration1 = [[0], [1], [2], [3], [4], [0, 4], [0, 2], [2, 4],  [3, 4], [1, 2], [0, 1],  [0, 3], [2, 3], [1, 3], [2, 3, 4], [0, 2, 4], [0, 3, 4], [0, 1, 2],[0, 1, 3]]
+    # filtration0 = [[0],[1],[2],[3],[4],[1,4],[0,1],[0,2],[0,3],[0,4],[1,2]]
+    # test_all_vertex_permutations(filtration)
+
+
+
