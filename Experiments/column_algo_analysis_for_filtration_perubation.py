@@ -103,6 +103,62 @@ def test_k_random_permutations_of_n_dim_simplices(filtration, n, k):
     axs.scatter(x,y)
     plt.show()
 
+def test_k_random_permutations_of_indexed_simplices(filtration, indices, k):
+    print(indices)
+    if(k>math.factorial(len(indices))):
+        print("WARNING: You are testing for more permutations, than your index set has. Just iterate over all of them.")
+
+    simplices_to_permute = []
+
+    for index in indices:
+        simplices_to_permute.append(filtration[index])
+
+    pre_simplices = filtration[:indices[0]]
+    post_simplices = filtration[indices[-1]+1:]
+
+    x = [0]
+    y = [ca.column_algorithm(ca.build_boundary_matrix_from_filtration(filtration))]
+    print(y)
+    iterations = 0
+    while iterations<k:
+        print(iterations,"/",k)
+        permuted_filtration = pre_simplices + [list(a) for a in np.random.permutation(simplices_to_permute)] + post_simplices
+        steps = ca.column_algorithm(ca.build_boundary_matrix_from_filtration(permuted_filtration))
+        x.append(1)
+        y.append(steps)
+        iterations+=1
+
+    fig, axs = plt.subplots(1)
+    axs.scatter(x,y)
+    plt.show()
+
+#It is assumed, that the "indices" are at the end of what is shifted through. So indices[-1]-1 = end of range
+def shift_indexed_simplices_through_range_of_filtration(filtration, indices, range_start):
+    simplices_to_shift = []
+    for index in indices:
+        simplices_to_shift.append(filtration[index])
+    pre_simplices = filtration[:range_start]
+    post_simplices = filtration[indices[-1]+1:]
+
+    shift_pre = []
+    shift_post = []
+    y = []
+    for i in range(range_start, indices[0]+1):
+        shift_pre = filtration[range_start : i]
+        shift_post = filtration[i: indices[0]]
+        shifted_filtration = pre_simplices + shift_pre + simplices_to_shift + shift_post + post_simplices
+        #print(pre_simplices)
+        #print(shift_pre)
+        #print(simplices_to_shift)
+        #print(shift_post)
+        #print(post_simplices)
+        steps = ca.column_algorithm(ca.build_boundary_matrix_from_filtration(shifted_filtration))
+        y.append(steps)
+
+    x = [i for i in range(len(y))]
+    fig, axs = plt.subplots(1)
+    axs.scatter(x,y)
+    plt.show()
 
 def compare_filtrations(filtration_one, filtration_two):
     mat1 = ca.build_boundary_matrix_from_filtration(filtration_one)
@@ -118,23 +174,24 @@ delaunay_to_dunce_filtration = [[0], [1], [2], [4], [3], [7], [6], [5],
                                 [0, 3], [1, 3], [3, 4], [0, 7], [1, 7], [3, 7],
                                 [0, 6], [1, 6], [2, 6], [6, 7], [2, 7], [4, 7],
                                 [0, 5], [2, 5], [5, 6], [5, 7], [2, 3], [1, 5],
-                                [3, 5], [3, 6], [4, 5],
-                                [0, 1, 2], [0, 1, 4], [0, 2, 4], [1, 2, 4], [0, 1, 3],
-                                [0, 3, 4], [1, 3, 4], [0, 1, 7], [0, 3, 7],
-                                [0, 1, 6], [0, 2, 6], [1, 2, 6], [0, 6, 7], [1, 6, 7],
-                                [0, 2, 7], [0, 4, 7], [2, 4, 7], [0, 2, 5], [0, 5, 6],
-                                [2, 5, 6], [0, 5, 7], [2, 5, 7], [3, 4, 7], [5, 6, 7],
-                                [1, 2, 3],  [1, 2, 5], [1, 3, 5], [2, 3, 5],
-                                [1, 5, 6],  [3, 5, 6], [2, 4, 5], [3, 4, 5],
+                                [3, 5], [3, 6], [4, 5], #35
+                                [0, 1, 2], [0, 1, 4], [0, 2, 4], [1, 2, 4],
+                                [0, 1, 3], [1, 3, 4], [0, 3, 4], [0, 1, 7],
+                                [0, 3, 7], [0, 1, 6], [0, 2, 6], [1, 2, 6],
+                                [0, 6, 7], [1, 6, 7], [0, 2, 7], [0, 2, 5],
+                                [0, 4, 7], [2, 5, 6], [2, 4, 7], [0, 5, 6],
+                                [1, 2, 3], [1, 2, 5], [1, 3, 5], [2, 3, 5],
+                                [0, 5, 7], [2, 5, 7], [3, 4, 7], [5, 6, 7],
+                                [1, 5, 6], [3, 5, 6], [2, 4, 5], [3, 4, 5],
                                 [4, 5, 7], [3, 6, 7], [1, 3, 7], [1, 3, 6], [2, 3, 4],
                                 [0, 1, 3, 4], [1, 2, 3, 4], [1, 2, 3, 5], [2, 3, 4, 5],
                                 [2, 4, 5, 7], [0, 2, 5, 7], [0, 5, 6, 7], [0, 1, 6, 7],
                                 [0, 1, 2, 6], [0, 1, 2, 4], [0, 2, 4, 7], [0, 1, 3, 7],
                                 [0, 2, 5, 6], [0, 3, 4, 7], [1, 3, 6, 7], [1, 2, 5, 6], [1, 3, 5, 6]]
 
-
-test_k_random_permutations_of_n_dim_simplices(delaunay_to_dunce_filtration, 2, 200000)
-
+shift_indexed_simplices_through_range_of_filtration(delaunay_to_dunce_filtration, [69,70,71], 35)
+#test_k_random_permutations_of_n_dim_simplices(delaunay_to_dunce_filtration, 2, 100)
+#test_k_random_permutations_of_indexed_simplices(delaunay_to_dunce_filtration, [37 + i for i in range(35)],0)
 def you_cant_run_but_you_can_hide_bitch():
     pass
     # filtration1 = [[0],[1],[2],[3],[4],[5],[6],[7],[8],[9],[0,1],[0,2],[0,3],[0,4],[0,5],[0,6],[0,7],[0,8],[0,9]]
