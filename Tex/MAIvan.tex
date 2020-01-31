@@ -1,25 +1,17 @@
 \documentclass[a4paper, 11pt,openany,oneside]{scrbook}
 
-\usepackage[dvipsnames]{xcolor}
-\usepackage[utf8]{inputenc}
 \usepackage{amsmath}
-
-%\usepackage{array}
 \usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{float}
+\usepackage{mathtools}
+
+\usepackage {fancyhdr}
+
 \usepackage[english]{babel}
 \usepackage{hyperref}
-\usepackage{cleveref}
-\usepackage{amsthm}
-\usepackage{shadethm}
 \usepackage{tikz}
-\usetikzlibrary{shapes}
-\usetikzlibrary{intersections}
-\usepackage{graphicx}
-\usepackage{cancel}
-\usepackage{mathtools}
-\usepackage{tikz}
-\usepackage{subcaption}
-\usepackage{amsthm}
 \usetikzlibrary{shapes,positioning,intersections,quotes}
 \usepackage[labelfont=bf,textfont=normalfont,singlelinecheck=off,justification=raggedright]{subcaption}
 
@@ -28,32 +20,14 @@
 
 %opening
 \usepackage{cite}
-\usepackage{enumitem}
-\setlist{noitemsep}
-
-\title{Masterarbeit}
-\author{Ivan Spirandelli}
-\usepackage {fancyhdr}
-
-
-\newenvironment{abstract}{\cleardoublepage \null \vfill \begin{center} \bfseries \abstractname \end{center}}{\vfill \null}
-
-%%fuer Algorithmen
-\usepackage{float}
-\usepackage[chapter]{algorithm}
-\usepackage{algpseudocode,algorithmicx}
-\algrenewcommand\algorithmicrequire{\textbf{Input:}}
-\algrenewcommand\algorithmicensure{\textbf{Output:}}
-\newfloat{algorithm}{t}{lop}
-\floatname{algorithm}{Algorithm}
-\newcommand{\algorithmautorefname}{Algorithm}
 
 %%neue command fuer beweis erstellen
 
-\newtheorem{thm}{Theorem}[section]
+\newtheorem{thm}{Theorem}
 \theoremstyle{definition}
-\newtheorem{defi}[thm]{Definition}
-\newtheorem{obs}[thm]{Observation}
+\newtheorem{defi}[subsection]{Definition}
+\newtheorem*{obs}{Observation:}
+\newtheorem*{rem}{Remark:}
 \theoremstyle{plain}
 \newtheorem{lem}[thm]{Lemma}
 \newtheorem{prop}[thm]{Proposition}
@@ -98,6 +72,10 @@
 \addto\captionsenglish{\renewcommand*\abstractname{Zusammenfassung}}
 \renewcommand{\labelenumi}{(\arabic{enumi})}
 
+\title{Masterarbeit}
+\author{Ivan Spirandelli}
+
+\newenvironment{abstract}{\cleardoublepage \null \vfill \begin{center} \bfseries \abstractname \end{center}}{\vfill \null}
 
 \begin{document}
 %\frontmatter

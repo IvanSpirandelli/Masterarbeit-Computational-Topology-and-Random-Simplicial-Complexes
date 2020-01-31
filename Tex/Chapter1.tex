@@ -14,11 +14,13 @@ is called an  \textit{\textbf{affine combination}} of the points $s_i$. \cite[De
 \end{defi}
 
 \begin{defi}[Affine hull, affinely independent]
-The set of all affine combinations of points in $S$ is called the  \textit{\textbf{affine hull}}. We say that the points in $S$ are \textit{\textbf{affinely independent}} if they generate a subspace of dimension $m-1$. \cite[Definition 2.11]{Polyhedral+and+Algebraic+Methods}
+The set of all affine combinations of points in $S$ is called the  \textit{\textbf{affine hull}}. We say that the points in $S$ are \textit{\textbf{affinely independent}}
+if they generate a subspace of dimension $m-1$. \cite[Definition 2.11]{Polyhedral+and+Algebraic+Methods}
 \end{defi}
 
 
-An alternative definition is given in \cite[III.1, paragraph 3]{Computational+Topology}. The points in $S$ are called  \textit{\textbf{affinely independent}} if any two affine combinations $x = \sum\limits_{n=1}^m \lambda_i s_i$ and $y = \sum\limits_{n=1}^m \mu_i s_i$ are the same, iff $\mu_i = \lambda_i$ for $i = 1,...,m$.
+An alternative definition is given in \cite[III.1, paragraph 3]{Computational+Topology}. The points in $S$ are called  \textit{\textbf{affinely independent}}
+if any two affine combinations $x = \sum\limits_{n=1}^m \lambda_i s_i$ and $y = \sum\limits_{n=1}^m \mu_i s_i$ are the same, iff $\mu_i = \lambda_i$ for $i = 1,...,m$.
 
 
 \begin{defi}[Convex combination]
@@ -40,3 +42,191 @@ We are particularly interested in the following special class of convex hulls.
 \begin{defi}[k-Simplex]
 A \textit{\textbf{k-Simplex}} is the convex hull of $k+1$ affinely independent points. 
 \end{defi}
+
+This means a 0-Simplex is a point, a 1-Simplex is a line, a 2-Simplex is a triangle and so on and so forth. See the following figure for an example of a 2-Simplex and a 3-Simplex.
+
+
+\begin{figure}[H]
+\captionsetup[subfigure]{justification=centering}
+\begin{subfigure}[t]{0.5\textwidth}
+\begin{center}
+\begin{tikzpicture}
+\node[above= 2pt of {(0.75,1)}, outer sep=2pt] {a};
+\node[below = 2pt of {(0,-0.5))}, outer sep=2pt] {b};
+\node[below = 2pt of {(1.5,-0.5)}, outer sep=2pt] {c};
+\node[above = 2pt of {(1,2,2)}, outer sep=2pt] {};
+\fill [opacity = 0.2] (0,-0.5)--(1.5,-0.5)--(0.75,1)--(0,-0.5);
+\draw [-,very thick] (0,-0.5)--(1.5,-0.5);
+\draw [-,very thick] (1.5,-0.5)--(0.75,1);
+\draw [-,very thick] (0.75,1)--(0,-0.5);
+\foreach \Point in {(0,-0.5),(1.5,-0.5),(0.75,1)}{
+\node[black] at \Point {\textbullet};
+}
+\end{tikzpicture}
+\end{center}
+\subcaption{A 2-simplex or triangle}
+\end{subfigure}
+\begin{subfigure}[t]{0.5\textwidth}
+\begin{center}
+\begin{tikzpicture}
+\node[below= 2pt of {(2,0,0.25)}, outer sep=2pt] {};
+\node[below = 2pt of {(0.25,0,1)}, outer sep=2pt] {};
+\node[below right= 2pt of {(2,0,2)}, outer sep=2pt] {};
+\node[above = 2pt of {(1,2,2)}, outer sep=2pt] {};
+\fill [opacity = 0.2] (0.25,0,1)--(2,0,2)--(1,2,2)--(0.25,0,1);
+\fill [opacity = 0.2] (2,0,0.25)--(2,0,2)--(1,2,2)--(2,0,0.25);
+\draw [dashed, thin] (2,0,0.25) -- (0.25,0,1);
+\draw [-,very thick] (2,0,2) -- (0.25,0,1);
+\draw [-,very thick] (2,0,2) -- (2,0,0.25);
+\draw [-,very thick] (2,0,2) -- (1,2,2);
+\draw [-,very thick] (2,0,0.25) -- (1,2,2);
+\draw [-,very thick] (0.25,0,1) -- (1,2,2);
+\foreach \Point in {(2,0,0.25), (0.25,0,1), (2,0,2), (1,2,2)}{
+\node[black] at \Point {\textbullet};
+}
+\end{tikzpicture}
+\end{center}
+\subcaption{A 3-Simplex or tetrahedron}
+\end{subfigure}
+\label{Figure 1.1}
+\caption{An example of a 2- and a 3-Simplex}
+\end{figure}
+
+The following definitions follow \cite[III.1]{Computational+Topology}.
+
+\begin{defi}[(proper) face/coface]
+    Consider a k-Simplex $\sigma$, which is the convex hull of points $S = \{s_0, ... , s_{k+1}\}$. The convex hull of a non-empty subset $U$ of $S$ is called a \textbf{face} of $\sigma$.
+    A face $\theta$ is called \textbf{proper}, if $|U| < k+1$. If $|U| = k$, we say that $\tau = \operatorname{conv}(U)$ is a \textbf{coface} of $\sigma$.
+\end{defi}
+
+A popular notation is to write $\tau \leq \sigma$ if $\tau$ is a face of $\sigma$ and $\tau < \sigma$ if it is proper.
+
+\begin{defi}[boundary and interior]
+    Consider a Simplex $\sigma$ as before. The \textbf{boundary} of $\sigma$, which we will denote by $\operatorname{bd}(\sigma)$ is the union of all proper faces of $\sigma$. Its \textbf{interior}
+    is: $\operatorname{int}(\sigma) \coloneqq \sigma\setminus\operatorname{bd}(\sigma)$
+\end{defi}
+
+A notation we will use in this work, is to write $[a,b,c]$ when talking about the simplex that has $a,b$ and $c$ for vertices.\\
+Now Consider Figure 1.1 (a) \ref{Figure 1.1} , for an illustration.
+The triangle $[a,b,c]$ has the gray area as interior and the Union of the edges $[a,b],[a,c],[b,c]$ and the vertices $[a],[b],[c]$
+as its boundary. The proper faces of the triangle $[a,b,c]$  are the edges in its boundary and the proper faces of the edges are the respective vertices. \\
+We will now proceed to define simplicial complexes.
+
+\begin{defi}[Simplicial complex, subcomplex, k-skeleton]
+    Let $K$ be a finite collection of Simplices. $K$ is a \textbf{simplicial complex} if the following two conditions hold:
+    \begin{enumerate}
+        \item $\sigma \in K \operatorname{and} \tau < \sigma \implies \tau \in K$
+        \item $\sigma_0, \sigma_1 \in K \implies \sigma_0 \cap \sigma_1 \in K \operatorname{or} \sigma_0 \cap \sigma_1 = \emptyset$
+    \end{enumerate}
+    'The \textbf{dimension} of $K$ is the maximum dimension of any of its simplices.' \cite[p. 63, paragraph 4]{Computational+Topology}.
+    A subset $L \subset K$ is called a \textbf{subcomplex} of $K$ if it itself a simplicial complex.
+    The \textbf{k-skeleton} of $K$ is the set of all simplices of dimension k or less.
+\end{defi}
+
+By the way we defined simplices, it is clear, that such a simplicial complex is a subset of $\mathbb{R}^n$, where $n$ is the dimension of the simplicial complex.
+Each vertex has coordinates and each $k$-simplex is the convex hull of $k+1$ vertices. This is why these are also referred to as \textbf{geometric} simplicial complexes.\\
+The following Figure \ref{Figure 1.2} gives an example of a simplicial complex in two dimensions and of a
+set of simplices, that is not a simplicial complex.
+
+\begin{figure}[H]
+\captionsetup[subfigure]{justification=centering}
+\begin{subfigure}[t]{0.5\textwidth}
+\begin{center}
+\begin{tikzpicture}
+\node[below= 2pt of {(0,0)}, outer sep=2pt] {a};
+\node[below = 2pt of {(2,0))}, outer sep=2pt] {b};
+\node[below right = 2pt of {(2,2)}, outer sep=2pt] {d};
+\node[left = 2pt of {(0,2)}, outer sep=2pt] {c};
+\node[right = 2pt of {(2,4)}, outer sep=2pt] {f};
+\node[right = 2pt of {(4,2)}, outer sep=2pt] {e};
+
+\fill [opacity = 0.2] (0,0)--(2,0)--(2,2)--(0,2)--(0,0);
+\draw [-,very thick] (0,0)--(2,0);
+\draw [-,very thick] (2,0)--(0,2);
+\draw [-,very thick] (0,2)--(0,0);
+\draw [-,very thick] (0,2)--(2,2);
+\draw [-,very thick] (2,2)--(4,2);
+\draw [-,very thick] (2,2)--(2,0);
+\draw [-,very thick] (2,4)--(2,2);
+\foreach \Point in {(0,0),(2,0),(0,2),(2,2),(4,2),(2,4)}{
+\node[black] at \Point {\textbullet};
+}
+\end{tikzpicture}
+\end{center}
+\subcaption{A simplicial complex.}
+\end{subfigure}
+\begin{subfigure}[t]{0.5\textwidth}
+\begin{center}
+\begin{tikzpicture}
+\node[below= 2pt of {(0,0)}, outer sep=2pt] {a};
+\node[left = 2pt of {(0,2))}, outer sep=2pt] {b};
+\node[right = 2pt of {(2,4)}, outer sep=2pt] {c};
+\node[below = 2pt of {(3,0)}, outer sep=2pt] {d};
+\node[right = 2pt of {(3,2)}, outer sep=2pt] {e};
+\node[left = 2pt of {(1,4)}, outer sep=2pt] {f};
+
+\fill [opacity = 0.2] (0,0)--(0,2)--(2,4)--(0,0);
+\fill [opacity = 0.2] (3,0)--(3,2)--(1,4)--(3,0);
+\draw [-,very thick] (0,0)--(0,2);
+\draw [-,very thick] (2,4)--(0,2);
+\draw [-,very thick] (0,0)--(2,4);
+\draw [-,very thick] (3,0)--(3,2);
+\draw [-,very thick] (1,4)--(3,2);
+\draw [-,very thick] (3,0)--(1,4);
+
+\foreach \Point in {(0,0),(0,2),(2,4),(3,0),(3,2),(1,4)}{
+\node[black] at \Point {\textbullet};
+}
+\end{tikzpicture}
+\end{center}
+\subcaption{Not a simplicial complex. }
+\end{subfigure}
+\label{Figure 1.2}
+\caption{Sets of simplices that do and do not fullfill Definition 1.1.8}
+\end{figure}
+
+Now when we look at the simplices of \ref{Figure 1.2} (a) and list them. We get
+\begin{center}
+    \begin{tabular}{lc}
+        Vertices: & $[a], [b], [c], [d], [e], [f]$ \\
+        Edges: & $[a,b],[a,c],[b,c],[b,d],[c,d],[d,e],[d,f]$ \\
+        Triangles: & $[a,b,c], [b,c,d]$
+    \end{tabular}
+\end{center}
+
+What is encoded here is just combinatorial data telling us, that some triangle $[a,b,c]$ contains edges $[a,b],[a,c],[b,c]$ and vertices $[a,b,c]$.\\
+This is what we call an abstract simplicial complex.
+\begin{defi}[Abstract simplicial complex]
+    Let $A$ be a finite collection of sets. $A$ is called an \textbf{abstract simplicial complex} iff:
+    \begin{enumerate}
+        \item $\alpha \in A$ and $\beta \subset \alpha \Rightarrow \beta \in A$
+    \end{enumerate}
+\end{defi}
+
+\begin{rem}
+    In this work, when we say, simplicial complex we refer to a \textbf{geometric} simplicial complex.
+    Let $A$ be an abstract simplicial complex. As for simplicial complexes we call the sets in $A$ its simplices. We will also write them in square brackets and the
+    \textbf{dimension} of $A$ is the maximum cardinality of one of its simplices.
+\end{rem}
+
+\begin{obs}
+    When comparing the definition of the abstract simplicial complex to the definition of the (geometric) simplicial complex, we can see, that the second
+    condition is automatically fullfilled for abstract simplicial complexes.
+\end{obs}
+
+Consider the following set: \\
+\begin{center}
+    $A = \{[a],[b],[c],[d],[e],[f],[a,b],[a,c],[b,c],[b,d],[c,d],[d,e],[d,f],[a,b,c],[b,c,d]\}$.
+\end{center}
+This is the same set of vertices edges and triangles as in the tabular above and it is easy to verify, that this is an abstract simplicial complex.
+The simplicial complex in Figure 1.2 (a) is a so called \textbf{geometric realization} of the abstract simplicial complex.
+This realization is obviously not unique. If we perturb any vertex slightly enough, we will get a different simplicial complex,
+but the abstract simplicial complex defined by the incidence relations stays the same. \\
+So every simplicial complex induces an abstract simplicial complex and geometric realizations of abstract simplicial complexes in $\mathbb{R}^n$ are not unique.
+Does every abstract simplicial complex have a geometric realization? Yes! \cite[p. 64]{Computational+Topology}
+
+\begin{thm}[Geometric Realization Theorem]
+    Every $d$-dimensional abstract simplicial complex has a geometric realization in $\mathbb{R}^{2d+1}$
+\end{thm}
+
+
