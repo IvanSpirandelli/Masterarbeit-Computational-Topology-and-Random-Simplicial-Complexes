@@ -1,3 +1,5 @@
+from numpy.ma import arange
+
 import GudhiExtension.column_algo.column_algorithm as ca
 import matplotlib.pyplot as plt
 
@@ -17,10 +19,8 @@ def computation_with_console_outs(filtration):
 def mat_visualization(mat,xticklabels = None, yticklabels = None, xrange = None, yrange = None):
     if(xrange == None):
         xrange = (0,len(mat[0]))
-        print(xrange)
     if(yrange == None):
         yrange = (0,len(mat))
-        print(yrange)
 
     fig, axs = plt.subplots(1)
 
@@ -28,11 +28,16 @@ def mat_visualization(mat,xticklabels = None, yticklabels = None, xrange = None,
     #axs.set_xlim(-3, 365)
     #axs.set_xlim(-3, 365)
     if(xticklabels != None):
-        axs.set_xticklabels(xticklabels[xrange[0]:xrange[-1]+1])
+        plt.xticks(arange(len(xticklabels)), xticklabels, fontsize = 5)
+        #axs.set_xticklabels(xticklabels[xrange[0]:xrange[-1]+1])
         for tick in axs.get_xticklabels():
-            tick.set_rotation(45)
+            tick.set_rotation(90)
 
     if(yticklabels != None):
-        axs.set_yticklabels(yticklabels[yrange[0]:yrange[-1]+1])
+        plt.yticks(arange(len(yticklabels)), yticklabels, fontsize=5)
+
+    plt.savefig("tmp.png", dpi=None, facecolor='w', edgecolor='w',
+            orientation='portrait', papertype=None, format=None,
+            transparent=False, bbox_inches=None, pad_inches=0.1, metadata=None)
 
     plt.show()
