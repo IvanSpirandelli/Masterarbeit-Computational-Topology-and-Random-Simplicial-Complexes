@@ -1,32 +1,38 @@
 import numpy as np
 import itertools as it
 
-
+#The column algorithm for matrix reduction
 def column_algorithm(filtered_boundary_matrix):
+    #variable counting the additions in the algorithm
     algorithm_step_count = 0
 
+    #number of columns
     n = filtered_boundary_matrix.shape[1]
     reduced_mat = np.copy(filtered_boundary_matrix)
     upper_tri = np.identity(n, dtype=int)
 
     for i in range(n):
+        #boolean to check if we have to do another search among the smaler indexed columns
         column_reduction = True
 
         while column_reduction:
+            #assume nothing changes
             column_reduction = False
 
             for k in range(i):
                 low = lowest_index(reduced_mat[:, i])
+                #Check if we find a smaller column with same lowest 1 rowindex
                 if low != -1 and lowest_index(reduced_mat[:, k]) == low:
-                    #print("We add: ", reduced_mat[:,k] )
-                    #print("to: ", reduced_mat[:,i] )
+                    #Additions
                     reduced_mat[:, i] = (reduced_mat[:, i] + reduced_mat[:,k]) % 2
                     upper_tri[:, i] -= upper_tri[:, k]
+                    #Do another step
                     column_reduction = True
                     algorithm_step_count += 1
 
     return algorithm_step_count
 
+#same as above, only that this also returns the reduced matrix.
 def column_algorithm_with_reduced_return(filtered_boundary_matrix):
     algorithm_step_count = 0
 
@@ -53,8 +59,11 @@ def column_algorithm_with_reduced_return(filtered_boundary_matrix):
     return algorithm_step_count, reduced_mat
 
 # Returns the index of the lowest 1 in a given column. If there is no "1" in the column. "-1" is returned.
+# TODO: Suboptimal implementation. Should be changed if we are to calculate massive amounts of data
 def lowest_index(arr):
+    #flipping the array, since we are looking for the last and not the first one.
     farr = np.flip(arr)
+    #Now we can use where to locate the first entry in the flipped array.
     idx = np.where(farr == 1)
     if (len(idx[0]) == 0):
         return -1
@@ -64,16 +73,17 @@ def lowest_index(arr):
 
 def build_boundary_matrix_from_filtration(filtration):
     mat = np.zeros(shape=(len(filtration), len(filtration)), dtype=int)
+    #maintaining which simplex is at which position
     index_set = {(): -1}
-    counter = 0
-    for simplex in filtration:
+
+    for idx,simplex in enumerate(filtration):
         dim = len(simplex)-1
-        index_set[tuple(simplex)] = counter
-        counter += 1
+        index_set[tuple(simplex)] = idx
         if (dim > 0):
             for combi in it.combinations(simplex, dim):
                 mat[index_set[combi], index_set[tuple(simplex)]] = 1
 
+    #removing 0 rows/columns
     mat = mat[~np.all(mat == 0, axis=1)]
     idx = np.argwhere(np.all(mat[..., :] == 0, axis=0))
     mat = np.delete(mat, idx, axis=1)
