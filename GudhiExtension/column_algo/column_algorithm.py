@@ -34,7 +34,10 @@ def column_algorithm(filtered_boundary_matrix):
 
 #same as above, only that this also returns the reduced matrix.
 def column_algorithm_with_reduced_return(filtered_boundary_matrix):
-    algorithm_step_count = 0
+    max_dim = sum(filtered_boundary_matrix[:,-1])-1
+
+    algorithm_step_count = [0 for _ in range(max_dim+1)]
+    print(algorithm_step_count)
 
     n = filtered_boundary_matrix.shape[1]
     reduced_mat = np.copy(filtered_boundary_matrix)
@@ -48,15 +51,42 @@ def column_algorithm_with_reduced_return(filtered_boundary_matrix):
 
             for k in range(i):
                 low = lowest_index(reduced_mat[:, i])
+                dim = sum(filtered_boundary_matrix[:,i])-1
+
+                if low != -1 and lowest_index(reduced_mat[:, k]) == low:
+                    reduced_mat[:, i] = (reduced_mat[:, i] + reduced_mat[:,k]) % 2
+                    upper_tri[:, i] -= upper_tri[:, k]
+                    column_reduction = True
+                    algorithm_step_count[dim] = algorithm_step_count[dim]+1
+
+    return algorithm_step_count, reduced_mat
+
+
+def column_algorithm_iterator(filtered_boundary_matrix):
+    max_dim = sum(filtered_boundary_matrix[:,-1])-1
+    algorithm_step_count = [0 for _ in range(max_dim+1)]
+
+    n = filtered_boundary_matrix.shape[1]
+    reduced_mat = np.copy(filtered_boundary_matrix)
+    upper_tri = np.identity(n, dtype=int)
+
+    for i in range(n):
+        column_reduction = True
+
+        while column_reduction:
+            column_reduction = False
+
+            for k in range(i):
+                low = lowest_index(reduced_mat[:, i])
+                dim = sum(reduced_mat[:,i])-1
                 if low != -1 and lowest_index(reduced_mat[:, k]) == low:
                     #print("We add: ", reduced_mat[:,k] )
                     #print("to: ", reduced_mat[:,i] )
                     reduced_mat[:, i] = (reduced_mat[:, i] + reduced_mat[:,k]) % 2
                     upper_tri[:, i] -= upper_tri[:, k]
                     column_reduction = True
-                    algorithm_step_count += 1
-
-    return algorithm_step_count, reduced_mat
+                    algorithm_step_count[dim] = algorithm_step_count[dim]+1
+                    yield algorithm_step_count, reduced_mat
 
 # Returns the index of the lowest 1 in a given column. If there is no "1" in the column. "-1" is returned.
 # TODO: Suboptimal implementation. Should be changed if we are to calculate massive amounts of data
