@@ -1,0 +1,177 @@
+import math
+import GudhiExtension.column_algo.column_algorithm as ca
+import GudhiExtension.column_algo.column_algo_outs as cao
+import matplotlib.pyplot as plt
+from operator import itemgetter
+
+def build_morozov_example(n):
+    if(n<3):
+        raise Warning("Increased n to 3, which is the minimal example to see the desired behaviour")
+        n = 3
+
+    v = math.ceil((n-1)/2)
+
+    print("n: ", n, "v: ", v)
+    vertices = [[0],[1],[2],[3]]
+    base_vertices = []
+
+    for i in range(n-4):
+        base_vertices.append([i+4])
+
+    for i in range(len(base_vertices)):
+        vertices.append(base_vertices[i])
+
+
+    triangles_with_two = []
+
+    #add edges, that just kill components:
+    fluff_edges = [[0,2], [1,2], [2,3]]
+    for elem in base_vertices:
+        fluff_edges.append([2,elem[0]])
+
+    first_fin_left = vertices[-1][0]+1
+    first_fin_right = vertices[-1][0]+2
+    vertices.append([first_fin_left])
+    vertices.append([first_fin_right])
+
+    fin_edges = [[3,first_fin_right],[0,first_fin_left]]
+    base_edges = [[1,3],[0,3]]
+    fin_close_edges = [[3,first_fin_left],[1,first_fin_right]]
+    print("FFL: ", first_fin_left, "FFR: ", first_fin_right)
+    base_triangles = [[0,1,3]]
+    fin_triangles = [[0,3,first_fin_left],[1,3,first_fin_right]]
+
+    to_split = [[0,3],[1,3]]
+
+    for i in range(len(base_vertices)):
+        print(to_split)
+        add_base_triangle_and_implying(to_split, base_vertices[i][0], vertices, base_triangles, base_edges, fin_triangles, fin_edges, fin_close_edges, i%2 == 0)
+
+    for remaining in to_split:
+        triangles_with_two.append([2,remaining[0],remaining[1]])
+
+    base_edges.insert(0,[0,1])
+
+    return output(vertices, fluff_edges, fin_close_edges, fin_edges, base_edges, base_triangles, triangles_with_two, fin_triangles)
+
+
+def add_fin_and_implying(a, b, top, fin_triangles, fin_edges, fin_close_edges, even_step):
+    #fin edges are sorted properly in output!
+    fin_triangles.append([a,b,top])
+    fin_edges.insert(0,[b,top])
+    fin_close_edges.append([a,top])
+
+def add_base_triangle_and_implying(to_split,c, vertices, base_triangles, base_edges, fin_triangles, fin_edges, fin_close_edges, even_step):
+        a = to_split[0][0]
+        b = to_split[0][1]
+        del to_split[0]
+
+        base_triangles.append([a,b,c])
+
+        if even_step:
+            to_split.append([a, c])
+            base_edges.insert(0,[a, c])
+            newvert = vertices[-1][0] + 1
+            vertices.append([newvert])
+            add_fin_and_implying(a, c, newvert, fin_triangles, fin_edges, fin_close_edges, even_step)
+
+            to_split.append([b, c])
+            base_edges.insert(0,[b, c])
+            newvert += 2
+            vertices.append([newvert])
+            add_fin_and_implying(b, c, newvert, fin_triangles, fin_edges, fin_close_edges, even_step)
+
+        else:
+            to_split.insert(len(to_split)-2,[a,c])
+            base_edges.insert(1,[a, c])
+            newvert = vertices[-2][0] + 1
+            vertices.append([newvert])
+            add_fin_and_implying(a, c, newvert, fin_triangles, fin_edges, fin_close_edges, even_step)
+
+            to_split.append([b,c])
+            base_edges.insert(0,[b, c])
+            newvert += 2
+            vertices.append([newvert])
+            add_fin_and_implying(b, c, newvert, fin_triangles, fin_edges, fin_close_edges, even_step)
+
+def output(vertices, fluff_edges, component_destroying_edges, fin_edges, base_edges, base_triangles, triangles_with_two, fin_triangles):
+    print("Vertices :")
+    print(vertices)
+    print("Other Edges: ")
+    for edge in fluff_edges:
+        edge.sort()
+        print(edge)
+    fluff_edges.sort()
+
+    for edge in component_destroying_edges:
+        edge.sort()
+        print(edge)
+    component_destroying_edges.sort()
+
+    print("Fin Edges: ")
+    for edge in fin_edges:
+        edge.sort()
+    fin_edges.sort(key=itemgetter(1))
+    fin_edges.reverse()
+    for edge in fin_edges:
+        print(edge)
+
+    print("Base Edges: ")
+    for edge in base_edges:
+        edge.sort()
+        print(edge)
+
+    print("Base Triangle: ")
+    for tri in base_triangles:
+        tri.sort()
+        print(tri)
+
+    print("Triangles with 2: ")
+    for tri in triangles_with_two:
+        tri.sort()
+        print(tri)
+    triangles_with_two.sort()
+
+    print("Fin Triangles: ")
+    for tri in fin_triangles:
+        tri.sort()
+        print(tri)
+
+    print("NUMBER OF TRIANGLES: ", len(triangles_with_two)+len(fin_triangles)+len(base_triangles))
+
+    return vertices + fluff_edges + component_destroying_edges + fin_edges + base_edges + base_triangles + triangles_with_two + fin_triangles
+
+
+def show_matrices_for_filtration(filtration):
+    mat = ca.build_boundary_matrix_from_filtration(filtration)
+    max_len = max([len(i) for i in filtration])
+
+    xticklabels = [elem for elem in filtration if len(elem) > 1]
+    yticklabels = [elem for elem in filtration if len(elem) < max_len]
+    yticklabels.reverse()
+    cao.mat_visualization(mat, xticklabels, yticklabels)
+
+    steps, red = ca.column_algorithm_with_reduced_return(mat)
+    for it in ca.column_algorithm_iterator(mat):
+        steps, red = it
+        cao.mat_visualization(red, xticklabels, yticklabels)
+    return steps
+
+
+x = []
+y = []
+for i in range(6,7):
+    print(i,"/10")
+    filtration = build_morozov_example(i)
+    x.append(len(filtration))
+    #mat = ca.build_boundary_matrix_from_filtration(filtration)
+    #steps, red = ca.column_algorithm_with_reduced_return(mat)
+
+    steps = show_matrices_for_filtration(filtration)
+    print("STEPS: ", steps)
+
+    print("NUM OF SIMPLICES: ", len(filtration))
+    y.append(sum(steps))
+
+plt.scatter(x,y)
+plt.show()

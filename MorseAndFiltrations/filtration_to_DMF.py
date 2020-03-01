@@ -15,6 +15,11 @@ def filtration_to_DMF(filtration):
                 critical[ind] = 1
             else:
                 pairings.append([list(pair),simplex])
+                critical[filtration.index(pair)] = 0
+
+    print("CRITICAL IN PAIRING: ", [filtration[i] for i in range(len(filtration)) if critical[i] == 1])
+    print("NUMBER OF CRITICAL FACES: ", len([filtration[i] for i in range(len(filtration)) if critical[i] == 1]))
+
     return pairings
 
 def simplex_in_pairings(simplex, pairings):

@@ -78,7 +78,7 @@ def column_algorithm_iterator(filtered_boundary_matrix):
 
             for k in range(i):
                 low = lowest_index(reduced_mat[:, i])
-                dim = sum(reduced_mat[:,i])-1
+                dim = sum(filtered_boundary_matrix[:,i])-1
                 if low != -1 and lowest_index(reduced_mat[:, k]) == low:
                     #print("We add: ", reduced_mat[:,k] )
                     #print("to: ", reduced_mat[:,i] )
