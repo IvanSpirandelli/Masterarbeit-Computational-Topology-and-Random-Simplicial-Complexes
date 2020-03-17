@@ -101,20 +101,37 @@ def lowest_index(arr):
         return len(arr) - idx[0][0] - 1
 
 
-def build_boundary_matrix_from_filtration(filtration):
+def build_boundary_matrix_from_filtration(filtration, clearing = True, crop_pre_clearing = True,  crop_post_clearing = False):
     mat = np.zeros(shape=(len(filtration), len(filtration)), dtype=int)
     #maintaining which simplex is at which position
     index_set = {(): -1}
+    cleared_indices = set()
 
     for idx,simplex in enumerate(filtration):
         dim = len(simplex)-1
         index_set[tuple(simplex)] = idx
         if (dim > 0):
+            max_index_of_facet = -1
             for combi in it.combinations(simplex, dim):
                 mat[index_set[combi], index_set[tuple(simplex)]] = 1
+                if(dim > 1 and clearing and index_set[combi] > max_index_of_facet):
+                    max_index_of_facet = index_set[combi]
+            if(clearing):
+                mat[:,max_index_of_facet] = 0
+                cleared_indices.add(max_index_of_facet)
 
-    #removing 0 rows/columns
-    mat = mat[~np.all(mat == 0, axis=1)]
-    idx = np.argwhere(np.all(mat[..., :] == 0, axis=0))
-    mat = np.delete(mat, idx, axis=1)
+    #removing 0-columns depending on specifications
+    if(crop_pre_clearing):
+        mat = mat[~np.all(mat == 0, axis=1)]
+        indices = np.argwhere(np.all(mat[..., :] == 0, axis=0))
+        updated_indices = []
+        if crop_post_clearing:
+            updated_indices = indices
+        else:
+            for idx in indices:
+                if not (idx[0] in cleared_indices):
+                    updated_indices.append(idx)
+
+        mat = np.delete(mat, updated_indices, axis=1)
+
     return mat

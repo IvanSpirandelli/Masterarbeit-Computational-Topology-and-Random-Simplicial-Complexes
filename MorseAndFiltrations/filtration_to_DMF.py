@@ -35,6 +35,7 @@ def find_max_face(simplex, filtration, pairings):
     curr_max_index = -1
     for combi in combis:
         tmp = filtration.index(list(combi))
+
         if tmp > curr_max_index:
             curr_max_index = tmp
 
