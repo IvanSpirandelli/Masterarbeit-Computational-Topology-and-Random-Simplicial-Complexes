@@ -1,43 +1,11 @@
 import numpy as np
 import itertools as it
 
-#The column algorithm for matrix reduction
-def column_algorithm(filtered_boundary_matrix):
-    #variable counting the additions in the algorithm
-    algorithm_step_count = 0
-
-    #number of columns
-    n = filtered_boundary_matrix.shape[1]
-    reduced_mat = np.copy(filtered_boundary_matrix)
-    upper_tri = np.identity(n, dtype=int)
-
-    for i in range(n):
-        #boolean to check if we have to do another search among the smaler indexed columns
-        column_reduction = True
-
-        while column_reduction:
-            #assume nothing changes
-            column_reduction = False
-
-            for k in range(i):
-                low = lowest_index(reduced_mat[:, i])
-                #Check if we find a smaller column with same lowest 1 rowindex
-                if low != -1 and lowest_index(reduced_mat[:, k]) == low:
-                    #Additions
-                    reduced_mat[:, i] = (reduced_mat[:, i] + reduced_mat[:,k]) % 2
-                    upper_tri[:, i] -= upper_tri[:, k]
-                    #Do another step
-                    column_reduction = True
-                    algorithm_step_count += 1
-
-    return algorithm_step_count
-
 #same as above, only that this also returns the reduced matrix.
-def column_algorithm_with_reduced_return(filtered_boundary_matrix):
+def column_algorithm(filtered_boundary_matrix, reduced_return = True):
     max_dim = sum(filtered_boundary_matrix[:,-1])-1
 
     algorithm_step_count = [0 for _ in range(max_dim+1)]
-    print(algorithm_step_count)
 
     n = filtered_boundary_matrix.shape[1]
     reduced_mat = np.copy(filtered_boundary_matrix)
@@ -55,12 +23,22 @@ def column_algorithm_with_reduced_return(filtered_boundary_matrix):
 
                 if low != -1 and lowest_index(reduced_mat[:, k]) == low:
                     reduced_mat[:, i] = (reduced_mat[:, i] + reduced_mat[:,k]) % 2
+                    algorithm_step_count[0] = algorithm_step_count[0] + count_addition_of_ones(reduced_mat[:, i], reduced_mat[:,k])
                     upper_tri[:, i] -= upper_tri[:, k]
                     column_reduction = True
                     algorithm_step_count[dim] = algorithm_step_count[dim]+1
 
-    return algorithm_step_count, reduced_mat
+    if reduced_return:
+        return algorithm_step_count, reduced_mat
+    else:
+        return algorithm_step_count
 
+def count_addition_of_ones(a,b):
+    count = 0;
+    for i in range(len(a)):
+        if a[i] == 1 or b[i] == 1:
+            count +=1
+    return count
 
 def column_algorithm_iterator(filtered_boundary_matrix):
     max_dim = sum(filtered_boundary_matrix[:,-1])-1

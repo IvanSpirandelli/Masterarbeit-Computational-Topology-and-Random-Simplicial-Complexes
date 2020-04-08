@@ -88,5 +88,6 @@ make the results deterministic)."""
 
     result = []
     for d in toposort(data):
+
         result.extend((sorted if sort else list)(d))
     return result

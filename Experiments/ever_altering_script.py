@@ -3,6 +3,13 @@ import GudhiExtension.column_algo.column_algo_outs as cao
 import GudhiExtension.column_algo.column_algorithm as ca
 from MorseAndFiltrations.DMF_to_filtration import DMF_to_filtration
 import Examples.n_gon_with_center_and_different_pairings as ngon
+import Examples.davides_eight_point_delaunay as dav
+import Examples.simple_examples as se
+import Examples.mozorov_example as me
+
+import GudhiExtension.point_cloud_generator as pcg
+import GudhiExtension.alpha_complex_wrapper as acw
+
 from Examples.two_layered_corridor_example import get_two_layered_corridor_example
 
 from MorseAndFiltrations.filtration_to_DMF import filtration_to_DMF
@@ -46,45 +53,22 @@ def compute_and_plot():
         print(i,"/20")
 
         filtration = ngon.get_n_gon_with_center(i)
-        pairings = ngon.get_expensive_pairings_same_directions(i)
+        pairings = ngon.get_expensive_pairings_opposite_directions(i)
 
         filtration = DMF_to_filtration(filtration,pairings)
-        print(filtration)
-        #print(pairings)
 
         x.append(len(filtration))
-        steps = ca.column_algorithm(ca.build_boundary_matrix_from_filtration(filtration, False))
-        y.append(steps)
+        steps,red = ca.column_algorithm(ca.build_boundary_matrix_from_filtration(filtration, False))
+        print(steps)
+        y.append(sum(steps))
 
     plt.scatter(x,y)
-    plt.savefig("n_gon_plot_many_additions" + ".png", dpi=None, facecolor='w', edgecolor='w',
-                orientation='portrait', papertype=None, format=None,
-                transparent=False, bbox_inches=None, pad_inches=0.1, metadata=None)
+    #plt.savefig("n_gon_plot_many_additions" + ".png", dpi=None, facecolor='w', edgecolor='w',
+    #            orientation='portrait', papertype=None, format=None,
+    #            transparent=False, bbox_inches=None, pad_inches=0.1, metadata=None)
     plt.show()
 
-
-#filtration = ngon.get_n_gon_with_center(5)
-#pairings1 = ngon.get_expensive_pairings_same_directions(5)
-#pairings2 = ngon.get_expensive_pairings_opposite_directions(5)
-
-#filtration1 = DMF_to_filtration(filtration, pairings1)
-#filtration2 = DMF_to_filtration(filtration, pairings2)
-
-#mat1 = ca.build_boundary_matrix_from_filtration(filtration1)
-#max_len1 = max([len(i) for i in filtration1])
-
-#xticklabels1 = [elem for elem in filtration1 if len(elem) > 1]
-#yticklabels1 = [elem for elem in filtration1 if len(elem) < max_len1]
-#yticklabels1.reverse()
-#cao.mat_visualization(mat1, xticklabels1, yticklabels1)
-
-#mat2 = ca.build_boundary_matrix_from_filtration(filtration2)
-#max_len2 = max([len(i) for i in filtration2])
-
-#xticklabels2 = [elem for elem in filtration2 if len(elem) > 1]
-#yticklabels2 = [elem for elem in filtration2 if len(elem) < max_len2]
-#yticklabels2.reverse()
-#cao.mat_visualization(mat2, xticklabels2, yticklabels2)
-
 compute_and_plot()
+
 quit()
+
