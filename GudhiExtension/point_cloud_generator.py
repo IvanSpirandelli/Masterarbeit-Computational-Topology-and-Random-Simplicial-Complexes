@@ -23,6 +23,13 @@ def generate_n_points(n, dim):
 
     return [list(elem) for elem in points]
 
+def generate_n_points_poisson(n,lam,dim):
+    print(np.random.poisson(lam,[dim,dim]*n))
 
-
+def generate_n_points_normal(n,dim,mean,sigma):
+    points = set()
+    while (len(points) < n):
+        point = (np.random.normal(mean,sigma) for _ in range(dim))
+        points.add(point)
+    return [list(elem) for elem in points]
 

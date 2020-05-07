@@ -29,15 +29,9 @@ def mat_visualization(mat,xticklabels = None, yticklabels = None, xrange = None,
     cropmat = mat[yrange[0]:yrange[-1],xrange[0]:xrange[-1]]
     axs.matshow(cropmat, origin = "upper", extent=(-0.5,xrange[-1]-xrange[0]-0.5, -0.5,yrange[-1]-yrange[0]-0.5))
 
-    #axs.matshow(cropmat, origin = "upper", extent=(-0.5,xrange[-1]-0.5, -0.5,yrange[-1]-0.5))
-
-    #axs.set_ylim(-0.5, -yrange[-1]-1)
-    #axs.set_xlim(-0.5, xrange[-1]-0.5)
-
     if(xticklabels != None):
         axs.set_xticks(np.arange(len(xticklabels)))
-        #plt.xticks(arange(len(xticklabels)), xticklabels, fontsize = 5)
-        #axs.set_xticklabels(xticklabels[xrange[0]:xrange[-1]+1])
+
         for tick in axs.get_xticklabels():
             tick.set_rotation(90)
         axs.set_xticklabels(xticklabels)
@@ -54,3 +48,17 @@ def mat_visualization(mat,xticklabels = None, yticklabels = None, xrange = None,
 
     plt.show()
     plt.close()
+
+def extract_and_print_pairs(filtration, lowest_ones):
+    print_pairings_to_console(get_pairings(filtration, lowest_ones))
+
+def get_pairings(filtration, lowest_ones):
+    pairs = []
+    for i,elem in enumerate(lowest_ones):
+        if (elem != -1):
+            pairs.append([filtration[elem], filtration[i]])
+    return pairs
+
+def print_pairings_to_console(pairings):
+    for pair in pairings:
+        print(pair[0], "->", pair[1])

@@ -43,8 +43,6 @@ def build_morozov_example(n):
 
     to_split = [[0,3],[1,3]]
 
-    print(base_vertices)
-
     for i in range(len(base_vertices)):
         #print(to_split)
         add_base_triangle_and_implying(to_split, base_vertices[i][0], vertices, base_triangles, base_edges, fin_triangles, fin_edges, fin_close_edges, base_vertices[i][0]%2 == 0)
