@@ -33,11 +33,16 @@ def mat_visualization(mat,xticklabels = None, yticklabels = None, xrange = None,
         axs.set_xticks(np.arange(len(xticklabels)))
 
         for tick in axs.get_xticklabels():
+            tick.set_fontsize(7)
             tick.set_rotation(90)
         axs.set_xticklabels(xticklabels)
 
     if(yticklabels != None):
         axs.set_yticks(np.arange(len(yticklabels)))
+
+        for tick in axs.get_yticklabels():
+            tick.set_fontsize(7)
+
         axs.set_yticklabels(yticklabels)
 
     plt.gcf().subplots_adjust(top=0.8)

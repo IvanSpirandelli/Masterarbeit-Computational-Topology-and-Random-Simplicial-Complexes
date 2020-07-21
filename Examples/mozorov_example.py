@@ -100,7 +100,7 @@ def add_base_triangle_and_implying(to_split,c, vertices, base_triangles, base_ed
             add_fin_and_implying(b, c, newvert, fin_triangles, fin_edges, fin_close_edges, even_step)
 
 def output(vertices, fluff_edges, component_destroying_edges, fin_edges, base_edges, base_triangles, triangles_with_two, fin_triangles):
-    prints = False
+    prints = True
 
     if prints:
         print("Vertices :")
@@ -154,39 +154,4 @@ def output(vertices, fluff_edges, component_destroying_edges, fin_edges, base_ed
 
     return vertices + component_destroying_edges + fluff_edges + fin_edges + base_edges + base_triangles + triangles_with_two + fin_triangles
 
-def show_matrices_for_filtration(filtration):
-    mat = ca.build_boundary_matrix_from_filtration(filtration, clearing=True)
-    max_len = max([len(i) for i in filtration])
 
-    xticklabels = [elem for elem in filtration if len(elem) > 2]
-    yticklabels = [elem for elem in filtration if len(elem) < max_len and len(elem)>1]
-    yticklabels.reverse()
-
-    xrange = (len(mat[0]) - len(xticklabels), len(mat[0]))
-    yrange = (len(mat) - len(yticklabels), len(mat))
-
-    cao.mat_visualization(mat, xticklabels, yticklabels, xrange, yrange, index=0)
-
-    steps, red = ca.column_algorithm_with_reduced_return(mat)
-    for idx,it in enumerate(ca.column_algorithm_iterator(mat)):
-        steps, red = it
-        cao.mat_visualization(red, xticklabels, yticklabels, xrange, yrange, index= idx)
-    return steps
-
-
-# x = []
-# y = []
-# for i in range(5,30):
-#     print(i,"/10")
-#     filtration = build_morozov_example(i)
-#     x.append(i)
-#     mat = ca.build_boundary_matrix_from_filtration(filtration, False)
-#     steps, red = ca.column_algorithm(mat)
-#     #steps = show_matrices_for_filtration(filtration)
-#     print("STEPS: ",steps, "BY TYPE: ", sum(steps))
-#
-#     print("NUM OF SIMPLICES: ", len(filtration))
-#     y.append(sum(steps))
-#
-# plt.scatter(x,y)
-#plt.show()

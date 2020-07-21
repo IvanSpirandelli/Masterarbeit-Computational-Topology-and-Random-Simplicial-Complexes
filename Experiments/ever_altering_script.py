@@ -1,37 +1,79 @@
 import GudhiExtension.filtration_manipulation as fm
 import GudhiExtension.column_algo.column_algo_outs as cao
 import GudhiExtension.column_algo.column_algorithm as ca
+import GudhiExtension.point_cloud_generator as pcg
+import GudhiExtension.alpha_complex_wrapper as acw
+import GudhiExtension.random_discrete_morse as rdm
+
 from MorseAndFiltrations.DMF_to_filtration import DMF_to_filtration
+from MorseAndFiltrations.filtration_to_DMF import filtration_to_DMF
+
+
 import Examples.n_gon_with_center_and_different_pairings as ngon
 import Examples.davides_eight_point_delaunay as dav
 import Examples.overlapping_wedge as overwedge
 import Examples.simple_examples as se
 import Examples.mozorov_example as me
+import Examples.rand_k_n_p as rnp
+import Examples.wireframe_pyramid as wp
+import Examples.dunce_hat as dh
+import Examples.critically_connected_tube as cct
 
-import GudhiExtension.point_cloud_generator as pcg
-import GudhiExtension.alpha_complex_wrapper as acw
 
-from Examples.two_layered_corridor_example import get_two_layered_corridor_example
-
-from MorseAndFiltrations.filtration_to_DMF import filtration_to_DMF, filtration_to_DMF_with_all_emergent
-
-from MorseAndFiltrations.gradient_field import gradient_field
-from MorseAndFiltrations.toposort import toposort_flatten
-from MorseAndFiltrations.generate_perfect_filtration import perfect_filtration_from_triangles
+import scipy.stats as scs
 import matplotlib.pyplot as plt
 import numpy as np
 import timeit
 
-def get_perfect_v_path_example():
-    simplices = [[0],[1],[2],[3],[4],[5],[6],[7],[8],
-                 [0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],
-                 [1,8],[0,8],[0,7],[0,6],[0,5],[0,4],[0,3],[0,2],
-                 [0,1,8],[0,7,8],[0,6,7],[0,5,6],[0,4,5],[0,3,4],[0,2,3],[0,1,2]
-                 ]
-    pairings = [[[0], [0, 1]], [[1], [1, 2]], [[2], [2, 3]], [[3], [3, 4]], [[4], [4, 5]], [[5], [5, 6]], [[6], [6, 7]], [[7], [7, 8]],
-                [[1, 8], [0, 1, 8]], [[0, 8], [0, 7, 8]], [[0, 7], [0, 6, 7]], [[0, 6], [0, 5, 6]],
-                [[0, 5], [0, 4, 5]], [[0, 4], [0, 3, 4]], [[0, 3], [0, 2, 3]], [[0, 2], [0, 1, 2]]]
-    return simplices, pairings
+
+def draw_filtration_2D(plot, points, filtration, level=0):
+    step = 0
+    index = 0
+    dist_at_index = 0.0
+    # print("Index: ", index, ", DistAtIndex: ", dist_at_index, ", Step: ", step)
+    if (step == 0):
+        # Moving forward in the list of simplices, until the layer of distance 0 is done
+        while (step == 0):
+            if (filtration[index][1] == dist_at_index):
+                index += 1
+            else:
+                step += 1
+                dist_at_index = filtration[index][1]
+
+        x, y = zip(*points)
+        plot.scatter(x, y, zorder=3)
+
+        for i,p in enumerate(points):
+            label = "{:}".format(i)
+
+            plt.annotate(label,  # this is the text
+                         (p[0], p[1]),  # this is the point to label
+                         textcoords="offset points",  # how to position the text
+                         xytext=(5, 5),  # distance from text to points (x,y)
+                         ha='center')  # horizontal alignment can be left, right or center
+
+    latest_dist = 0.0
+    # print("Index: ", index, ", DistAtIndex: ", dist_at_index, ", Step: ", step)
+    while (step < level and index < len(filtration)):
+        if (filtration[index][1] == dist_at_index):
+
+            if (len(filtration[index][0]) == 2):
+                zipped = list(zip(points[filtration[index][0][0]], points[filtration[index][0][1]]))
+                plot.plot(list(zipped[0]), list(zipped[1]), lw=3, color='coral', zorder=2)
+
+            elif (len(filtration[index][0]) == 3):
+                zipped = list(zip(points[filtration[index][0][0]],
+                                  points[filtration[index][0][1]],
+                                  points[filtration[index][0][2]]))
+                plot.fill(list(zipped[0]), list(zipped[1]), color='beige', zorder=1)
+
+            index += 1
+            latest_dist = dist_at_index
+        else:
+            dist_at_index = filtration[index][1]
+            step += 1
+        # print("Index: ", index, ", DistAtIndex: ", dist_at_index, ", Step: ", step)
+    return latest_dist
 
 def show_matrices_for_filtration(filtration):
     mat = ca.build_boundary_matrix_from_filtration(filtration, False, False)
@@ -45,7 +87,7 @@ def show_matrices_for_filtration(filtration):
     steps,_, red = ca.column_algorithm(mat)
     for i,it in enumerate(ca.column_algorithm_iterator(mat)):
         steps,_, red = it
-        cao.mat_visualization(red, xticklabels, yticklabels, name="1fishNfins", index=i)
+        cao.mat_visualization(red, xticklabels, yticklabels, name="tetrahedron_with_fins", index=i+1)
     print("Steps: ", steps, sum(steps))
     return sum(steps)
 
@@ -59,14 +101,14 @@ def compute_plot_and_fit():
     w= []
     oddv= []
     oddw= []
-    for i in range(5,100):
-        print(i,"/60")
+    for i in range(1,100):
+        print(i,"/100")
 
         # simplices = ngon.get_n_gon_with_center_and_fins(i)
         # pairings = ngon.fin_pairings_many_critical_cells_v2(i)
         # filtration = DMF_to_filtration(simplices, pairings)
 
-        filtration = me.build_morozov_example(i)
+        filtration = cct.get_c_c_t(i)
 
         steps,lows,red = ca.column_algorithm(ca.build_boundary_matrix_from_filtration(filtration, False, False))
         print(steps)
@@ -81,7 +123,7 @@ def compute_plot_and_fit():
     f = np.poly1d(p)  # So we can call f(x)
     fig = plt.figure()
     ax = fig.add_subplot(111)
-    #ax.plot(x, y, 'bo', label="Data")
+    ax.plot(x, y, 'bo', label="Data")
     ax.plot(x, f(x),'r', label="NGON")
     coeff1, res1, _, _, _ = np.polyfit(x, y, 1, full=True)
     coeff2, res2, _, _, _ = np.polyfit(x, y, 2, full=True)
@@ -103,18 +145,24 @@ def compute_plot_and_fit():
 
 def stabelize(filtration, pairings):
     stableization_steps = 0
+    print("FILTRATION: ", filtration)
     if(pairings == []):
-        pairings = filtration_to_DMF_with_all_emergent(filtration, False)
-        print(pairings)
-
+        critical, pairings, _ = filtration_to_DMF(filtration)
+        print("CRITICAL CELLS: ", critical)
+        print("PAIRINGS: ", pairings)
+        print("NUMBER: ", len(critical))
+    print("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-")
     n_filtration = DMF_to_filtration(filtration, pairings)
 
 
     while n_filtration != filtration:
-        print(n_filtration)
-        pairings = filtration_to_DMF(n_filtration, True)
+        print("FILTRATION: ", n_filtration)
+        critical, pairings, _ = filtration_to_DMF(n_filtration)
         filtration = n_filtration
-        print(pairings)
+        print("CRITICAL CELLS: ", critical)
+        print("PAIRINGS: ", pairings)
+        print("NUMBER: ", len(critical))
+        print("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-")
         n_filtration = DMF_to_filtration(filtration, pairings)
         stableization_steps += 1
 
@@ -215,15 +263,228 @@ def comparing_running_times(n,dim):
 
     print("ALL MATRICES ARE REDUCED TO SAME?", (red1 == red2).all() and (red1 == red3).all() and (red1 == red4).all())
 
+def correlation_out(name, simplices, x, y ):
+    with open(name + ".txt", "w+") as file:
+        file.write(str(simplices) + ";\n")
+        file.write("CRITICAL FACES: " + str(x) + "\n")
+        file.write("CALCULATION STEPS: " + str(y) + "\n")
+        spear, _ = scs.spearmanr(x, y)
+        pear, _ = scs.pearsonr(x,y)
+        cova = np.corrcoef(x,y)
+        slope, intercept, r_value, p_value, std_err = scs.linregress(x,y)
+        file.write("#######################"+ "\n")
+        file.write("R-VALUE: " +  str(r_value)+ "\n")
+        file.write("P-VALUE: " +  str(p_value) + "\n")
+        file.write("COVARIANCE MATRIX: " +  str(cova) + "\n")
+        file.write("PEARSON CORRELATION: " +  str(pear) + "\n")
+        file.write("SPEARMAN CORRELATION: "+ str(spear) + "\n")
+        file.write("#######################" + "\n")
 
-# filtration = ngon.get_n_gon_with_center_and_fins(6)
-# pairings = ngon.fin_pairings_many_critical_cells(6)
-# filtration = DMF_to_filtration(filtration, pairings)
+        file.write("SLOPE:" + str(slope) + "\n")
+        file.write("INTERCEPT:" +  str(intercept) + "\n")
+        file.write("STANDARD ERROR:" +  str(std_err) + "\n")
+
+        return pear, spear, p_value
+
+def random_morse_analysis(construction, name = "tmp", outer_start = 1, outer_end = 50, inner_runs = 50):
+    for i in range(outer_start,outer_end):
+        print("Step: ", i)
+        simplices = construction(i)
+        x = []
+        y = []
+        for j in range(inner_runs):
+            print(inner_runs-j,",", end=" ")
+            complex = simplices.copy()
+            cc, pairings, _ = rdm.random_discrete_morse(complex)
+            filtration = DMF_to_filtration(simplices, pairings)
+            steps,_ = ca.column_algorithm(ca.build_boundary_matrix_from_filtration(filtration), False)
+
+            x.append(len(cc))
+            y.append(steps[0])
+
+        print()
+        pear, spear, p_val = correlation_out(name + "_" + str(i) + "_" + str(inner_runs) + "_RDM",simplices,x,y)
+
+        print(".................")
+
+def random_filtration_analysis(construction, max_dimension, name = "tmp", outer_start = 1, outer_end = 50, inner_runs = 50):
+    all_pear = []
+    all_spear = []
+    all_p_val = []
+    for i in range(outer_start,outer_end):
+        print("Step: ", i)
+        simplices = construction(i)
+        x = []
+        y = []
+        for j in range(inner_runs):
+            #print(inner_runs-j,",", end=" ")
+            filtration = simplices.copy()
+            for d in range(max_dimension):
+                fm.get_random_permutation_of_simplices_of_dimension_d(filtration,d)
+            pairings = filtration_to_DMF(filtration)
+            filtration = DMF_to_filtration(filtration, pairings)
+            steps,_ = ca.column_algorithm(ca.build_boundary_matrix_from_filtration(filtration), False)
+
+            x.append(len(filtration) - 2*len(pairings))
+            y.append(steps[0])
+
+        #print()
+        pear, spear, p_val = correlation_out(name + "_" + str(i) + "_" + str(inner_runs) + "_RANDOM_FILTRATIONS",simplices,x,y)
+        all_pear.append(pear)
+        all_spear.append(spear)
+        all_p_val.append(p_val)
+
+        print("PEAR: ", pear,"| SPEAR: ", spear, "| p-Val: ", p_val)
+        print(".................")
+    print("ALL PEAR: ", all_pear)
+    print("AVERAGE PEAR: ", sum(all_pear)/len(all_pear))
+
+    print("ALL SPEAR: ", all_spear)
+    print("AVERAGE SPEAR: ", sum(all_spear)/len(all_spear))
+
+    print("ALL P_VAL: ", all_p_val)
+    print("AVERAGE P_VAL: ", sum(all_p_val)/len(all_p_val))
+
+def number_of_criticals_per_dimension(criticals):
+    out = [0]
+    l = 1
+    for crit in criticals:
+        if(len(crit) > l):
+            out.append(1)
+            l+=1
+        else:
+            out[-1]+=1
+    return out
+
+def random_2_experiments():
+    import tikzplotlib
+
+    n = 20
+    prob = 0
+    stepwidth = 0.025
+    mus = []
+    stds = []
+    ps = []
+    perfect_matching_ratio = []
+    runs = 10000
+
+    while(prob<1.015):
+        data = []
+        perfects = 0
+        for _ in range(runs):
+            simplices = rnp.get_random_2_complex(n,prob)
+            criticals, pairings = filtration_to_DMF(simplices)
+            elems = number_of_criticals_per_dimension(criticals)
+            if(len(elems) == 2):
+                perfects += 1
+
+            data.append(len(criticals))
+        perfect_matching_ratio.append(perfects/runs)
+
+        # Fit a normal distribution to the data:
+        mu, std = scs.norm.fit(data)
+
+        mus.append(mu)
+        stds.append(std)
+        ps.append(prob)
+        # Plot the histogram.
+        plt.hist(data, bins=25, density=True, alpha=0.6, histtype='bar', stacked = True)
+
+        # Plot the PDF.
+        xmin, xmax = plt.xlim()
+        x = np.linspace(xmin, xmax, 1000)
+        p = scs.norm.pdf(x, mu, std)
+        plt.plot(x, p, 'k', linewidth=2)
+        title = "Fit results: mu = %.2f,  std = %.2f" % (mu, std)
+        plt.title(title)
+        tikzplotlib.save("NormalFit_"+ str(n) + "_" + str(np.math.floor(prob*1000)/10.0) + ".tex")
+        plt.show()
+        prob += stepwidth
+        print(prob)
+
+    print(perfect_matching_ratio)
+    plt.plot(ps,perfect_matching_ratio)
+    plt.xlabel("p")
+    plt.ylabel("perfect")
+    tikzplotlib.save(str(n) + "_perfect_matchings.tex")
+    plt.show()
+
+    plt.plot(ps,mus)
+    plt.xlabel("p")
+    plt.ylabel("mean")
+    tikzplotlib.save(str(n) + "_mus.tex")
+    plt.show()
+
+    plt.plot(ps,stds)
+    plt.xlabel("p")
+    plt.ylabel("standard deviation")
+    tikzplotlib.save(str(n) + "_stds.tex")
+    plt.show()
+
+def show_matrices_for_filtration_with_ranges(filtration, xrange, yrange):
+    mat = ca.build_boundary_matrix_from_filtration(filtration, False, False)
+    max_len = max([len(i) for i in filtration])
+
+    xticklabels = [elem for id,elem in enumerate(filtration) if(id in range(xrange[0],xrange[1]))] # if len(elem) > 1
+    yticklabels = [elem for id,elem in enumerate(filtration) if(id in range(yrange[0],yrange[1]))] # if len(elem) < max_len
+    yticklabels.reverse()
+    cao.mat_visualization(mat, xticklabels, yticklabels,xrange,yrange)
+
+    steps,_, red = ca.column_algorithm(mat)
+    for i,it in enumerate(ca.column_algorithm_iterator(mat)):
+        steps,_, red = it
+        cao.mat_visualization(red, xticklabels, yticklabels, xrange, yrange, name="tetrahedron_with_fins", index=i+1)
+    print("Steps: ", steps, sum(steps))
+    return sum(steps)
+# points = pcg.generate_n_points(150,2)
+# alpha = acw.alpha_complex_wrapper(points)
 #
-# steps, red, low = ca.column_algorithm(ca.build_boundary_matrix_from_filtration(filtration, False, False))
-# print(steps)
+# filtration = [elem[0] for elem in alpha.filtration]
 #
-# show_matrices_for_filtration(filtration)
+# filtration.sort(key=len)
+#
+# criticals, pairings, clear = filtration_to_DMF(filtration)
+#
+#
+# mat1 = ca.build_boundary_matrix_from_filtration_and_clear(filtration,clear)
+# steps1, lowest1, red1 = ca.column_algorithm(mat1)
+#
+# mat2 = ca.build_boundary_matrix_from_filtration(filtration)
+# steps2, lowest2, red2 = ca.column_algorithm(mat2)
+#
+# print("steps CLEARED: ", steps1)
+# print("steps STD: ", steps2)
+# print("Equal result: ", lowest1 == lowest2)
 
+#filtration = [[0], [1], [2], [3], [4], [5],[6],[7],
+#               [0, 1], [0, 2], [1, 2],
+#               [0,6],[6,7],[2,6],[2,7],
+#               [0,3], [1,3], [0,4], [2, 3], [2,4],
+#               [3,4],[4,5], [3, 5],
+#               [0, 1, 2], [1,2,3], [0,1,3], [0,3,4],[2,3,4],
+#               [0,2,6],[2,6,7],
+#               [3, 4, 5]]
+#
+# pairings = [[[0],[0,4]],[[2],[2,4]],[[4],[4,5]],[[1],[1,3]],
+#             [[0,1],[0,1,3]],[[1,2],[1,2,3]],[[0,3],[0,3,4]],[[2,3],[2,3,4]],[[3,4],[3,4,5]],
+#             [[0,2],[0,2,6]],[[2,6],[2,6,7]],[[6],[0,6]],[[7],[2,7]]]
 
-compute_plot_and_fit()
+#show_matrices_for_filtration_with_ranges(filtration,(39,len(filtration)), (10,38))
+
+#filtration = [[0], [1], [2], [3], [4],
+#               [0, 1], [0, 2], [0, 3],
+#               [1, 2], [1, 3], [1, 4],
+#               [2, 4], [2, 3],
+#               [0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 4]]
+#
+# pairings = [[[3],[2,3]],[[1],[1,3]],[[4],[1,4]],
+#             [[1,2],[1,2,4]],[[0,2],[0,2,3]],[[0,1],[0,1,3]]]
+
+filtration = dh.get_simplicial_complex()
+
+pairings = dh.get_optimal_matching()
+
+filtration = DMF_to_filtration(filtration,pairings)
+
+show_matrices_for_filtration(filtration)
+
