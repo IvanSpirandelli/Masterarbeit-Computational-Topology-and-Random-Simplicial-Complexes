@@ -1,10 +1,7 @@
 import math
-import GudhiExtension.column_algo.column_algorithm as ca
-import GudhiExtension.column_algo.column_algo_outs as cao
-import matplotlib.pyplot as plt
 from operator import itemgetter
 
-def build_morozov_example(n):
+def build_morozov_example(n, console_prints = False):
     if(n<3):
         raise Warning("Increased n to 3, which is the minimal example to see the desired behaviour")
         n = 3
@@ -52,7 +49,7 @@ def build_morozov_example(n):
 
     base_edges.insert(0,[0,1])
 
-    return output(vertices, fluff_edges, fin_close_edges, fin_edges, base_edges, base_triangles, triangles_with_two, fin_triangles)
+    return output(vertices, fluff_edges, fin_close_edges, fin_edges, base_edges, base_triangles, triangles_with_two, fin_triangles, console_prints)
 
 
 def add_fin_and_implying(a, b, top, fin_triangles, fin_edges, fin_close_edges, even_step):
@@ -99,9 +96,7 @@ def add_base_triangle_and_implying(to_split,c, vertices, base_triangles, base_ed
             vertices.append([newvert])
             add_fin_and_implying(b, c, newvert, fin_triangles, fin_edges, fin_close_edges, even_step)
 
-def output(vertices, fluff_edges, component_destroying_edges, fin_edges, base_edges, base_triangles, triangles_with_two, fin_triangles):
-    prints = True
-
+def output(vertices, fluff_edges, component_destroying_edges, fin_edges, base_edges, base_triangles, triangles_with_two, fin_triangles, prints):
     if prints:
         print("Vertices :")
         print(vertices)
