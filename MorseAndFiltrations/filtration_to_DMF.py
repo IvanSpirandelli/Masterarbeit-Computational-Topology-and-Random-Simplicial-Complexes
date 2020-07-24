@@ -26,47 +26,23 @@ def filtration_to_DMF(filtration):
     indices_for_clearing.sort()
     return [filtration[i] for i in range(len(filtration)) if critical[i] == 1], pairings, indices_for_clearing
 
-def filtration_to_DMF_with_all_emergent(filtration, only_apparent_pairs = False):
-    critical = [0]*len(filtration)
+def filtration_to_emergent_face(filtration):
     pairings = []
+    indices_for_clearing = []
     for ind,simplex in enumerate(filtration):
-
         if(len(simplex) == 1):
-            critical[ind] = 1
+            continue
         elif not simplex_in_pairings(simplex, pairings):
+
             pair = find_youngest_facet(simplex, filtration, pairings)
-            if(pair == None):
-                if(only_apparent_pairs):
-                    critical[ind] = 1
-                else:
-                    copairindex = find_oldest_cofacet(simplex,filtration)
-                    if copairindex != None:
-                        copair = filtration[copairindex]
-                        if(not simplex_in_pairings(copair, pairings)):
-                            #print("COFACEPAIR: ", simplex, copair)
-                            pairings.append([simplex, copair])
-                            critical[filtration.index(simplex)] = 0
-                        else:
-                            critical[ind] = 1
-                    else:
-                        critical[ind] = 1
-            else:
-                if(only_apparent_pairs):
-                    if(filtration[find_oldest_cofacet(pair, filtration)]==simplex):
-                        #print("APARRENT PAIR: ", list(pair), simplex)
-                        pairings.append([list(pair),simplex])
-                        critical[filtration.index(pair)] = 0
-                    else:
-                        critical[ind] = 1
-                else:
-                    #print("FACEPAIR: ", list(pair),simplex)
-                    pairings.append([list(pair), simplex])
-                    critical[filtration.index(pair)] = 0
+            tmp = filtration.index(pair)
+            if(filtration[find_oldest_cofacet(pair, filtration)]==simplex):
+                pairings.append([list(pair),simplex])
+            if(len(pair) > 1):
+                indices_for_clearing.append(tmp)
 
-    print("CRITICAL IN PAIRING: ", [filtration[i] for i in range(len(filtration)) if critical[i] == 1])
-    print("NUMBER OF CRITICAL FACES: ", len([filtration[i] for i in range(len(filtration)) if critical[i] == 1]))
-
-    return pairings
+    indices_for_clearing.sort()
+    return pairings, indices_for_clearing
 
 def simplex_in_pairings(simplex, pairings):
     simplex = list(simplex)

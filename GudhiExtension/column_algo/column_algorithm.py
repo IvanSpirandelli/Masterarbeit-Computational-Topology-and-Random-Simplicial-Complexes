@@ -3,7 +3,6 @@ import itertools as it
 
 def column_algorithm(filtered_boundary_matrix, reduced_return=True):
     max_dim = sum(filtered_boundary_matrix[:, -1]) - 1
-
     algorithm_step_count = [0 for _ in range(max_dim + 1)]
 
     n = filtered_boundary_matrix.shape[1]
@@ -78,7 +77,7 @@ def column_algorithm_with_a_twist(filtered_boundary_matrix, reduced_return = Tru
         return algorithm_step_count,lowest_ones
 
 def count_addition_of_ones(a,b):
-    count = 0;
+    count = 0
     for i in range(len(a)):
         if a[i] == 1 or b[i] == 1:
             count +=1
@@ -142,7 +141,7 @@ def build_boundary_matrix_from_filtration(filtration, clearing = False, crop_pre
                 mat[index_set[combi], index_set[tuple(simplex)]] = 1
                 if(dim > 1 and clearing and index_set[combi] > max_index_of_facet):
                     max_index_of_facet = index_set[combi]
-            if(clearing):
+            if(clearing and max_index_of_facet != -1):
                 mat[:,max_index_of_facet] = 0
                 cleared_indices.add(max_index_of_facet)
 
@@ -159,6 +158,7 @@ def build_boundary_matrix_from_filtration(filtration, clearing = False, crop_pre
                     updated_indices.append(idx)
 
         mat = np.delete(mat, updated_indices, axis=1)
+
     return mat
 
 def build_boundary_matrix_from_filtration_and_clear(filtration, cols_to_clear):
@@ -189,4 +189,4 @@ def betti_numbers(filtration, lowest_ones, dim):
             else:
                 bk[len(filtration[i])-1] += 1
 
-    return [zk[i] - bk[i+1] for i in range(0,dim)]
+    return [zk[i] - bk[i+1] for i in range(0,dim)] + [zk[dim]]

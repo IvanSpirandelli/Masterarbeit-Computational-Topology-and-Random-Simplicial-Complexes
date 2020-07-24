@@ -1,3 +1,5 @@
+import tikzplotlib
+
 import GudhiExtension.filtration_manipulation as fm
 import GudhiExtension.column_algo.column_algo_outs as cao
 import GudhiExtension.column_algo.column_algorithm as ca
@@ -436,55 +438,11 @@ def show_matrices_for_filtration_with_ranges(filtration, xrange, yrange):
         cao.mat_visualization(red, xticklabels, yticklabels, xrange, yrange, name="tetrahedron_with_fins", index=i+1)
     print("Steps: ", steps, sum(steps))
     return sum(steps)
-# points = pcg.generate_n_points(150,2)
-# alpha = acw.alpha_complex_wrapper(points)
-#
-# filtration = [elem[0] for elem in alpha.filtration]
-#
-# filtration.sort(key=len)
-#
-# criticals, pairings, clear = filtration_to_DMF(filtration)
-#
-#
-# mat1 = ca.build_boundary_matrix_from_filtration_and_clear(filtration,clear)
-# steps1, lowest1, red1 = ca.column_algorithm(mat1)
-#
-# mat2 = ca.build_boundary_matrix_from_filtration(filtration)
-# steps2, lowest2, red2 = ca.column_algorithm(mat2)
-#
-# print("steps CLEARED: ", steps1)
-# print("steps STD: ", steps2)
-# print("Equal result: ", lowest1 == lowest2)
 
-#filtration = [[0], [1], [2], [3], [4], [5],[6],[7],
-#               [0, 1], [0, 2], [1, 2],
-#               [0,6],[6,7],[2,6],[2,7],
-#               [0,3], [1,3], [0,4], [2, 3], [2,4],
-#               [3,4],[4,5], [3, 5],
-#               [0, 1, 2], [1,2,3], [0,1,3], [0,3,4],[2,3,4],
-#               [0,2,6],[2,6,7],
-#               [3, 4, 5]]
-#
-# pairings = [[[0],[0,4]],[[2],[2,4]],[[4],[4,5]],[[1],[1,3]],
-#             [[0,1],[0,1,3]],[[1,2],[1,2,3]],[[0,3],[0,3,4]],[[2,3],[2,3,4]],[[3,4],[3,4,5]],
-#             [[0,2],[0,2,6]],[[2,6],[2,6,7]],[[6],[0,6]],[[7],[2,7]]]
 
-#show_matrices_for_filtration_with_ranges(filtration,(39,len(filtration)), (10,38))
 
-#filtration = [[0], [1], [2], [3], [4],
-#               [0, 1], [0, 2], [0, 3],
-#               [1, 2], [1, 3], [1, 4],
-#               [2, 4], [2, 3],
-#               [0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 4]]
-#
-# pairings = [[[3],[2,3]],[[1],[1,3]],[[4],[1,4]],
-#             [[1,2],[1,2,4]],[[0,2],[0,2,3]],[[0,1],[0,1,3]]]
-
-filtration = dh.get_simplicial_complex()
-
-pairings = dh.get_optimal_matching()
-
-filtration = DMF_to_filtration(filtration,pairings)
-
-show_matrices_for_filtration(filtration)
+filtration = me.build_morozov_example(6)
+crits,pairs,clears  = filtration_to_DMF(filtration)
+print(pairs)
+print(crits)
 
