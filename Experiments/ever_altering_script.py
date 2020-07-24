@@ -15,7 +15,7 @@ import Examples.n_gon_with_center_and_different_pairings as ngon
 import Examples.davides_eight_point_delaunay as dav
 import Examples.overlapping_wedge as overwedge
 import Examples.simple_examples as se
-import Examples.mozorov_example as me
+import Examples.morozov_example as me
 import Examples.rand_k_n_p as rnp
 import Examples.wireframe_pyramid as wp
 import Examples.dunce_hat as dh
