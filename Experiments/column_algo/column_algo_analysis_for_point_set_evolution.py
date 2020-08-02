@@ -2,9 +2,9 @@ import random
 from copy import deepcopy
 from datetime import datetime
 
-from GudhiExtension.alpha_complex_wrapper import alpha_complex_wrapper
-from GudhiExtension.column_algo.column_algorithm import column_algorithm
-import GudhiExtension.point_cloud_generator as pcg
+from Algorithms.alpha_complex_wrapper import alpha_complex_wrapper
+from Algorithms.column_algo.column_algorithm import column_algorithm
+import Algorithms.point_cloud_generator as pcg
 import matplotlib.pyplot as plt
 
 def initial_points(top, num_points, dim, num_sets):

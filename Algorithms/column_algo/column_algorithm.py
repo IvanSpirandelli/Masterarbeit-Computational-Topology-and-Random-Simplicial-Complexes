@@ -161,7 +161,7 @@ def build_boundary_matrix_from_filtration(filtration, clearing = False, crop_pre
 
     return mat
 
-def build_boundary_matrix_from_filtration_and_clear(filtration, cols_to_clear):
+def build_boundary_matrix_from_filtration_and_clear(filtration, cols_to_clear = []):
     mat = np.zeros(shape=(len(filtration), len(filtration)), dtype=int)
     #maintaining which simplex is at which position
     index_set = {(): -1}

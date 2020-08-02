@@ -3,7 +3,7 @@ from PySide2.QtWidgets import (QStackedWidget)
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
-from GudhiExtension import sc_drawer
+from Algorithms import sc_drawer
 
 
 class FiltrationStackWidget(QStackedWidget):

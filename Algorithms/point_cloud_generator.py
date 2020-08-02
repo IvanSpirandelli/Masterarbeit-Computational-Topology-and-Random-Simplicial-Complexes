@@ -2,7 +2,7 @@ import random
 import numpy as np
 import itertools as it
 
-from GudhiExtension.alpha_complex_wrapper import alpha_complex_wrapper
+from Algorithms.alpha_complex_wrapper import alpha_complex_wrapper
 
 
 def generate_n_gridpoints_of_dim_with_dilation(n, dim, dilation):

@@ -1,4 +1,4 @@
-from GudhiExtension.alpha_complex_wrapper import alpha_complex_wrapper
+from Algorithms.alpha_complex_wrapper import alpha_complex_wrapper
 
 if __name__ == "__main__":
 

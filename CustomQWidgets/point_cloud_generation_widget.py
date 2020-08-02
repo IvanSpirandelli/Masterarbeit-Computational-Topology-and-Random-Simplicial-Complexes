@@ -8,8 +8,8 @@ from PySide2.QtWidgets import (QVBoxLayout, QWidget, QSlider, QGridLayout, QLine
                                QPushButton)
 from PySide2.QtCore import Slot, Qt, QSize
 
-from GudhiExtension.alpha_complex_wrapper import alpha_complex_wrapper
-import GudhiExtension.point_cloud_generator as pcg
+from Algorithms.alpha_complex_wrapper import alpha_complex_wrapper
+import Algorithms.point_cloud_generator as pcg
 
 
 class PointCloudGenerationWidget(QWidget):

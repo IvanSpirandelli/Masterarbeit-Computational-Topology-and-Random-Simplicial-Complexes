@@ -4,9 +4,9 @@ from datetime import datetime
 from copy import deepcopy
 import itertools as it
 
-from GudhiExtension.alpha_complex_wrapper import alpha_complex_wrapper
-from GudhiExtension.column_algo.column_algorithm import column_algorithm
-import GudhiExtension.point_cloud_generator as pcg
+from Algorithms.alpha_complex_wrapper import alpha_complex_wrapper
+from Algorithms.column_algo.column_algorithm import column_algorithm
+import Algorithms.point_cloud_generator as pcg
 from Utilities.csv_file_container import csv_file_container
 
 dunce_hat = [

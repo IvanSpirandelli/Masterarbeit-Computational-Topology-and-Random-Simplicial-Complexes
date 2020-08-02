@@ -6,8 +6,8 @@ from PySide2.QtCore import QCoreApplication, Slot
 from CustomQWidgets.filtration_tab_widget import FiltrationTabWidget
 from CustomQWidgets.persistence_graphs_tab_widget import PersistenceGraphsTabWidget
 from CustomQWidgets.setup_tab_widget import SetupTabWidget
-from GudhiExtension.alpha_complex_wrapper import alpha_complex_wrapper
-import GudhiExtension.point_cloud_generator
+from Algorithms.alpha_complex_wrapper import alpha_complex_wrapper
+import Algorithms.point_cloud_generator
 
 
 class PlotSliderWindow(QMainWindow):

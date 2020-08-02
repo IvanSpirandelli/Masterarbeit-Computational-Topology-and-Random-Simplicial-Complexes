@@ -4,9 +4,9 @@ import matplotlib.pyplot as plt
 import math
 import numpy as np
 
-import GudhiExtension.column_algo.column_algorithm as ca
-import GudhiExtension.point_cloud_generator as pcg
-from GudhiExtension.alpha_complex_wrapper import alpha_complex_wrapper
+import Algorithms.column_algo.column_algorithm as ca
+import Algorithms.point_cloud_generator as pcg
+from Algorithms.alpha_complex_wrapper import alpha_complex_wrapper
 
 def test_all_vertex_permutations(filtration):
     mat = ca.build_boundary_matrix_from_filtration(filtration)

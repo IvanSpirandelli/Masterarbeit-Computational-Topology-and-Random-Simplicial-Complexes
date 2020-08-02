@@ -1,7 +1,7 @@
-import GudhiExtension.point_cloud_generator as pcg
-import GudhiExtension.alpha_complex_wrapper as acw
-import GudhiExtension.column_algo.column_algorithm as ca
-import GudhiExtension.column_algo.column_algo_outs as cao
+import Algorithms.point_cloud_generator as pcg
+import Algorithms.alpha_complex_wrapper as acw
+import Algorithms.column_algo.column_algorithm as ca
+import Algorithms.column_algo.column_algo_outs as cao
 import Examples.rand_k_n_p as rnp
 
 from MorseAndFiltrations.DMF_to_filtration import DMF_to_filtration
@@ -12,8 +12,28 @@ import numpy as np
 import matplotlib.pyplot as plt
 import tikzplotlib
 
+def filtration_len_in_alpha_complexes(n,dim):
+    filt1 = []
+    filt2 = []
+    runs = 50
+    for i in range(runs):
+        print(i)
+        points1 = pcg.gaussian_mixture_model(n,[[0,0],[1,1],[0,3]],[[[1,0],[0,1]],[[1,0],[0,1]],[[1,0],[0,1]]])
+        alpha1 = acw.alpha_complex_wrapper(points1, False)
+        filtration1 = [elem[0] for elem in alpha1.filtration]
+        filt1.append(len(filtration1))
+
+        points2 = pcg.generate_n_points(n,dim)
+        alpha2 = acw.alpha_complex_wrapper(points2, False)
+        filtration2 = [elem[0] for elem in alpha2.filtration]
+        filt2.append(len(filtration2))
+
+    print("Mixture: ", sum(filt1)/runs)
+    print("Uniform: ", sum(filt2)/runs)
+
 def percentage_of_apparent_pairs_in_alpha_complexes(n, dim):
-    points = pcg.gaussian_mixture_model(n,[[0,0],[1,1],[0,3]],[[[1,0],[0,1]],[[1,0],[0,1]],[[1,0],[0,1]]])
+
+    points = pcg.generate_n_points(n, dim)
     alpha = acw.alpha_complex_wrapper(points, False)
     filtration = [elem[0] for elem in alpha.filtration]
     crit, pairs, clear = filtration_to_DMF(filtration)
@@ -100,8 +120,67 @@ def plots_of_percentage_of_apparent_pairs(dim):
     tikzplotlib.save("apparent_pairs_in_dim" + str(dim) + "stads_to_steps_gaussian_mixture.tex")
     plt.show()
 
+def plots_of_percentage_of_apparent_pairs_by_dim(n, runs):
+    mus = {-1 : 0}
+    stds = {-1 : 0}
+    minmax = {0 : (0,0)}
+    steps = []
+    for step in range(2,7):
+        steps.append(step)
+        mus[step] = []
+        stds[step] = []
+        minmax[step] = (100,0)
+        data = []
+
+        print("STEP: ", step)
+        for _ in range(runs):
+            print(_)
+            res = percentage_of_apparent_pairs_in_alpha_complexes(n, step)
+            if(res > minmax[step][1] ):
+                minmax[step] = (minmax[step][0],res)
+            if(res < minmax[step][0]):
+                minmax[step] = (res,minmax[step][1])
+            data.append(res)
+
+        # Fit a normal distribution to the data:
+        mu, std = scs.norm.fit(data)
+
+        mus[step].append(mu)
+        stds[step].append(std)
+
+        # Plot the histogram.
+        plt.hist(data, bins=25, alpha = 0.6, histtype='bar', density = True)
+        # Plot the PDF.
+        xmin, xmax = plt.xlim()
+        x = np.linspace(xmin, xmax, 1000)
+        p = scs.norm.pdf(x, mu, std)
+        plt.plot(x, p, 'k', linewidth=2)
+        title = "Fit results: mu = %.2f,  std = %.2f" % (mu, std)
+        plt.title(title)
+        tikzplotlib.save("apparent_pairs_in_dim" + str(step) + "_on_pointscloud_of_size_" + str(n) + "_gaussian_mixture.tex")
+        plt.show()
+
+    print(steps)
+    print(list(mus.items()))
+    print(list(stds.items()))
+
+    means = [elem[1][0] for elem in list(mus.items())[1:]]
+    stads = [elem[1][0] for elem in list(stds.items())[1:]]
+
+    print(steps)
+    print(means)
+    print(stads)
+
+    plt.plot(steps, means)
+    tikzplotlib.save("apparent_pairs_on_" + str(n) + "_points_uniform.tex")
+    plt.show()
+
+    plt.plot(steps, stads)
+    tikzplotlib.save("apparent_pairs_on_" + str(n) + "_points_uniform.tex")
+    plt.show()
+
 def plots_of_distance_between_apparent_pairs_and_betti_numbers(n,k):
-    runs = 2000
+    runs = 10
     mus = {-1 : 0}
     stds = {-1 : 0}
     minmax = {0 : (0,0)}
@@ -109,7 +188,7 @@ def plots_of_distance_between_apparent_pairs_and_betti_numbers(n,k):
     perfects = []
     elements_in_filtration = []
 
-    for step in range(0,101,1):
+    for step in range(0,101,10):
 
         print("STEP: ", step)
 
@@ -123,6 +202,7 @@ def plots_of_distance_between_apparent_pairs_and_betti_numbers(n,k):
         perfect = 0
         accumulated_len = 0
         for _ in range(runs):
+            print(_)
             res, len_filt = distance_between_apparent_and_betti_in_random_k_complexes(step, n, k)
 
             if(res > minmax[step][1] ):
@@ -183,4 +263,4 @@ def plots_of_distance_between_apparent_pairs_and_betti_numbers(n,k):
     tikzplotlib.save("apparent_pairs_in_k_complex" + str(k) + "total_elements.tex")
     plt.show()
 
-plots_of_percentage_of_apparent_pairs(2)
+plots_of_percentage_of_apparent_pairs_by_dim(100,20)
