@@ -1,4 +1,11 @@
+from operator import itemgetter
+
+#This method constructs a filtration for which the standard persistent
+#homology algorithm achieves its worst case bound. Pass @param n for vertices of base n-gon.
 def get_n_gon_with_center_and_fins_filtration(n):
+    if(n<3):
+        raise Warning("Passed n too low. Setting n = 3.")
+        n = 3
     base_vertices = [[i] for i in range(n + 1)]
     fin_vertices = [[i + n] for i in range(1, n + 1)]
 
@@ -16,13 +23,14 @@ def get_n_gon_with_center_and_fins_filtration(n):
 
     return base_vertices + fin_vertices + bounding_edges + fin_edges + base_edges + base_triangles + fin_triangles
 
-import math
-from operator import itemgetter
-
+#This method constructs a filtration, specified by Dimitriy Morozov in the paper:
+#"Persistence Algorithm Takes Cubic Time in the Worst Case",
+#for which the standard persistent homology algorithm achieves its worst case bound.
+#See paper for sepcification of @param n. Pass (n,True) to get construction printed to console.
 def build_morozov_example(n, console_prints = False):
     if(n<3):
-        raise Warning("Increased n to 3, which is the minimal example to see the desired behaviour")
-        n = 3
+        raise Warning("Passed n too low. Setting n = 5.")
+        n = 5
 
     vertices = [[0],[1],[2],[3]]
     base_vertices = []
@@ -104,6 +112,7 @@ def add_base_triangle_and_implying(to_split,c, vertices, base_triangles, base_ed
             newvert += 2
             vertices.append([newvert])
             add_fin_and_implying(b, c, newvert, fin_triangles, fin_edges, fin_close_edges, even_step)
+
 
 def output(vertices, fluff_edges, component_destroying_edges, fin_edges, base_edges, base_triangles, triangles_with_two, fin_triangles, prints):
     if prints:
