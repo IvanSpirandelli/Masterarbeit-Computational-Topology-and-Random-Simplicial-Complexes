@@ -1,0 +1,371 @@
+\chapter{Homology}
+\label{ch:homology}
+\section{Homology Groups}
+This section is mainly based on \cite{Computational+Topology}[Chapter IV]. Homology groups are topological invariants that describe holes in topological spaces. The topological spaces we will consider are simplicial complexes. Restricting the theory in this way is also referred to as simplicial homology. We will begin by introducing chains of simplices. A handy notation we will use in the following definition is to write $\sigma^{(k)} \in K$ for a $k$-dimensional simplex in some simplicial complex $K$. All concepts we will discuss work just as well when we include the empty face but since nothing that is of interest to us happens, when including it, we will omit it for brevity. Strictly speaking in all our examples and concepts we will discuss simplicial complexes without the empty face. Note that including the empty face yields reduced homology theory which is different on an algebraic level. 
+
+\begin{defi}
+Let $K$ be a simplicial complex. Let $K^{(k)} \coloneqq \{\sigma^{(k)} \in K\}$ be the set of $k$-simplices in $K$. A formal sum \[
+c = \sum_{i=1}^{|K^{(k)}|} a_i \sigma_i
+\]
+with $a_i \in \mathcal{R}$, where $\mathcal{R}$ is a ring, and $\sigma_i \in K^{(k)}$, $i \in 1,\dots,|K^{(k)} |$, is called a \textbf{$\bm{k}$-chain}. We denote the set of all $k$-chains of $K$ by $C_k(K)$.
+\end{defi}
+
+In general, we will omit the bounds of the sum and just write $\sum a_i \sigma_i$. Furthermore we will omit the reference to the simplicial conmplex $K$ and just write $C_k$.
+
+\begin{defi}
+We define an addition on the set of k-chains $C_k$: \[
++: C_k \times C_k \rightarrow C_k, \]\[
+\sum a_i \sigma_i + \sum b_i \sigma_i \coloneqq \sum (a_i+b_i) \sigma_i.
+\] 
+\label{def:addition_of_kchains}
+\end{defi}
+
+\begin{lemma}
+The k-chains together with the above defined addition form an abelian group that we denote as $(C_k,+)$
+\end{lemma}
+\begin{proof}
+Associativity follows from the associativity of the coefficients from the ring $\mathcal{R}$. The neutral element is $0 \coloneqq \sum 0\sigma^{(k)}_i$ and each chain $c = \sum a_i\sigma^{(k)}_i$ has an inverse $-c \coloneqq \sum (-a_i)\sigma^{(k)}_i$. The group is abelian, since addition in $\mathcal{R}$ is abelian.
+\end{proof}
+
+As mentioned above, we want to describe holes in a simplicial complex. We do this by considering their boundary. The following definition introduces a boundary operator for simplices that naturally extends to k-chains. 
+
+\begin{defi}
+Let $\sigma^{(k)} = [s_0,\dots,s_k]$ be some simplex. We define the \textbf{boundary operator}
+\[
+\partial_k \sigma \coloneqq \sum_{j=0}^{k}(-1)^j[s_0,\dots,\hat{s_j},\dots,s_k]
+\]
+where $[s_0,\dots,\hat{s_j},\dots,s_k]$ is the facet of $\sigma$ that does not contain $s_j$. For a $k$-chain $c = \sum a_i \sigma_i^{(k)}$ the boundary operator is defined as
+\[
+\partial_k c = \sum a_i \partial_k \sigma_i.
+\]
+\end{defi}
+The boundary operator maps $k$-chains to $(k-1)$-chains, and since 
+\[\partial_k (c_1 + c_2) = \partial_k c_1 + \partial_k c_2\]
+the boundary operator 
+\[
+    \partial_k: C_k \rightarrow C_{k-1}
+\]
+is a group homomorphism between the groups of $k$-chains and $(k-1)$-chains. We can now introduce $k$-cycles and $k$-boundaries and their respective groups. 
+
+\begin{defi}
+Let $c$ be a $\bm{k}$\textbf{-chain}. If $\partial_kc = 0$, then $c$ is called a $\bm{k}$\textbf{-cycle}. Consider a $(k+1)$-chain $r$. If $c = \partial_{k+1}r$, then $c$ is called a $\bm{k}$\textbf{-boundary}. 
+\end{defi}
+
+By definition, $\partial_k$ commutes with addition and hence we get the following groups.
+The group of $\bm{k}$\textbf{-cylces} denoted as $Z_k = Z_k(K)$ and the group of $\bm{k}$\textbf{-boundaries} $B_k = B_k(K)$. Both $Z_k$ and $B_k$ are subgroups of $C_k$. Another perspective on these groups is to interpret them as kernel and image of $\partial$, i.e. $Z_k = \operatorname{ker}(\partial_k)$ and $B_k = \operatorname{im}(\partial_{k+1})$.
+
+Since $C_k$ is abelian, so are $Z_k$ and $B_k$. The following fundamental lemma further specifies the relation between $C_k$ and $B_k$.
+
+\begin{lemma}[Fundamental Lemma of Homology]
+$\partial_k \partial_{k+1} c = 0$ for $k \in \mathbb{N}_0$ and $(k+1)$-chain $c$. 
+\end{lemma}
+\begin{proof}
+It suffices to show that $\partial_k \partial_{k+1} \tau = 0$ for every $(k+1)$-simplex $\tau$ since a $(k+1)$-chain is just a sum of $(k+1)$-simplices. 
+
+Let $\tau = [s_0,\dots,s_{k+1}]$. Consider the boundary $\partial_{k+1}\tau$. It consists of all $k$-faces of $\tau$.
+
+Let $\gamma = [s_0,\dots,\hat{s_i},\dots,\hat{s_j},\dots,s_{k+1}]$, i.e., a $(k-1)$-face. It is adjacent to the two faces $k$-faces \[\sigma_i = [s_0,\dots,\hat{s_i},\dots,s_{k+1}] \text{ and }\sigma_j = [s_0,\dots,\hat{s_j},\dots,s_{k+1}]\]
+Considering the different possibilities for $i$ and $j$ to be even or odd, a straightforward calculation yields that $\gamma$ cancels out in the sum corresponding to $\partial_k \partial_{k+1} \tau$. Hence $\partial_k \partial_{k+1} \tau = 0$.
+\end{proof}
+
+From the lemma we immediately get that $B_k$ is a subgroup of $Z_k$. There is a popular way of depicting these group relations, found in most literature concerned with homology. The following Figure \ref{fig:group_relations} is our version of it.
+
+\begin{figure}[H]
+%\centering%
+\begin{subfigure}[c]{0.49\textwidth}
+\begin{center}
+\input{Homology/Figures/homology_groups_illustration}
+\end{center}
+\end{subfigure}
+\caption{Connections between cycle and boundary groups, established by the group homomorphisms $\partial$.}
+\label{fig:group_relations}
+\end{figure}
+
+
+Since $B_k$ is a subgroup of $Z_k$, we are allowed to take the group quotient $Z_k/B_k$. This leads us to the definition of Homology groups and Betti numbers.
+\begin{defi}
+We define the  $\bm{k}$\textbf{-th}  \textbf{Homology group} as
+\[
+    H_k \coloneqq Z_k/B_k
+\]
+and the $\bm{k}$\textbf{-th} \textbf{Betti number} as \[ \beta_k \coloneqq \operatorname{rank}(H_k).\]
+\end{defi}
+
+What we will see is that, informally speaking, $\beta_k$ counts the number of $k$-dimensional holes in the underlying simplicial complex, except for $\beta_0$, which is counting the connected components.
+
+The $k$-th homology group can be interpreted as the partitioning of the $k$-th cycle group $Z_k$ into classes of cycles that differ by boundaries of the $k$-th boundary group $B_k$. From algebra we know, that $H_k = \{zB_k \mid z \in Z_k\}$ forms a group with \[+: H_k \times H_k \rightarrow H_k, z_1B_K+z_2B_k = (z_1+z_2)B_k\] where the $+$ on the right hand side is the addition of $k$-chains defined in \ref{def:addition_of_kchains}. 
+
+From here on out we will restrict our coefficients to be from the field $\mathbb{Z}_2$, since this suffices for all further concepts discussed in this work and it simplifies some definitions and calculations. For example the coefficients of $k$-chains now just indicate if some simplex is contained in the chain or not. Furthermore we can drop the $(-1)^j$ in the definition of the boundary operator, since in $\mathbb{Z}_2$ we have $-1 = 1$. As we will discuss later on it also simplifies the standard algorithm to compute homology groups.
+
+In the following example we will calculate the Betti number $\beta_1$ of the simplicial complex depicted in the following Figure \ref{fig:simplicial_homology_example} by computing the factorization of $Z_1$ by $B_1$. The classes resulting from this factorization are called \textbf{homology classes} and any two elements within one class are called homologous. Some of the simplifications arising from choosing coefficients from $\mathbb{Z}_2$ will become apparent.
+
+\begin{figure}[H]
+%\centering%
+\begin{subfigure}[c]{0.99\textwidth}
+\begin{center}
+\input{Homology/Figures/simplicial_homology_example}
+\end{center}
+\end{subfigure}
+\caption{A simplicial complex.}
+\label{fig:simplicial_homology_example}
+\end{figure}
+
+To calculate $H_1$ we need to know what $B_1$ and $Z_1$ are. Let $t_1$ be the triangle with vertices $v_0, v_1$ and $v_2$. Then $\partial_2(t_1) = [v_0,v_1] + [v_0,v_2] + [v_1,v_2]$. Since $t_1$ is the only 2-simplex we get
+\[
+B_1 = \{0, [v_0,v_1]+[v_0,v_2]+[v_1,v_2]\}.
+\]
+To compute the cycle group, we need to find all 1-chains that are mapped to $0$ by $\partial_1$, i.e. we have to compute the kernel. We can do this by solving:
+\begin{equation*}
+    \begin{split}
+         0 &= a_0\partial_1[v_0,v_1] + a_1\partial_1[v_0,v_2] + a_2\partial_1[v_1,v_2] + a_3\partial_1[v_1,v_3] +a_4\partial_1[v_2,v_3]\\
+    &= a_0(v_0+v_1) + a_1(v_0+v_2) + a_2(v_1+v_2) + a_3(v_1+v_3) + a_4(v_2+v_3) \\
+    &= v_0(a_0+a_1) + v_1(a_0+a_2+a_3) + v_2(a_1+a_2+a_4) + v_3(a_3+a_4)
+    \end{split}
+\end{equation*}
+for coefficients $a_i \in \mathbb{Z}_2$. So we get the set of equations: 
+\begin{center}
+    \begin{tabular}{ccl}
+        $(1)$ & $0$ & $= a_0+a_1$\\
+        $(2)$ & $0$ & $= a_0+a_2+a_3$\\
+        $(3)$ & $0$ & $= a_1+a_2+a_4$\\
+        $(4)$ & $0$ & $= a_3+a_4$
+\end{tabular}
+\end{center}
+
+From equation $(1)$ we get that $a_0 = a_1$ and from $(4)$ we get that $a_3 = a_4$. Therefore equations $(2)$ and $(3)$ tell us if $a_2 = 0$ then $a_0 = a_3$ and $a_1 = a_4$. This implies two possible cycles. Namely the $0$-cycle and \[z_1 = [v_0,v_1]+[v_1,v_3]+[v_2,v_3]+[v_0,v_2].\]
+On the other hand. If $a_2 = 1$, we get that either $a_0 = a_1 = 1$ or $a_3 = a_4 = 1$, which implies the cycles 
+\[
+    z_2 = [v_0,v_1]+[v_0,v_2]+[v_1,v_2]
+\]
+and 
+\[
+   z_3 = [v_1,v_2]+[v_1,v_3]+[v_2,v_3].
+\]
+These are all possible cycles, so overall we get \[
+Z_1 = \{0, z_1, z_2, z_3\}.
+\]
+By adding all elements of $B_1$ to each element of $Z_1$ we get
+\begin{center}
+\begin{tabular}{rclcl}
+    $0+B_1$ &=& $\{0,z_2\}$ &&\\
+    $z_1+B_1$&=& $\{z_1 + 0, z_1+z_2\}$&=&$\{z_1,z_3\}$\\
+    $z_2+B_1$&=& $\{z_2 + 0, z_2+z_2\}$&=&$\{z_2,0\}$\\
+    $z_3+B_1$&=& $\{z_3 + 0, z_3+z_2\}$&=&$\{z_2,z_3\}$
+\end{tabular}
+\end{center}
+This means, that $Z_1$ is partitioned into two classes by factorisation with $B_1$. Namely $\{\{0,z_2\},\{z_1,z_3\}\}$. Now we choose elements representing both classes in our example. We will pick $[0]$ and $[z_3]$ and hence \[
+H_1 = \{[0],[z_3]\}.
+\]
+Therefore $\beta_1 = \operatorname{rank}(H_1) = 1$, which corresponds to the one-dimensional hole bounded by the edges between vertices $v_1,v_2$ and $v_3$. 
+
+\section{Boundary Matrices and Smith Normal Form}
+\label{sec:boundary_matrices_and_smith_normal_form}
+At the end of the last section we did the calculations by hand to illustrate the discussed concepts. In practice, however, we are often only concerned with the Betti numbers and not with the different homology groups. Therefore we only need to compute the ranks of $Z_k$ and $B_k$. As we will see, we can encode $\partial$ as a matrix over $\mathbb{Z}_2$. Then we can use standard linear algebra to extract the desired information. For more details we refer the reader to \cite{Computational+Topology}[Chapter IV.2], which this section is based on. 
+
+\begin{defi}
+Let $K$ be a simplicial complex and assume an arbitrary but fixed ordering of the simplices. Let $n_{k-1}$ be the number of $(k-1)$-simplices and $n_k$ be the number of $k$-simplices. Let $i \in \{1,\dots,n_{k-1}\}$ and $j \in \{1,\dots,n_k\}$, then we define a matrix $\partial_k$ = $[a_{ij}]$ with $a_{ij} = 1$, if the $i$-th $(k-1)$-simplex is a face of the $j$-th $k$-simplex. Otherwise $a_{ij} = 0$. This matrix is called the \textbf{$\bm{k}$-th boundary matrix}. 
+\end{defi}
+
+The 1-st boundary matrix of the example in Figure \ref{fig:simplicial_homology_example} is the following \[
+\begin{blockarray}{cccccc}
+\label{mat:small}
+& [v_0,v_1] & [v_0,v_2] & [v_1,v_2] & [v_1,v_3] & [v_2,v_3]\\
+\begin{block}{c[ccccc]}
+  \left[v_0\right]  & 1 & 1 & 0 & 0 & 0\\*
+  \left[v_1\right]  & 1 & 0 & 1 & 1 & 0\\*
+  \left[v_2\right]  & 0 & 1 & 1 & 0 & 1\\*
+  \left[v_3\right]  & 0 & 0 & 0 & 1 & 1\\*
+\end{block}
+\end{blockarray}
+\]
+
+The rows of the $k$-th boundary matrix, form a basis of $C_{k-1}$ and the columns form a basis of $C_k$. From linear algebra we know that we can exchange and add rows and columns, without changing the rank of the matrix. Furthermore, as is illustrated in \cite{Computational+Topology}[Chapter IV] these alterations always yield rows and columns that represent a basis of the $k$ and $k-1$-chains.
+
+The standard algorithm to extract the ranks of the chain groups is to reduce the boundary matrix to the so called \textbf{Smith normal form} (SNF). 
+
+In the general case, the computation of the SNF allows to read off the Betti numbers. In case that the chosen ring $\mathcal{R}$ is a field, the groups $Z_k = \operatorname{ker}\partial_k$ and $B_k = \operatorname{im}\partial_{k+1}$ can be obtained by standard Gaussian elimination. In particular, this applies to the choice $\mathcal{R} = \mathbb{Z}_2$.
+%In the general case, where the coefficients of our chains are not from $\mathbb{Z}_2$ but some ring, this is more complicated and we will not discuss it here. \\ If we were interested in the so called torsion coefficients of the homology groups however, we would need to consider coefficients from $\mathbb{Z}$ or some other ring. \\
+%In our case the Smith normal form is just a matrix for which an initial segment of the diagonal is one and all other entries are zero. We can use Gaussian Elimination to get an upper triangular matrix and eliminate the remaining ones, that are not on the diagonal, by row operations afterwards.\\
+
+Now consider some $k$-th boundary matrix $M_k$. And let $\hat{M}_k$ be the matrix in Smith normal form, we get by reducing $M_k$ via row and column operations. As stated, the number of columns $n_k$ is the rank of $C_k$. Now let \[n_k = b_{k-1} + z_k,\]
+where $b_{k-1}$ is equal to the number of columns containing a one in $\hat{M}_k$ and $z_k$ the number of columns which have only zeroes for entries. The leftmost $b_{k-1}$ columns of $\hat{M}_k$ represent $k$-chains that form $(k-1)$-boundaries and the rightmost $z_k$ columns of $\hat{M}_k$ represent $k$-cycles that generate $Z_k$. This means the rank of $Z_k$ is $z_k$ and the rank of $B_{k-1}$ is $b_{k-1}$. Therefore, if we have all the boundary matrices of some simplicial complex $K$ and reduce them to Smith normal form, we get the Betti numbers $\beta_k = \operatorname{rank}(Z_k) - \operatorname{rank}(B_k)$. 
+
+\section{Persistent Homology}
+
+Persistent homology is one of the central concepts in Topological Data Analysis. It enables us to extract and describe the topological structure of high-dimensional spaces. 
+%A notable practical example was published in \cite{Nicolau7265}, where persistent homology was used to identify a subgroup of breast cancer tumors, undetectable by classical clustering approaches. \\
+
+In the last section, we established a way to talk about holes in simplicial complexes. We already established the notion of a filtration in Definition \ref{def:filtration}. What we will now discuss is a theory that allows us to talk about how holes behave with respect to the sequence of complexes we get from a filtration. 
+Recall that the sequence encoded in a filtration is increasing with respect to inclusion. This section is based on \cite{persistence_and_simplification}[Chapter VII] and \cite{pershom}.
+
+Consider some filtration $F = \{K_0,\dots,K_n\}$, we denote the set of their chain groups by $C_*^i$, for $i \in 0,\dots,n$. Similarly we denote the corresponding cycle and boundary groups by $Z_*^i$ and $B_*^i$ respectively. 
+
+For $i,j \in 0, \dots, n$, $i \leq j$, we have an inclusion map from $K_i$ to $K_j$, and therefore for every dimension $k$ we have an induced group homomorphism 
+\[h_k^{i,j}: H_k(K_i) \rightarrow H_k(K_j).\]
+
+This means that the sequence of simplicial complexes gives us a sequence of homology groups connected by group homomorphisms, 
+\[
+0 = H_k(K_0) \rightarrow \dots \rightarrow H_k(K_n) =  H_k(K).
+\]
+
+\begin{defi}
+For $0 \leq i \leq j \leq n$, we refer to the factor groups \[
+    H_k^{i,j} = \frac{Z_k^i}{Z_k^i \cap B_k^{j}}
+\] as the \textbf{$\bm{k}$-th persistent homology groups}. The ranks of these groups are the \textbf{$\bm{k}$-th persistent Betti numbers}.
+\end{defi}
+
+These groups are well-defined, since the denominator is an intersection of two subgroups of $C_k^{i+p}$ and hence a subgroup of the numerator.
+We will refer to the set of chain groups $C_*^i$ as the $\bm{i}$\textbf{-th frame}.
+
+\begin{defi}
+Let $\gamma \in H_k(K_i)$. We say $\gamma$ is \textbf{born} in frame $i$, if $\gamma \notin H_k^{i-1,i}$. We say $\gamma$ \textbf{dies} in frame $j$, if 
+\[h_k^{i,j-1}(\gamma) \notin H_k^{i-1,j-1} \text{  but  } h_k^{i,j}(\gamma) \in H_k^{i-1,j}.\] 
+We call the difference $j-i$ the \textbf{index persistence}. If some simplex never dies, its index persistence equals infinity.
+\end{defi}
+
+When considering some function $f: K \rightarrow \mathbb{R}$, that defines a filtration via sublevel sets of $a_0,\dots,a_n$, we call the difference $a_j - a_i$ the \textbf{persistence} of the classes born at $a_i$ and dying at $a_j$.
+
+We now have a notion of how topological features of our space persist through different steps of a filtration of some simplicial complex $K$. In the following section we will introduce the standard algorithm with which persistent homology can be computed. 
+
+\section{Matrix Reduction}
+\label{sec:matrix_reduction}
+The standard algorithm to compute persistent homology is a variant of the matrix reduction, used to compute homology via the Smith normal form. 
+
+% In the following we will talk about simplexwise filtrations since it simplifies some formulations, but we would like to point out, that any filtration induces a simplexwise filtration in the following sense. Let $F = \{K_0,\dots,K_n\}$ be a filtration. Let $\{\sigma_0^0, \dots ,\sigma_{l_0}^0\}$ be the elements of $K_0$ in lexicographical order. Let $\{\sigma_0^i, \dots ,\sigma_{l_i}^i\} = K_i \setminus K_{i-1}$ for $i \in 1, \dots,n$ in lexicographical order. Then 
+% \[F_* = (\sigma_0^0, \dots ,\sigma_{l_0}^0, \dots, \sigma_0^n, \dots ,\sigma_{l_n}^n)\]
+% is a simplexwise filtration. \\
+
+Consider a simplexwise filtration $F_*$ of some simplicial complex $K$. Let $\sigma_0,\dots,\sigma_m$ be the ordering of all simplices in $K$, induced by $F_*$. Due to $F_*$ being a filtration, we know that $\sigma_i < \sigma_j$ implies $i<j$. Note that every subsequence of simplices starting at $\sigma_0$ is a simplicial complex and an element of $F_*$. We define the boundary matrix \[
+\partial[i,j] = \begin{cases} 
+      1 & \text{if $\sigma_i$ is a facet of $\sigma_j$,} \\
+      0 & \text{else.} 
+   \end{cases}
+\]
+
+This matrix contains the same information as all of the $k$-th boundary matrices combined. Each column and row correspond to one simplex. Consider the column corresponding to $\sigma_j$, i.e., column $j$. Every row that has a one as entry in column $j$ corresponds to a facet of $\sigma_j$.
+Conversely, the ones in some row $i$ correspond to cofacets of $\sigma_i$.
+
+\begin{defi}
+Consider some matrix $M$ with $m+1$ rows and elements in $\mathbb{Z}_2$.
+For each column $j$ we define \[
+\operatorname{low}(j) = \begin{cases} 
+
+      \operatorname{max}\{i \in 0,\dots,m \mid M[i,j] = 1\} & \text{if column $j$ is non-zero,} \\
+      -1 & \text{else.} 
+      
+   \end{cases}
+\]
+\end{defi}
+
+The operator $\operatorname{low}()$ gives us the index of the \textbf{lowest $\bm{1}$} of a column of a matrix, if it exists. What the following algorithm will do, is reduce the boundary matrix $\partial$ to a matrix, such that for any two columns $i$ and $j$, it holds that $\operatorname{low}(i) \neq \operatorname{low}(j)$, if $i \neq j$ and if the respective lowest entries exist. 
+
+We will refer to this matrix as the reduced matrix and denote it as $R$. Simultaneously, the algorithm will keep track of the column additions we need to reduce the boundary matrix. We can store this information in a matrix which we will call $A$ for addition matrix. We will write $R[*,j]$, when referring to column $j$ of matrix $R$. Furthermore we write $\operatorname{low}_R()$, to indicate which lowest elements we are interested in. 
+
+\begin{algorithm}[H]
+\SetKwData{Left}{left}\SetKwData{This}{this}\SetKwData{Up}{up}\SetKwFunction{Union}{Union}\SetKwFunction{FindCompress}{FindCompress}\SetKwInOut{Input}{Input}\SetKwInOut{Output}{Output}
+\Input{boundary matrix $\partial$}
+\Output{reduced matrix $R$ and addition matrix $A$}
+
+$R = \partial$\\
+$A = I_m$\\
+\For{j = 1,\dots,m}
+{
+    \While{$\operatorname{low}_R(i) \neq -1$ \text{\textbf{and}}\\ there exists $i<j$, with $\operatorname{low}_R(i) = \operatorname{low}_R(j)$ }
+    {
+        $R[*,j] =  R[*,j] + R[*,i]$\\
+        $A[i,j] = 1$ 
+    }
+}
+\textbf{return} $R,A$
+\caption{Column reduction algorithm}
+\label{algo:column_reduction_algorithm}
+\end{algorithm} 
+\vspace{0.5cm}
+
+In lines 1 and 2 we just initialize our matrices. Line 3 starts a for-loop over all columns, which is in $\mathcal{O}(m)$. The while loop from line 4 to 8 is also in $\mathcal{O}(m)$. After the while loop, the column $R[*,j]$ is either all zero, or has a lowest entry differing from all lowest entries of preceding columns. To achieve this, we add columns $R[*,i]$ and $R[*,j]$, if they have the same lowest entry. This also runs in $\mathcal{O}(m)$ since each column has $m$ entries. Overall we get a cubic running time in the worst case. 
+
+After adding two columns we are guaranteed to have differing lowest entries for them. Also the index of the lowest entry of a column decreases with each step or the column becomes all zero. Hence the while loop terminates. The matrices we get returned in line 10 fulfill: \[
+    R = \partial A.
+\]
+
+\begin{defi}
+\label{def:col_red_steps}
+For a boundary matrix $\partial$ and a column $j$ representing simplex $\tau$ we denote the number of iterations of the while loop starting in line $4$ of Algorithm \ref{algo:column_reduction_algorithm} by $\operatorname{red}(\tau)$. We refer to this number as the number of \textbf{column reduction steps of} $\bm{\tau}$. We call the sum of all column reduction steps over all columns the \textbf{column reduction steps of} $\bm{B}$ and denote it by $\operatorname{red}(B)$.
+\end{defi}
+
+The column reduction steps do not count the total number of addition operations needed during the reduction of a column or boundary matrix. It only counts how often columns get added. In each individual column addition there can be $\mathcal{O}(n)$ addition operations needed to add the columns. We discuss an example later on in the section. \\
+
+Similarly to what we discussed in Section \ref{sec:boundary_matrices_and_smith_normal_form}, we can extract the Betti numbers of the simplicial complex $K$ via the ranks of the cycle and boundary groups of $K$. The rank of $Z_k$ is the number of zero columns corresponding to $k$-simplices in the reduced boundary matrix. We will denote these by $\#Zero_k$. The rank of $B_k$ equals the number of rows corresponding to $k$-simplices that contain a lowest $1$. We denote it by $\#Low_k$. Therefore for the $k$th Betti number we get \[
+\beta_k = \#Zero_k - \#Low_k.
+\]
+
+This however is not the primary goal of our algorithm. We are interested in the appearance and disappearance of cycles in our persistent homology groups. The lowest entries in our reduced matrix define a pairing between simplices. Namely, if $\operatorname{low}_R(j)= i$, the simplex corresponding to row $i$ is paired with the simplex corresponding to column $j$. We will explain what these pairings mean, after formulating a lemma, which shows that this pairing depends on the boundary matrix $\partial$ and not on $R$, which is characterized by being reduced and calculated by left to right column operations. To this end we introduce the following notations.
+
+The lower left sub matrix of some matrix $M$ with top right corner element $M[i,j]$ is denoted as $M_i^j$, i.e., $M_i^j$ consists of the first $j$ columns of $M$ and the last $m-i$ rows. Furthermore, we define \[
+r_\partial(i,j) \coloneqq \operatorname{rank}(\partial_i^j) - \operatorname{rank}(\partial_{i+1}^{j}) + \operatorname{rank}(\partial_{i+1}^{j-1}) - \operatorname{rank}(\partial_{i}^{j-1}).
+\]
+Note that the left to right column operations we do in our algorithm do not change the rank of a matrix, or a submatrix for that matter. 
+
+Therefore we get that $\operatorname{rank}(\partial_i^j) = \operatorname{rank}(R_i^j) $. Hence $r_\partial(i,j) = r_R(i,j)$ for all $i$ and $j$. The following lemma and proof follow \cite{Computational+Topology}[VII.1] closely.
+
+\begin{lemma}[Pairing lemma]
+
+It holds that $i = \operatorname{low}_R(j)$ if and only if $r_\partial(i,j) = 1$. This means the pairings defined by the lowest $1$s of $R$ do not depend on $R$.
+
+\end{lemma}
+
+\begin{proof}
+% As stated above $r_\partial(i,j) = r_R(i,j) = \operatorname{rank}(R_i^j) - \operatorname{rank}(R_{i+1}^{j}) + \operatorname{rank}(R_{i+1}^{j-1}) - \operatorname{rank}(R_{i}^{j-1})$.\\
+Any linear combination of non zero columns in $R_i^j$ is again non zero, since the lowest $1$s are unique. Hence we get that the rank of $R_i^j$ is equal to its number of non zero columns. We will now consider several cases.
+In the first case $R[i,j]$, the top right corner element of $R_i^j$ is the lowest $1$ of $R[*,j]$.
+It follows that $\operatorname{rank}(R_{i+1}^{j}) = \operatorname{rank}(R_{i+1}^{j-1}) = \operatorname{rank}(R_{i}^{j-1}) = \operatorname{rank}(R_i^j)-1$. This holds, since in all of these sub matrices, we either cut away row $i$ or column $j$. So column $j$ either becomes a zero column or is cut away. Let us set $x = \operatorname{rank}(R_{i+1}^{j})$, then: \[r_\partial(i,j) = r_R(i,j) = x+1 - x + x -x =1.\]
+If $R[i,j]$ is not a lowest $1$ there are two subcases to consider. 
+
+Firstly, let us assume, that none of the columns $1,\dots,j-1$ has a lowest $1$ in row $i$. Then $R_i^{j}$ and $R_{i+1}^{j}$ have the same rank, because cutting away row $i$ does not produce a new zero column. The same holds for $R_i^{j-1}$ and $R_{i+1}^{j-1}$, and since in both cases column $j$ is either a zero or a non zero column, their ranks are also the same. In this case we get $r_\partial(i,j) = r_R(i,j) = 0$.
+
+Secondly, if some column $1,\dots,j-1$ has its lowest $1$ in row $i$ it follows that removing row $i$ yields a zero column in any resulting sub matrix. Therefore $R_{i+1}^{j-1}$ has one more zero column than $R_{i}^{j-1}$ and $R_{i+1}^{j}$ has one more zero column than $R_{i}^{j}$. This again results in $r_\partial(i,j) = r_R(i,j) = 0$. With this the proof is concluded.
+\end{proof}
+
+We will now discuss what these pairings mean. Either column $j$ of $R$ is zero. In this case the appearance of $\sigma_j$ in our simplexwise filtration creates a new cycle and therefore gives birth to a new homology class. This is why we call these simplices positive. 
+
+Or column $j$ of $R$ has a lowest $1$ in row $i$. Column $j$ of $R$ stores the boundary of the chain represented by column $j$ of matrix $A$. This means, that the addition of the simplex corresponding to this column causes a homology class to die. Furthermore this class is born in frame $i$, since one of its cycles just died in column $j$ and all other cycles that died with it, have lowest $1$s below row $i$. If they had a lowest $1$ in row $i$ we could have reduced the matrix further and would have obtained $\operatorname{low}(j)<i$, which is a contradiction to our algorithm.
+
+This means, that the pair $(i,j)$ gives us the index persistence $j-i$ of the respective homology class. Furthermore if there is some positive simplex $\sigma_i$ that never gets paired with a negative one, the homology class appearing at $i$ has an index persistence of infinity.
+
+As an example consider the simplicial complex from Figure \ref{fig:simplicial_homology_example}. And let \[
+F_* = ([v_0],[v_1],[v_2],[v_3],[v_0,v_1],[v_0,v_2],[v_1,v_2],[v_1,v_3],[v_2,v_3],[v_0,v_1,v_2]),
+\]
+be a simplexwise filtration. The following matrix $B$ is the reduced boundary matrix of $F_*$ in which we cut away all columns corresponding to vertices. See Matrix \ref{mat:small} for the relevant part of the initial boundary matrix.
+\[
+\begin{blockarray}{ccccccc}
+\label{tab:reduction}
+& [v_0,v_1] & [v_0,v_2] & [v_1,v_2] & [v_1,v_3] & [v_2,v_3] & [v_0,v_1,v_2] \\
+\begin{block}{c[cccccc]}
+  \left[v_0\right]  & 1 & 1 & 0 & 0 & 0 & 0\\*
+  \left[v_1\right]  & 1 & 0 & 0 & 1 & 0 & 0\\*
+  \left[v_2\right]  & 0 & 1 & 0 & 0 & 0 & 0\\*
+  \left[v_3\right]  & 0 & 0 & 0 & 1 & 0 & 0\\*
+  \left[v_0,v_1\right]  & 0 & 0 & 0 & 0 & 0 & 1\\*
+  \left[v_0,v_2\right]  & 0 & 0 & 0 & 0 & 0 & 1\\*
+  \left[v_1,v_2\right]  & 0 & 0 & 0 & 0 & 0 & 1\\*
+  \left[v_1,v_3\right]  & 0 & 0 & 0 & 0 & 0 & 0\\*
+  \left[v_2,v_3\right]  & 0 & 0 & 0 & 0 & 0 & 0\\*
+\end{block}
+\end{blockarray}
+\]
+
+Column $[v_1,v_2]$ is a zero column since when the simplex $[v_1,v_2]$ is added in the filtration a hole appears that has $[v_0,v_1]$, $[v_0,v_2]$ and $[v_1,v_2]$ as its boundary. The hole is closed when simplex $[v_0,v_1,v_2]$ is added. This means that $[v_1,v_2]$ and $[v_0,v_1,v_2]$ are a persistence pair, which is also indicated by the lowest $1$ in column $[v_0,v_1,v_2]$. Another cycle appears when $[v_2,v_3]$ is added in the filtration. This hole never gets closed. This also implies that there is no column corresponding to a triangle which has a lowest $1$ in row $[v_2,v_3]$. Note that the reduction of both columns requires additions with other columns. Column $[v_1,v_2]$ is reduced by adding columns $[v_0,v_2]$ and $[v_0,v_1]$. Column $[v_2,v_3]$ is reduced by adding columns $[v_1,v_3]$, $[v_0,v_2]$ and $[v_0,v_1]$. This means the number of column reduction steps $\operatorname{red}(B)$ equals \[\operatorname{red}([v_1,v_2]) + \operatorname{red}([v_2,v_3]) = 2 + 3 = 5.\] 
+
+\section{Reduction with a Twist}
+\label{sec:twist}
+As we have discussed in the last section, the lower ones are not dependent on our reduction strategy. A strategy developed in \cite{with_a_twist} is to do the reduction steps from higher to lower dimensions. Consider some simplicial complex $K$ and filtration $F$. We first reduce the highest dimensional simplices of $K$ in order of appearance in $F$ and then work our way down to dimension zero.
+
+We will refer to the algorithm using this strategy as the \textbf{twisted reduction algorithm}.
+The central observation that causes this strategy to yield an improvement in running time is the following. 
+
+When reducing a column $j$, such that $\operatorname{low}(j) = i$ with $i<j$ we know that column $j$ kills some class born at $i$, so column $i$ has to be a zero column. This means we can just set column $i$ to zero and have to do no further computational steps for the reduction of this particular column. This column operation is usually referred to as \textbf{clearing}. 
+
+Considering the example from the previous section we can see that if we start the reduction by processing the triangles, we consider column $[v_0,v_1,v_2]$ first. It is reduced from the beginning. Since it has a lowest one in row $[v_1,v_2]$ we now that column $[v_1,v_2]$ has to be a zero column and we can set it to zero without doing any further computations. Therefore we save some reduction steps compared to the standard reduction scheme.
+
+The twisted algorithm yields the same asymptotic bound, as the standard algorithm, however it often performs much better. We will further discuss this in Chapter 5. 
+

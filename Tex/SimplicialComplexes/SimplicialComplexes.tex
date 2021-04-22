@@ -1,0 +1,441 @@
+\chapter{Simplicial Complexes}
+The fundamental concept, that all other concepts discussed in this work will rely upon, is that of simplicial complexes. Simplicial complexes are topological spaces we can describe in a discrete manner and they are of interest in a variety of different topics. In computer graphics, every triangular mesh is a simplicial complex. Meshes are also used to solve physical problems via finite element methods. Simplicial complexes play a role in network theory, in material sciences and in the topological analysis of point clouds. The latter will be one of the central topics in this work. 
+
+\section{Basic Definitions} 
+\label{sec:SimplicialComplexes}
+
+We assume that the reader is familiar with affine and convex combinations and hulls. For a thorough introduction in discrete geometry we refer you to \cite{Polyhedral+and+Algebraic+Methods} or \cite{Computational+Topology}, which also are the basis for this section. We begin by defining simplices.
+
+\begin{defi}
+A \textbf{geometric $\bm{k}$-simplex} is the convex hull of $k+1$ affinely independent points in $\mathbb{R}^n$. We call $k$ the \textbf{dimension} of the simplex. The empty set is a geometric simplex of dimension $-1$.
+\end{defi}
+
+This means a geometric 0-simplex is a point, a geometric 1-simplex is a line, a geometric 2-simplex is a triangle and so on and so forth. We will often omit the number $k$ and just talk about geometric simplices. See the following figure for an example of a geometric 2-simplex and a geometric 3-simplex. 
+
+\begin{figure}[H]
+%\centering%
+\begin{subfigure}[c]{0.49\textwidth}
+\begin{center}
+\input{SimplicialComplexes/Figures/two_simplex}
+\end{center}
+\end{subfigure}
+\begin{subfigure}[c]{0.49\textwidth}
+\begin{center}
+\input{SimplicialComplexes/Figures/three_simplex}
+\end{center}
+\end{subfigure}
+\caption{A geometric 2-simplex and a geometric 3-simplex}
+\label{fig:simplices}
+\end{figure}
+
+
+\begin{defi} \cite[III.1]{Computational+Topology} 
+    Consider some geometric simplex $\sigma$ of dimension $k$, which is the convex hull of affinely independent points $S = \{s_0, \dots , s_{k}\}$. Let $\gamma$ be the convex hull of a non-empty subset $U$ of $S$. Then $\gamma$ is called a \textbf{face} of $\sigma$ and $\sigma$ is called \textbf{coface} of $\gamma$.
+A face is called \textbf{proper}, if $|U| \leq k$. Finally if $\operatorname{dim}(\gamma) = k-1$, we say that $\gamma$ is a \textbf{facet} of $\sigma$ and $\sigma$ is a \textbf{cofacet} of $\gamma$. 
+\end{defi}
+
+A popular notation, that we will also use, is to write $\tau \leq \sigma$ if $\tau$ is a face of $\sigma$ and $\tau < \sigma$ if it is proper.
+
+We will now introduce a particular kind of collection of simplices in which faces and intersections of simplices are also contained in the collection.
+
+\begin{defi}
+    Let $K$ be a finite collection of geometric simplices. $K$ is a \textbf{geometric simplicial complex} if the following two conditions hold:
+    \begin{enumerate}
+        \item If $\sigma \in K \operatorname{and} \tau < \sigma$, then $\tau \in K$
+        \item If $\sigma_0, \sigma_1 \in K$ then $\sigma_0 \cap \sigma_1 \in K$
+    \end{enumerate}
+The \textbf{dimension} of $K$ is the maximum dimension of any of its simplices.
+    A subset $L \subset K$ is called a \textbf{geometric subcomplex} of $K$ if it is a geometric simplicial complex itself.
+    The \textbf{$\bm{k}$-skeleton} of $K$ is the set of all simplices of dimension k or less.
+\end{defi}
+
+We will refer to the elements of a simplicial complex as its simplices or its \textbf{cells}.
+
+The following Figure \ref{fig:simplicial_complexes} gives (a) an example of a geometric simplicial complex in two dimensions and (b) of a set of geometric simplices, that is not a geometric simplicial complex.
+
+\begin{figure}[H]
+%\centering%
+\begin{subfigure}[c]{0.49\textwidth}
+\begin{center}
+\input{SimplicialComplexes/Figures/simplicial_complex}
+\subcaption{A geometric simplicial complex}
+\end{center}
+\end{subfigure}
+\begin{subfigure}[c]{0.49\textwidth}
+\begin{center}
+\input{SimplicialComplexes/Figures/no_simplicial_complex}
+\subcaption{Not a geometric simplicial complex}
+\end{center}
+\end{subfigure}
+\caption{Two different sets of simplices, where the first collection fulfills the conditions of a geometric simplicial complex and the second does not.}
+\label{fig:simplicial_complexes}
+\end{figure}
+
+
+Now when we look at the sets of vertices in each simplex of Figure \ref{fig:simplicial_complexes} (a) and list them, we get:
+\begin{center}
+    \begin{tabular}{lc}
+        Empty set: & $\emptyset$, \\
+        Vertices: & $\{a\}, \{b\}, \{c\}, \{d\}, \{e\}, \{f\}$, \\
+        Edges: & $\{a,b\},\{a,c\},\{b,c\},\{b,d\},\{c,d\},\{d,e\},\{d,f\}$, \\
+        Triangles: & $\{a,b,c\}, \{b,c,d\}$.
+    \end{tabular}
+\end{center}
+
+Forgetting the explicit coordinates of each vertex and only considering the set of labels we can still see that there is some vertex $\{a\}$ that has two adjacent edges $\{a,b\}$ and $\{a,c\}$ while some other vertices $\{e\}$ and $\{f\}$ only have one adjacent edge. 
+This type of combinatorial data is captured in what we call an abstract simplicial complex.
+
+\begin{defi}
+    Consider a finite set $V = \{v_1, v_2, \dots ,v_n\}$, which we will call a \textbf{vertex set}.
+    Let $A$ be a set of subsets of $V$. 
+    We call $A$ an \textbf{abstract simplicial complex} over $V$ if the following condition holds:
+    \begin{itemize}
+    	\item If $\alpha \in A$ and $\beta \subset \alpha$ then $\beta \in A$.
+    \end{itemize}
+    Note that $V = \bigcup_{\sigma \in A} \sigma$.
+\end{defi}
+
+We call the sets in $A$ \textbf{abstract simplices,} and the \textbf{dimension} of an abstract simplex $\sigma$ is its cardinality minus one, i.e.,\[ \operatorname{dim}(\sigma) = |\sigma| - 1.\]
+The notions of faces and cofaces are analogous to those of geometric simplicial complexes.
+The dimension of the abstract simplicial complex $A$ is the maximal dimension of one of its simplices. A subset $B \subseteq A$ is called an (abstract) subcomplex of $A$ if it is an abstract simplicial complex itself.
+
+When comparing the definition of an abstract simplicial complex to the definition of a geometric simplicial complex, we can see that the second
+condition for geometric simplicial complexes is automatically fulfilled for abstract simplicial complexes.
+
+
+Now consider a vertex set $V = \{a,b,c,d,e,f\}$. The following set
+
+\[
+    A = \{\emptyset, \{a\}, \{b\}, \{c\}, \{d\}, \{e\}, \{f\}, \{a,b\}, \{a,c\}, \{b,c\},
+\]
+\[
+ \{b,d\},\{c,d\},\{d,e\},\{d,f\},\{a,b,c\},\{b,c,d\}\}
+\]
+is an abstract simplicial complex over $V$. 
+
+If we interpret the sets with two elements in $A$ as edges and those with three elements as triangles, this corresponds to the tabular above, in which we listed the simplices of the geometric simplicial complex in Figure \ref{fig:simplicial_complexes}.
+
+The simplicial complex in Figure \ref{fig:simplicial_complexes} is realizing the abstract simplicial complex $A$. 
+
+More formally, let \[g:V \rightarrow \mathbb{R}^m\] be a map that assigns linearly independent coordinates in $\mathbb{R}^m$ to the vertices of an abstract simplicial complex A. The map on the vertices induces a map on each individual abstract simplex $\sigma = \{v_1, \dots ,v_i\}$ by sending $\sigma$ to $\operatorname{conv}(\{g(v_0),\dots,g(v_i)\})$. We abuse notation slightly and also refer to this induced map as $g$. 
+
+In case $g$ is injective and $g(\sigma)\cap g(\tau) = g(\sigma \cap \tau)$ for all pairs $\sigma, \tau \in A$, then $g$ is called a \textbf{geometric realization} of $A$. 
+
+Given a geometric simplicial complex $K$, we obtain an abstract simplicial complex $A$, by taking the set of vertex labels for each geometric simplex in $K$. Then $A$ is called a \textbf{vertex scheme} of $K$. Hence, every geometric simplicial complex yields an abstract simplicial complex by simply omitting the coordinate information for the vertices of $K$. It also holds that every abstract simplicial complex has a geometric realization.  
+
+One way to define a geometric realization of an abstract simplicial complex $A$ over vertex set $V = \{v_1,\dots,v_m\}$ is to define $g:V \rightarrow \mathbb{R}^m$ as \begin{itemize}
+    \item $g(v_i) = e_i$,  for $i = 1, \dots, m$ 
+    \item $g(\sigma) = \operatorname{conv}(\{g(v) \mid v \in \sigma \})$, for $\sigma \in A$. 
+\end{itemize}
+Then $K \coloneqq g(A)$ is a subcomplex of an $(m-1)$-simplex embedded in $\mathbb{R}^{m}$. 
+We will conclude our discussion of the relation between abstract and geometric simplicial complexes by stating the following theorem, which allows a lower dimensional realization. See \cite[p.64]{Computational+Topology}.
+
+\begin{thm}[Geometric Realization Theorem]
+    Every $d$-dimensional abstract simplicial complex has a geometric realization in $\mathbb{R}^{2d+1}$
+\end{thm}
+% \begin{proof}
+% This proof follows the proof given in \cite[p. 64]{Computational+Topology} closely. 
+% Consider an abstract simplicial complex $A$ and let $V$ be the set of its vertices, i.e. its zero dimensional elements. We define an injection $f:V \rightarrow \mathbb{R}^{2d+1}$ such that the vertices are mapped to a set of points in general position. This means, that any subset of mapped vertices of cardinality $2d+2$ or less is affinely independent. 
+% We need to show that the intersection of two simplices of the realization $\sigma_0 = \operatorname{conv}(f(\alpha_0))$ and $\sigma_1 = \operatorname{conv}(f(\alpha_1))$ is either empty or equals $\operatorname{conv}(f(\alpha_0 \cap \alpha_1))$.\\
+% To this end consider two abstract simplices $\alpha_0$ and $\alpha_1$ of dimension $k_0$ and $k_1$ respectively. It holds that \[
+% |\alpha_0 \cup \alpha_1| = |\alpha_0| + |\alpha_1| - |\alpha_0 \cap \alpha_1| \leq k_0 + k_1 + 2 \leq 2d+2
+% \]
+% which implies that by construction of $f$ the points in $\{f(a)\mid a \in \alpha_0 \cup \alpha_1\}$ are affinely independent. Therefor we know that every convex combination $x$ of points in $\{f(a) \mid a \in \alpha_0 \cup \alpha_1\}$ is unique. Hence $x \in \operatorname{conv}(f(\alpha_0))$ and $x \in \operatorname{conv}(f(\alpha_1))$ if and only if $x$ is a convex combination of $\{f(a)\mid a \in \alpha_0 \cap \alpha_1\}$. Therefor we get that the intersection of $\sigma_0$ and $\sigma_1$ is indeed empty or equals $\operatorname{conv}(f(\alpha_0 \cap \alpha_1))$.
+% \end{proof}
+
+We have seen how readily the concepts of abstract and geometric simplicial complex can be translated into one another. Therefore from now on, we omit the keywords abstract and geometric, and just talk about simplicial complexes, simplices, etc., unless we explicitly need to distinguish the two concepts. We are usually referring to abstract simplicial complexes. Often however we will see examples in which these abstract simplicial complexes are realized geometrically without discussing explicitly, that the realization is but one possible geometric realization of the abstract simplicial complex.
+
+For brevity, we will introduce the following notation of writing abstract and geometric simplices in square brackets like so: \[
+[a,b,c]
+\] which stands for the convex hull $\operatorname{conv}(\{a,b,c\})$, i.e., a geometric simplex and/or the set $\{a,b,c\}$, i.e., an abstract simplex.
+
+
+We have already talked about the notion of subcomplexes. Now we will consider sequences of subcomplexes, that are increasing with respect to inclusion. 
+
+\begin{defi}
+\label{def:filtration}
+Let $K$ be a simplicial complex. A \textbf{filtration} of $K$ is a sequence of subcomplexes $F = \{K_0, \dots, K_n = K\}$ such that $K_i \subseteq K_{i+1}$ for $i = 0, \dots, n-1$.
+\end{defi}
+
+Note that two consecutive elements of the filtration might be equal, or might differ substantially. An intuitively useful extension of the last definition is the following. 
+\begin{defi}
+Let $F = \{K_0, \dots ,K_n\}$ be a filtration. If $K_0 = \emptyset$ and $|K_{i+1} \setminus K_i| = 1$ for all $i \in 0, \dots ,n-1$ we call the filtration \textbf{simplexwise} and denote it by $F_*$.
+\end{defi}
+A notation we will use in this work is to write simplexwise filtrations as \[
+    F_* = (\sigma_1, \dots , \sigma_m),
+\] where we mean that $F_*$ is a filtration of $K = \{\sigma_1, \dots, \sigma_m\}$ and subcomplex $K_i$ is the set of the first $i$ simplices, i.e. $K_i = \{\sigma_1, \dots ,\sigma_i\}$.
+
+One way to define a filtration is by taking a function $f: K \rightarrow \mathbb{R}$ that is monotonously increasing with respect to inclusion, i.e, for $\sigma, \tau \in K$, $\sigma < \tau$ we have $f(\sigma) \leq f(\tau)$.
+
+Given such a function we can define subcomplexes of $K$ by looking at the sub level sets of $f$. Let $a \in \mathbb{R}$, then $f^{-1}((-\infty,a]) \subseteq K$ is a subcomplex of $K$. Now we can take a sequence of elements in $\mathbb{R}$, $a_0 < a_1 < \dots < a_n$ and take $f^{-1}(a_0), \dots, f^{-1}(a_n)$ to define a filtration. 
+
+On the other hand, given a filtration $F = \{K_0, \dots, K_n\}$ we can define such a function by setting $f(\sigma) = 0$ for $\sigma \in K_0$, and $f(\sigma) = i$ for $\sigma \in K_i \setminus K_{i-1}$ for $i = 1, \dots, n$.
+
+Furthermore for a filtration $F = \{K_0, \dots, K_n = K\}$ and a function $f$ defined in that manner we call $F_* = (\sigma_1,\dots,\sigma_m)$ with $f(\sigma_i) \leq f(\sigma_{i+1})$ and $i < j$ if $\sigma_i < \sigma_j$ a \textbf{simplexwise refinement} of $F$. 
+ 
+Sometimes we want to consider an ordering of that type of the simplices of a filtration $F$. In this case we will just consider a simplexwise refinement $F_*$ without further discussion. 
+
+The following figure gives a simple example of a simplexwise filtration.  
+
+\begin{figure}[H]
+%\centering%
+\begin{subfigure}[b]{0.3\textwidth}
+\begin{center}
+\input{SimplicialComplexes/Figures/simplicial_complex_1}
+\subcaption{$K_1$}
+\end{center}
+\end{subfigure}
+\begin{subfigure}[b]{0.3\textwidth}
+\begin{center}
+\input{SimplicialComplexes/Figures/simplicial_complex_2}
+\subcaption{$K_2$}
+\end{center}
+\end{subfigure}
+\begin{subfigure}[b]{0.3\textwidth}
+\begin{center}
+\input{SimplicialComplexes/Figures/simplicial_complex_3}
+\subcaption{$K_3$}
+\end{center}
+\end{subfigure}\\
+\begin{subfigure}[b]{0.3\textwidth}
+
+\begin{center}
+\input{SimplicialComplexes/Figures/simplicial_complex_4}
+\subcaption{$K_4$}
+\end{center}
+\end{subfigure}
+\begin{subfigure}[b]{0.3\textwidth}
+
+\begin{center}
+\input{SimplicialComplexes/Figures/simplicial_complex_5}
+\subcaption{$K_5$}
+\end{center}
+\end{subfigure}
+\begin{subfigure}[b]{0.3\textwidth}
+
+\begin{center}
+\input{SimplicialComplexes/Figures/simplicial_complex_6}
+\subcaption{$K_6$}
+\end{center}
+\end{subfigure}\\
+\begin{subfigure}[b]{0.99\textwidth}
+\begin{center}
+\input{SimplicialComplexes/Figures/simplicial_complex_7}
+\subcaption{$K = K_7$}
+\end{center}
+\end{subfigure}
+\caption{A simplexwise filtration of a triangle}
+\label{fig:filtration}
+\end{figure}
+
+
+\section{Filtrations from Point Clouds}
+\label{sec:filtrations_from_point_clouds}
+As we will see later on, we can use filtrations to analyze how the topology of a simplicial complex changes 'over time', i.e. with respect to the sequence of the filtration. A major practical use for this is to analyze the topology of point clouds. To this end, however, we first need to have a natural way to get from a point cloud to some simplicial complex and a filtration. More detailed information on this can be found in \cite{Computational+Topology} and \cite{elementary_topology}. 
+
+The first construction we will discuss is the so called Vietoris-Rips complex.
+
+\begin{defi}
+Let $S \subset \mathbb{R}^n$ be a finite set of points and consider some $\epsilon > 0$. The set \[
+   \operatorname{VR}_\epsilon(S) \coloneqq \{\sigma \subseteq S \mid \operatorname{dist}(s_i,s_j)\leq \epsilon \text{, }s_i,s_j \in \sigma\}
+\]
+is called \textbf{Vietoris-Rips complex} of $S$.
+\end{defi}
+
+In other words, $\operatorname{VR}_\epsilon(S)$ is the set of all simplices defined by all sets of finitely many points in $S$ that have a pairwise distance smaller than $\epsilon$.
+
+It is easy to see, that this yields an abstract simplicial complex over the vertex set $S$. Since all subsets and intersections of sets in $\operatorname{VR}_\epsilon(S)$ are again in $\operatorname{VR}_\epsilon(S)$.
+
+While the Vietoris-Rips complex is straightforward to compute, it will result in simplicial complexes, that obscure lower dimensional topological structure in our data set. This happens since, whenever there is a set of edges, that is the edge set of some high dimensional simplex, this simplex is also included.
+
+Another construction, that is similar to the Vietoris-Rips complex, but a little more aware of lower dimensional structure is the following.
+\begin{defi}
+Let $S \subset \mathbb{R}^n$ be finite and let $\epsilon > 0$. The set \[
+    \text{\v{C}}_\epsilon(S) \coloneqq \{ \sigma \subseteq S \mid \bigcap\limits_{s \in \sigma} B_\epsilon(s) \neq \emptyset \},
+\]
+where $B_\epsilon(s)$ is the closed $n$-dimensional ball of radius $\epsilon$ with center $s$, is called \textbf{\v{C}ech complex} of $S$.
+\end{defi}
+
+In other words, the \v{C}ech complex consists of the simplices, whose vertices have intersecting balls of radius epsilon centered on them. The following Figure \ref{fig:chech_vr_complex} gives a small example of a  \v{C}ech and a Vietoris-Rips complex.
+
+\begin{figure}[H]
+%\centering%
+\begin{subfigure}[b]{0.49\textwidth}
+\begin{center}
+\input{SimplicialComplexes/Figures/chech1}
+\subcaption{Set of points $S$.}
+\end{center}
+\end{subfigure}
+\begin{subfigure}[b]{0.49\textwidth}
+\begin{center}
+\input{SimplicialComplexes/Figures/chech2}
+\subcaption{Balls of radius $\epsilon$ around each point.}
+\end{center}
+\end{subfigure}
+\begin{subfigure}[c]{0.49\textwidth}
+\begin{center}
+\input{SimplicialComplexes/Figures/chech3}
+\subcaption{The resulting \v{C}ech complex $\text{\v{C}}_{\epsilon}(S)$.}
+\end{center}
+\end{subfigure}
+\begin{subfigure}[c]{0.49\textwidth}
+\begin{center}
+\input{SimplicialComplexes/Figures/vietoris1}
+\subcaption{The Vietoris-Rips complex $\operatorname{VR}_{\epsilon}(S)$.}
+\end{center}
+\end{subfigure}
+\caption{Example of a \v{C}ech and a VR complex.}
+\label{fig:chech_vr_complex}
+\end{figure}
+
+The above figure illustrates how a \v{C}ech and a Vietoris-Rips complex differ for the same value $\epsilon$. It generally holds, that $\text{\v{C}}_\epsilon(S) \subseteq \operatorname{VR}_\epsilon(S) \subseteq \text{\v{C}}_{\sqrt{2}\epsilon}(S)$ which is proven in \cite{Computational+Topology}[Chapter III]. A notable property of both is that they not necessarily have a geometric realization in the dimension of the underlying point set. For example, let us consider the points in Figure \ref{fig:chech_vr_complex}(b). If we choose our radius $\epsilon$ large enough, the resulting simplicial complex will be a $6$-simplex on seven vertices with all its faces, which has a geometric realization in spaces of dimension six or higher, while the underlying point set is in dimension two. 
+
+
+We will introduce a final construction, that has a geometric realization in the ambient space of the underlying point set. This is the so called Alpha Complex, which in a sense mixes the construction of \v{C}ech complexes with Voronoi diagrams.
+
+\begin{defi}
+Let $S \subset \mathbb{R}^n$ be finite set of points. The \textbf{Voronoi cell} of a point $q \in S$ is the set of points that is not closer to any other point in $S$ than $q$, i.e. \[
+    V_q \coloneqq \{x \in \mathbb{R}^n \mid \norm{x-q} \leq \norm{x-s}, s \in S\setminus\{q\}\}.
+\]
+
+The \textbf{Voronoi diagram} of $S$ is the set of all its Voronoi cells. 
+\end{defi}
+
+In other words, a Voronoi diagram is a partitioning of $\mathbb{R}^n$ into areas that are closest to a particular pvechain vs iotaoint in the set $S$. The intersections of the Voronoi cells, are areas, in which several points of $S$ are equally close. 
+
+\begin{figure}[H]
+%\centering%
+\begin{center}
+\input{SimplicialComplexes/Figures/voronoi1}
+\end{center}
+\caption{Voronoi diagram of the point set from Figure \ref{fig:chech_vr_complex} (a).}
+\label{fig:voronoi}
+\end{figure}
+
+\begin{defi}
+Let $S \in \mathbb{R}^n$ be a finite set of points. Let $V(S)$ be the Voronoi diagram of $S$. Then
+\[
+D(S) \coloneqq \{\sigma \subseteq S \mid  \bigcap\limits_{s \in \sigma}V_s \neq \emptyset \}
+\] 
+is the \textbf{Delaunay complex} of $S$.
+\end{defi}
+
+If the points of a finite point set $S \subset \mathbb{R}^n$ are in general position, in the sense that no $n+2$ points lie on a common $n$-sphere, then the Delaunay complex is a triangulation of the convex hull of $S$ and is called the \textbf{Delaunay triangulation}. 
+
+The following Figure \ref{fig:delaunay} (a) shows the Delaunay triangulation corresponding to the Voronoi diagram from Figure \ref{fig:voronoi}. Figure \ref{fig:delaunay} (b) shows a Voronoi diagram in two dimensions on  a set of four points that lie on a circle. The corresponding Delaunay complex has a three dimensional cell, i.e., is not a triangulation of the convex hull of the point set.
+
+\begin{figure}[H]
+%\centering%
+\begin{subfigure}[b]{0.49\textwidth}
+\begin{center}
+\input{SimplicialComplexes/Figures/delaunay_tri}
+\subcaption{Delaunay triangulation corresponding to Figure \ref{fig:voronoi}.}
+\end{center}
+\end{subfigure}
+\begin{subfigure}[b]{0.49\textwidth}
+\begin{center}
+\input{SimplicialComplexes/Figures/delaunay_complex}
+\subcaption{Voronoi diagram on points not in general position.}
+\end{center}
+\end{subfigure}
+\caption{Illustrating Delaunay triangulations and complexes.}
+\label{fig:delaunay}
+\end{figure}
+
+We will now combine Voronoi diagrams with the constructing idea of \v{C}ech complexes. 
+
+\begin{defi}
+We define the \textbf{alpha complex} of a finite set of points $S \subset \mathbb{R}^n$ as \[
+\operatorname{Alpha(\epsilon)} \coloneqq \{\sigma \subseteq S \mid \bigcap\limits_{s \in \sigma}(B_\epsilon(s) \cap V_s) \neq \emptyset\},
+\]
+with $B_\epsilon(s)$ being the ball of radius $\epsilon$ centered at $s$ and $V_s$ being the Voronoi cell of $s$.
+\end{defi}
+
+It is apparent from the definition, that if we choose $\epsilon$ large enough, so that each ball $B_\epsilon(s)$ covers all points in $S$, all simplices will be defined by the incidences in the Voronoi diagram. Hence, for $S$ in general position we can take the convex hulls of the abstract simplices defined by our Alpha complex and will get a geometric realization in the ambient space of the set of points. See the following example, where the resulting alpha complex is equal to the \v{C}ech complex from Figure \ref{fig:voronoi}. 
+
+\begin{figure}[H]
+%\centering%
+\begin{subfigure}[b]{0.99\textwidth}
+\begin{center}
+\input{SimplicialComplexes/Figures/voronoi2}
+\end{center}
+\end{subfigure}
+
+\caption{The intersection of balls depicted in figure \ref{fig:chech_vr_complex} (b) and the Voronoi cells from figure \ref{fig:voronoi}.}
+\label{fig:alpha_complex}
+\end{figure}
+
+Now for any of these constructions we can use different parameters $\epsilon_0,\dots,\epsilon_n$ to obtain a sequence of nested simplicial complexes, i.e., a filtration. 
+
+If the number of simplices at some $\epsilon_i$ actually increases, which only happens finitely many times, we can assign each new simplex the value $\epsilon_i$ to get a function $f:K\rightarrow \mathbb{R}$, which describes the given filtration, via the sub level sets as discussed before. 
+
+
+\section{Simplicial Collapses}
+\label{sec:simplicial_collapses}
+We conclude this chapter on simplicial complexes by introducing the notion of simplicial collapses. An early reference to these deformations can be found in \cite{whitehead}.
+
+\begin{defi}
+Let $K$ be a simplicial complex and let $\sigma,\tau \in K$. Let $\sigma$ be a facet of $\tau$. We call $\sigma$ a \textbf{free face} if the following conditions are fulfilled:
+\begin{itemize}
+    \item $\sigma$ has no cofacet except $\tau$
+    \item $\tau$ has no cofacet
+\end{itemize}
+\end{defi}
+
+\begin{defi}
+Let $K$ be a simplicial complex and let $\sigma$ be a free face with coface $\tau$. 
+
+Define $C_{\sigma} \coloneqq \{\gamma \in K \mid \sigma \leq \gamma \leq \tau\}$. Constructing $K' \coloneqq K \setminus C_{\sigma}$ by removing the simplices in $C_\sigma$ from $K$ is called a \textbf{simplicial collapse}. If $\operatorname{dim}(\sigma) = \operatorname{dim}(\tau)-1$, we call the collapse \textbf{elementary}. We denote an (elementary) simplicial collapse by $K \searrow_{\sigma} K'$.
+\end{defi}
+
+Note that $K'$ is a subcomplex of $K$. In the following example, Figure \ref{fig:collapses}, we start with a triangle as simplicial complex $K$ and successively collapse free faces until we have reached a single point.
+
+\begin{figure}[H]
+%\centering%
+\begin{subfigure}[c]{0.45\textwidth}
+\begin{center}
+\input{SimplicialComplexes/Figures/collapse1}
+\subcaption{Simplicial complex $K$ with free faces $\sigma_1,\sigma_2$ and $\sigma_3$.}
+\end{center}
+\end{subfigure}
+\begin{subfigure}[c]{0.45\textwidth}
+\begin{center}
+\input{SimplicialComplexes/Figures/collapse2}
+\subcaption{Result of $K \searrow_{\sigma_3} K'$. Now $v_1$ and $v_2$ are free faces, with cofacets $\sigma_1$ and $\sigma_2$ respectively.}
+\end{center}
+\end{subfigure}
+\begin{subfigure}[c]{0.45\textwidth}
+\begin{center}
+\input{SimplicialComplexes/Figures/collapse3}
+\subcaption{Result of $K' \searrow_{v_2} K''$. Now $v_0$ and $v_1$ are free faces.}
+\end{center}
+\end{subfigure}
+\begin{subfigure}[c]{0.45\textwidth}
+\begin{center}
+\input{SimplicialComplexes/Figures/collapse4}
+\subcaption{Result of $K'' \searrow_{v_1} K'''$. }
+\end{center}
+\end{subfigure}
+\caption{A sequence of elementary collapses.}
+\label{fig:collapses}
+\end{figure}
+
+If there is a sequence of collapses, such that some simplicial complex $K$ collapses to a point by following that sequence, we say that $K$ is a \textbf{collapsible}.
+
+In topology, a space is \textbf{contractible}, if it is homotopy-equivalent to a point. Every collapsible complex is contractible. However contractible does not imply collapsible as the famous example of the \enquote{Dunce hat}, see Figure \ref{fig:dunce}, illustrates. 
+More on this topic can be found in \cite{cohenhom}.
+
+\begin{figure}[H]
+%\centering%
+\begin{subfigure}[c]{0.95\textwidth}
+\begin{center}
+\input{SimplicialComplexes/Figures/dunce_hat}
+\end{center}
+\end{subfigure}
+\caption{The dunce hat.}
+\label{fig:dunce}
+\end{figure}
+
+In Figure \ref{fig:dunce} vertices with the same label indicate that the respective vertices are identified. In this example the sides of the triangle we see here are therefore glued together.
+
+It is easy to verify that the dunce hat has no free face and therefore is not collapsible. However it is contractible, c.f. \cite{ZEEMAN1963341}.

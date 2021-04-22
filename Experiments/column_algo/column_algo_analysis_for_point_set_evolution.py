@@ -2,7 +2,7 @@ import random
 from copy import deepcopy
 from datetime import datetime
 
-from Algorithms.alpha_complex_wrapper import alpha_complex_wrapper
+from Algorithms.alphacomplexwrapper import AlphaComplexWrapper
 from Algorithms.column_algo.column_algorithm import column_algorithm
 import Algorithms.point_cloud_generator as pcg
 import matplotlib.pyplot as plt
@@ -11,7 +11,7 @@ def initial_points(top, num_points, dim, num_sets):
     print("init points")
     for i in range(num_sets):
         points = pcg.generate_n_points(num_points, dim)
-        alpha = alpha_complex_wrapper(points)
+        alpha = AlphaComplexWrapper(points)
         steps = column_algorithm(alpha.get_boundary_matrix())
         top.append([steps, points])
 
@@ -25,7 +25,7 @@ def evolve(top, keep, fresh):
         for i in range(fresh):
             evolved_elem = deepcopy(elem)
             change_n_points_in_set(evolved_elem[1],1)
-            alpha = alpha_complex_wrapper(evolved_elem[1])
+            alpha = AlphaComplexWrapper(evolved_elem[1])
             steps = column_algorithm(alpha.get_boundary_matrix())
             evolved_elem[0] = steps
             out.append(evolved_elem)

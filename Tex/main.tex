@@ -1,0 +1,118 @@
+%\documentclass[a4paper, 11pt,openany,oneside]{scrbook}
+\documentclass[a4paper, 11pt]{report}
+\usepackage[english,ngerman]{babel} 
+\usepackage[utf8]{inputenc}
+
+\usepackage{float}
+\usepackage{tikz}
+\usepackage{xinttools}
+\usepackage{subcaption}
+\usepackage{xcolor}
+
+\usetikzlibrary{positioning}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+
+\input{Tikz/tikz_def.tex}
+\input{Tikz/tikz_styles.tex}
+
+\newcommand{\PD}[1]{\textcolor{red}{\textbf{PD}\noindent\textbf{[#1]}}}
+
+\usepackage{titlesec}
+\titleformat{\chapter}[display]   
+{\normalfont\huge\bfseries}{\chaptertitlename\ \thechapter}{20pt}{\Huge}   
+\titlespacing*{\chapter}{0pt}{-50pt}{40pt}
+
+\usepackage[linesnumbered,lined,boxed,commentsnumbered]{algorithm2e}
+\usepackage{enumerate}
+\usepackage{blkarray}
+
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{dsfont}
+\usepackage{bm}
+\usepackage{csquotes}
+\RequirePackage{doi}
+\usepackage{hyperref}
+
+
+
+\DeclareMathOperator{\low}{low}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}[chapter]
+\newtheorem{lemma}[thm]{Lemma}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{corl}[thm]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{defi}[thm]{Definition}
+\newtheorem{obs}[thm]{Observation}
+
+\title{Computational Topology And Random Simplicial Complexes}
+\author{Ivan Spirandelli}
+\date{March 2020}
+
+\begin{document}
+
+\input{titeleid.tex}
+\newpage
+\thispagestyle{empty}
+\qquad
+\selectlanguage{english}
+\begin{abstract}
+In this thesis we will give a brief introduction on simplicial persistent homology and discrete Morse theory. We will discuss the mathematical background and the most popular algorithms
+for persistence computation in the Chapters 1--3. In Chapter 4 we will extend some recent discussions of canonically defined persistence pairs, which are closely related to discrete Morse functions. We will formulate and prove a theorem linking them to the number of column additions in the standard algorithm used to compute persistent homology. Furthermore we will introduce a new construction of examples that achieves the worst case bound for this algorithm and compare it to a previously known construction. 
+
+In the final Chapter 5 we will do computational experiments on random simplicial complexes with respect to the concepts established in Chapter 4. Here random simplicial complex is meant in the sense of analogues of the Erdös--Rényi random graph model and of alpha complexes constructed on random point clouds. 
+\end{abstract}
+\selectlanguage{ngerman}
+\begin{abstract}
+In dieser Arbeit werden in den ersten Kapiteln die Grundlagen von simplizialer persistenter Homologie und diskreter Morse-Theorie eingeführt. Es werden sowohl die mathematischen Strukturen als auch die Standardalgorithmen der Themengebiete diskutiert. Im vierten Kapitel greifen wir jüngere Erkenntnisse zu kanonisch definierten Persistenzpaaren auf, die in engem Zusammenhang mit diskreter Morse-Theorie stehen, und erweitern diese. Wir formulieren und beweisen ein Theorem, dass sie mit der Laufzeit des Standardalgorithmus zur Berechnung von persistenter Homologie verknüpft. Des weiteren führen wir eine neue Konstruktion von Beispielen ein, die die schlechtest mögliche Laufzeit in Bezug auf den Standardalgorithmus haben. Wir vergleichen die Konstruktion mit einer bereits bekannten Konstruktion dieser Art. 
+
+Im letzten Kapitel untersuchen wir zufällige Simplizialkomplexe in Bezug auf die Erkenntnisse aus dem vierten Kapitel. Hierbei meint zufällig sowohl im Sinne von Analoga zu dem zufälligen Graphen Model von Erdös-Rényi, als auch im Sinne der Konstruktion von Alpha-Komplexen auf zufälligen Punktwolken. 
+\end{abstract}
+\selectlanguage{english}
+\newpage
+\renewcommand{\abstractname}{Acknowledgements}
+\begin{abstract}
+ I'd like to thank Frank Lutz and $\text{Pawe\l}$ $\text{D\l otko}$ for their support and guidance during the times of me working on this thesis. 
+\end{abstract}
+\thispagestyle{empty}
+
+\pagenumbering{roman}
+\tableofcontents
+\newpage
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\thispagestyle{empty}
+
+\input{SimplicialComplexes/SimplicialComplexes}
+
+\newpage
+%\newpage\null\thispagestyle{empty}\newpage
+\input{Homology/Homology}
+
+\newpage
+%\newpage\null\thispagestyle{empty}\newpage
+\input{DiscreteMorseTheory/DiscreteMorseTheory}
+
+\newpage
+%\newpage\null\thispagestyle{empty}\newpage
+\input{ConnectingMorsePersistence/ConnectingMorsePersistence}
+
+\newpage
+\newpage\null\thispagestyle{empty}\newpage
+\input{RandomSimplicialComplexes/RandomSimplicialComplexes}
+
+%\newpage
+%%\newpage\null\thispagestyle{empty}\newpage
+%\input{FinalRemarks/FinalRemarks}
+
+\bibliographystyle{halpha}
+\bibliography{references.bib}
+\end{document}

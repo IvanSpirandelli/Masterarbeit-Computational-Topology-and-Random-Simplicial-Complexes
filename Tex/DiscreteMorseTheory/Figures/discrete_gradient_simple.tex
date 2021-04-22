@@ -1,0 +1,23 @@
+
+\begin{tikzpicture}
+
+\node[b_circle, name path=0, label=below left:{}] (0) at (0,0) {};
+
+\node[b_circle, name path=1, label=below right:{}] (1) at (2,0) {};
+
+\node[b_circle, name path=2, label=above:{}] (2) at  (1,2) {};
+
+\node[inner sep = 2pt, label=below:{}] (c) at (1,1) {};
+
+
+\path[-, draw] (0) to[] node[anchor = center, inner sep = 6pt,below] {} (1);
+\path[-, draw] (1) to[] node[anchor = center, inner sep = 6pt,right] {} (2);
+\path[-, draw] (0) to[] node[anchor = center, inner sep = 6pt,left] {} (2);
+
+\draw[->, ultra thick] (0) to ($(0)!0.5!(2)$);
+\draw[->, ultra thick] (1) to ($(1)!0.5!(2)$);
+\draw[->, ultra thick] ($(0)!0.5!(1)$) to (c);
+
+\fill[opacity = 0.2] (0,0) -- (2,0) -- (1,2);
+
+\end{tikzpicture}

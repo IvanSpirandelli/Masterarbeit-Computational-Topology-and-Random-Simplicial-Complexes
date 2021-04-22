@@ -1,3 +1,5 @@
 *.idea/
+env/
+venv/
 _Results/
 __pychache__/

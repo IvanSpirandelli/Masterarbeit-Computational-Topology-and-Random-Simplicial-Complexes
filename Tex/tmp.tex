@@ -1,0 +1,72 @@
+
+\section{Centered n-gons}
+Consider an n-gon with corners ${1,...,n}$ and a center point $0$. Now consider the simplicial complex consisting of the vertices $\{(1),...,(n)\}$, the edges $\{(0,1),...,(0,n),(1,2),...,(n-1,n),(1,n)\}$ and the triangles \\$\{(0,1,2),...,(0,n-1,n),(0,1,n)\}$. \\The following figure gives an example for a pentagon with a center point.
+
+\PD{Will we get different results if the edegs in the external boundary are paired in the same way as the triangles?}
+
+\begin{figure}[H]
+\noindent%
+\centering%
+\fbox{%
+\begin{minipage}[c][4.9cm][c]{\dimexpr.49\linewidth-2\fboxsep-2\fboxrule}%
+\centering%
+\input{ConnectingMorsePersistence/Figures/pentagon}
+\end{minipage}}%
+%\captionsetup{width=0.9\textwidth}
+\caption{Triangulation of a pentagon with a central point.}
+\label{fig:centeredpentagon}
+\end{figure}
+
+\begin{lemma}[Quadratic number of additions]
+Let $K$ be a simplicial complex of an n-gon with center, as defined above. The filtration: 
+\begin{center}
+    $\{(n),...,(0),(n-1,n),(n-2,n-1),...,(1,2),(0,1),(0,2),...,(0,n),(1,n),...\}$
+\end{center}
+yields a boundarymatrix, for which the column reduction algorithm needs more than $\sum_{i=1}^n i = \frac{n(n+1)}{2} \in \Omega(n^2)$ additions.
+\end{lemma}
+\begin{proof}
+Coming soon.
+\end{proof}
+
+The following figure shows the plot of the number of simplices in the n-gon with center mapped to the number of additions needed by the column reduction algorithm. Note that the number of simplices equals $1+4n$.
+
+
+\begin{figure}[H]
+\noindent%
+\centering%
+\centering%
+\includegraphics[width=\linewidth]{ConnectingMorsePersistence/Figures/n_gon_plot_many_additions.png}
+
+%\captionsetup{width=0.9\textwidth}
+\caption{Number of additions of the reduction algorithm}
+\label{fig:quadratic_plot
+}
+\end{figure}
+
+Let $F$ be a filtration as in Lemma 3.1. for $n = 5$ The following figure shows a the output of the algorithm Filtration\_to\_DMF($F$).
+
+\begin{figure}[H]
+\noindent%
+\centering%
+\fbox{%
+\begin{minipage}[c][4.9cm][c]{\dimexpr.49\linewidth-2\fboxsep-2\fboxrule}%
+\centering%
+\input{ConnectingMorsePersistence/Figures/pentagon_quad_morse}
+\end{minipage}}%
+%\captionsetup{width=0.9\textwidth}
+\caption{Triangulation of a pentagon with a central point.}
+\label{fig:pentagon_quad_morse}
+\end{figure}
+
+
+\section{Conflicts along v-paths}
+\begin{lemma}[Conflictfree 2-dim v-path]
+Let $K$ be a simplicial complex and $V$ a gradient field on $K$. Let $p = (v_1,e_1,v_2,...,e_{n-1},v_n)$ be a v-path of vertices and edges in $V$. Let $F$ be the filtration given by the algorithm \textbf{DMF\_to\_Filtration}. Let $B_p$ be the submatrix of the boundary Matrix of $F$, that only consists of rows $v_1,...,v_n$ and columns $e_1,...,e_{n-1}$. It holds that $\low(i) = i+1$.
+\end{lemma}
+
+\begin{proof}
+Note that in the full boundary matrix there might be columns or rows in between the rows and columns of $B_p$, but we will ignore those. \\
+The v-path $p$ enforces that $v_1,...,v_n$ appear in that order. So $v_1$ before $v_2$ before $v_3$ and so on. The same holds for $e_1,...,e_{n-1}$. This means the $i$-th column, for $i \in \{i,...,n-1\}$ has non zero entries in the rows corresponding to $v_i$ and $v_{i+1}$, since the simplex $e_i$ is adjacent to the simplices $v_i$ and $v_{i+1}$. Since $v_{i+1}$ is the $(i+1)$-th row, the statement follows.
+\end{proof}
+
+\PD{I do not clearly see from that proof if there are no intermediate cells, of indices below the maximal index of an element in the V-Path, that do not creat conflicts. I do see that there will not be clnfilicts between elements of v-path, but what about elements of v-path and other simplices?}

@@ -1,0 +1,26 @@
+\begin{tikzpicture}
+
+\node[b_circle, name path=0, label=below:{0}] (0) at (0,-0.5) {};
+
+\node[circle, name path=1, label=above:{1}] (1) at (0,2) {};
+
+\node[circle, name path=2, label=right:{2}] (2) at  (2,-2) {};
+
+\node[circle, name path=2, label=left:{3}] (3) at  (-2,-2) {};
+
+\draw[dashed, thick] (1) to (2) to (3) to (1);
+\draw[dotted, very thick] (0) to (1);
+\draw[dotted, very thick] (0) to (2);
+\draw[dotted, very thick] (0) to (3);
+
+\fill[opacity = 0.4] (0.center)--(2.center)--(3.center);
+\fill[opacity = 0.4] (0.center)--(1.center)--(2.center);
+\fill[opacity = 0.2] (0.center)--(1.center)--(3.center);
+
+\node[circle, name path=1, label=above:{1}] (1) at (0,2) {};
+
+\node[circle, name path=2, label=right:{2}] (2) at  (2,-2) {};
+
+\node[circle, name path=2, label=left:{3}] (3) at  (-2,-2) {};
+
+\end{tikzpicture}

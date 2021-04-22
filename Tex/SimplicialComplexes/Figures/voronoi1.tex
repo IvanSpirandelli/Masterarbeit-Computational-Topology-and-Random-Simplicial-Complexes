@@ -1,0 +1,44 @@
+\begin{tikzpicture}
+
+    \def\pts{(-1.5,1),(0,2),(1.5,1),(2,1),(1.75,0.5),(-0.25,-0.25),(-2,-0.6)}
+    % draw the points and their cells
+    \xintForpair #1#2 in \pts \do{
+      \edef\pta{#1,#2}
+      \begin{scope}
+        \xintForpair \#3#4 in \pts \do{
+          \edef\ptb{#3,#4}
+          \ifx\pta\ptb\relax % check if (#1,#2) == (#3,#4) ?
+            \tikzstyle{myclip}=[];
+          \else
+            \tikzstyle{myclip}=[clip];
+          \fi;
+          \path[myclip] (#3,#4) to[half plane] (#1,#2);
+        }
+        \clip (-\maxxy,-\maxxy+1) rectangle (\maxxy,\maxxy); % last clip
+        %\definecolor{randcolor}{hsb}{\randhue,.5,1}
+        \fill[white] (#1,#2) circle (4*\biglen); % fill the cell with random color
+        \fill[opacity = 0.25] (#1,#2) circle (4*\biglen); % fill the cell with random color
+      \end{scope}
+    }
+    \pgfresetboundingbox
+    \draw[white, very thick] (-\maxxy,-\maxxy+1) rectangle (\maxxy,\maxxy);
+    
+    \begin{pgfonlayer}{background}
+    
+    \fill[opacity = 1] (-\maxxy,-\maxxy+1) rectangle (\maxxy,\maxxy);
+    \end{pgfonlayer}
+    
+    \node[b_circle, name path=1, label=left:{}] (1) at (-1.5,1) {};
+
+    \node[b_circle, name path=2, label=above:{}] (2) at  (0,2) {};
+
+    \node[b_circle, name path=3, label=right:{}] (3) at  (1.5,1) {};
+    \node[b_circle, name path=3, label=right:{}] (31) at  (2,1) {};
+    \node[b_circle, name path=3, label=right:{}] (32) at  (1.75,0.5) {};
+
+
+    \node[b_circle, name path=4, label=below:{}] (4) at (-0.25,-0.25) {};
+
+    \node[b_circle, name path=5, label=below left:{}] (5) at  (-2,-0.6) {};
+    
+  \end{tikzpicture}

@@ -1,0 +1,16 @@
+\begin{tikzpicture}
+
+\node[b_circle, name path=0, label=below:{}] (0) at (0,0) {};
+
+\node[b_circle, name path=1, label=below:{}] (1) at (2,0) {};
+
+\node[b_circle, name path=2, label=above:{}] (2) at  (1,2) {};
+
+
+
+\path[-, draw] (0) to[] node[anchor = center, below] {$\sigma_3$} (1);
+\path[-, draw] (1) to[] node[anchor = center, right] {$\sigma_2$} (2);
+\path[-, draw] (0) to[] node[anchor = center, left] {$\sigma_1$} (2);
+
+\fill[opacity = 0.2] (0,0) -- (2,0) -- (1,2);
+\end{tikzpicture}

@@ -1,0 +1,50 @@
+\begin{tikzpicture}
+\node[b_circle, name path=0, label=below:{0}] (0) at (0,0.25) {};
+
+\node[b_circle, name path=1, label=left:{1}] (1) at (-1.5,1) {};
+
+\node[b_circle, name path=2, label=above:{2}] (2) at  (0,2) {};
+
+\node[b_circle, name path=3, label=right:{3}] (3) at  (1.5,1) {};
+
+\node[b_circle, name path=4, label=below:{4}] (4) at (1,-1) {};
+
+\node[b_circle, name path=5, label=below:{5}] (5) at  (-1,-1) {};
+
+\foreach \i in {2,...,5}
+{
+    \draw[thick] (0) to (\i);
+}
+
+\draw[thick] (1) to (5);
+
+\draw[->-, thick] (0) to (1);
+\draw[->-, thick] (1) to (2);
+\draw[->-, thick] (2) to (3);
+\draw[->-, thick] (3) to (4);
+\draw[->-, thick] (4) to (5);
+
+\node[inner sep = 0] (6) at ($(1)!0.5!(5)$) {};
+\node[inner sep = 0] (7) at ($(0)!0.5!(5)$) {};
+\node[inner sep = 0] (8) at ($(0)!0.5!(4)$) {};
+\node[inner sep = 0] (9) at ($(0)!0.5!(3)$) {};
+\node[inner sep = 0] (10) at ($(0)!0.5!(2)$) {};
+\node[inner sep = 0] (11) at ($(0)!0.5!(1)$) {};
+
+\draw[->, thick] (6) to ($(6)!0.3!(0)$);
+
+\draw[->, thick] (7) to ($(7)!0.3!(8)$);
+
+\draw[->, thick] (8) to ($(8)!0.3!(9)$);
+
+\draw[->, thick] (9) to ($(9)!0.3!(10)$);
+
+\draw[->, thick] (10) to ($(10)!0.3!(11)$);
+
+\fill[opacity=0.2] (-1.5,1)--(0,2)--(1.5,1)--(1,-1)--(-1,-1)--(-1.5,1);
+
+
+%\draw [-,very thick] (2,0,2) -- (0.25,0,1);
+
+\end{tikzpicture}
+

@@ -1,0 +1,481 @@
+\chapter{Random Simplicial Complexes}
+\label{ch:random}
+In this chapter we carry out some experiments regarding apparent pairs on random simplicial complexes. We will consider two different notions of random simplicial complexes. Namely, alpha complexes constructed on randomly generated point clouds and two-dimensional analogues of the Erdös--Rényi random graph model as introduced by Meshulam and Linial in \cite{LinialMeshulam} and extended by Meshulam and Wallach in \cite{Meshulam_Wallach_2009}. An extensive discussion of results regarding these was done by Kahle in \cite{kahle2016random}. For some insights and experiments regarding apparent pairs and Vietoris--Rips complexes see \cite{bauer2019ripser}.
+
+\section{Erdös--Rényi Analogues}
+Consider the set $G(n)$ of all graphs on vertex set $\{1,\dots,n\}$. The Erdös--Rényi random graph model $G(n,p)$ is the probability distribution on $G(n)$, \enquote{where every edge is included with probability $p$ jointly independently.} \cite{kahle2016random}[page 1].
+
+A general analogue in terms of simplicial complexes is the random $k$-complex $Y_k(n,p)$ introduced in \cite{Meshulam_Wallach_2009}. $Y_k(n,p)$ \enquote{contains the complete $(k-1)$-skeleton of a simplex on $n$ vertices, and every $k$-dimensional face appears independently with probability $p$.} \cite{kahle2016random}[page 4].
+
+In our case $Y_k(n,p)$ will have $n+1$ vertices since we want to keep it consistent with our previous notations for filtrations.
+
+We will construct filtrations by ordering simplices by dimension first and lexicographically within the respective dimensions. Then we take the full $(k-1)$-skeleton in that order. Finally we include each $k$-face with probability $p$. 
+The following Figure \ref{fig:randomk} gives an example of a random $2$-complex on four points, i.e., for $n=3$.
+
+\begin{figure}[H]
+%\centering%
+\begin{subfigure}[b]{0.99\textwidth}
+\begin{center}
+\input{RandomSimplicialComplexes/Figures/Distributions/randomk}
+\end{center}
+\end{subfigure}
+\caption{Random $2$-complex on four points.}
+\label{fig:randomk}
+\end{figure}
+
+We have not explicitly stated a value for $p$ with respect to Figure \ref{fig:randomk}, since the complex might result from any $p > 0$ with varying probability. The corresponding filtration is \[
+F_* = ([0],[1],[2],[3],[0,1],[0,2],[0,3],[1,2],[1,3],[2,3],[0,1,3],[1,2,3]).
+\]
+
+
+\section{Apparent Pairs on Random 2-Complexes}
+In this section we will analyze apparent pairs in the context of random $2$-complexes $Y_2(n,p)$ for fixed $n$ and varying $p$. We consider filtrations as specified in the previous section.
+
+An interesting observation is that for $n\in \mathbb{N}$, $p \in \{0,1\}$, and simplices of $Y_2(n,p)$ in lexicographical order, the apparent gradient always yields a perfect Morse matching. 
+
+For $p = 0$ and $n$ arbitrary but fixed we get the following filtration: 
+\[
+F_* = ([0],[1],\dots,[n],[0,1],\dots,[0,n],[1,2],\dots,[n-1,n]).
+\]
+Looking at the apparent pairs we see that $[0]$ is not paired, i.e., is a critical cell. Vertex $[1]$ gets paired with $[0,1]$, $[2]$ gets paired with $[0,2]$, and so on until $[n]$ gets paired with $[0,n]$. All other edges remain unpaired, and there are no triangles or higher-dimensional faces. Furthermore, each edge that does not get paired, corresponds to a one-dimensional hole in the simplicial complex. Therefore, we get that the number of critical cells is equal to the Betti number in the respective dimensions. 
+
+If $p = 1$, every edge that is not paired with a vertex gets paired with a triangle. Edge $[1,2]$ is the youngest facet of triangle $[0,1,2]$ which is the oldest cofacet of $[1,2]$. The same holds for $[1,3]$ and $[0,1,3]$ and so on until we reach $[1,n]$ and $[0,1,n]$. Then $[2,3]$ to $[2,n]$ get paired with $[0,2,3]$ to $[0,2,n]$. This pattern continues until $[n-1,n]$ gets paired with $[0,n-1,n]$. This means all vertices get paired with the edge between this vertex and $[0]$, while all edges that do not contain vertex $[0]$ get paired with the triangle containing this edge and vertex $[0]$.
+
+For the following figure we sample $Y_2(10,p)$ for $p = 0,0.01,\dots,0.99,1$, calculate the Betti numbers for the resulting complex and subtract the number of critical cells in the apparent gradients. Then we count how often this difference equals zero and divide it by the total number of generated complexes, i.e., we calculated the ratio of the apparent gradient being a perfect Morse matching for different values of $p$. For each $p$ we constructed $1000$ simplicial complexes to average over.
+
+\begin{figure}[H]
+%\centering%
+\begin{subfigure}[c]{0.95\textwidth}
+\begin{center}
+\input{RandomSimplicialComplexes/Figures/ExperimentsOnApparentPairsInRandomKComplexes/percentage_perfect_2d_10}
+\end{center}
+\end{subfigure}
+\caption{Probability of the apparent gradient being a perfect Morse matching for $Y_2(10,p)$ with different values of $p$.}
+\label{fig:perfect_apparent}
+\end{figure}
+
+As we have previously argued for $p = 0$ the apparent gradient is perfect. In order for an apparent gradient to be not perfect, the number of critical cells in some dimension $l$ has to be larger than the Betti number $\beta_l$.
+
+This can happen for example, if two triangles $[a,b,c]$ and $[b,c,d]$ have edge $[b,c]$ as a youngest facet but $[b,c]$ can only have one of them as the oldest cofacet. Without loss of generality it is $[a,b,c]$. This means that triangle $[b,c,d]$ is critical, i.e., the number of critical cells in dimension two is higher than $\beta_2$. Furthermore there also has to be some edge which can not be paired, hence the number of critical edges equals $\beta_1 + 1$. Up to a certain point it holds that the higher number of simplices in a complex drawn from $Y_2(10,p)$ causes situations to occur in which triangles can not be paired. This could explain the inital decline of the curve. 
+
+If more and more simplices appear, we get closer to the structure of the full simplex in which the apparent gradient is a perfect Morse matching again, hence the increase after $p = 0.6$.
+
+For the next figure we compute
+\[
+	d = \sum_{i=0}^2 c_i - \sum_{i=0}^2 \beta_i,
+\] for each sampled complex. Here $c_i$ is the number of critical cells in dimension~$i$. We average these values over $1000$ sampled complexes for $Y_2(10,p)$ and $200$ sampled complexes for $Y_2(15,p)$ and $Y_2(20,p)$.
+
+\begin{figure}[H]
+%\centering%
+\begin{subfigure}[c]{0.95\textwidth}
+\begin{center}
+\input{RandomSimplicialComplexes/Figures/ExperimentsOnApparentPairsInRandomKComplexes/distance_critical_betti}
+\end{center}
+\end{subfigure}
+\caption{Average difference of summed Betti numbers and summed critical cells with resepct to the apparent gradient. $Y_2(10,p)$ in blue, $Y_2(15,p)$ in orange and $Y_2(20,p)$ in green.}
+\label{fig:average_diff_betti_apparent}
+\end{figure}
+
+It is interesting to see, that the peak in averaged $d$-values is achieved earlier for larger $n$ and at low $p$-values in general. This implies that after a certain value of $p$ is reached there are more triangles that break up the previously discussed situations in which triangles can not get paired.
+
+\section{Perfect Random Discrete Morse}
+Consider the previously discussed random discrete Morse algorithm as specified by Lutz and Benedetti in \cite{lutzbenedetti}. Their construction of random discrete Morse functions is very different, in particular random, while the apparent gradient construction is deterministic. Yet both approaches are interesting to analyze in a similar manner. The following figure shows plots similar to the one from Figure \ref{fig:perfect_apparent}. This time for each $p = 0,0.01,\dots,0.99,1$, we draw a simplicial complex from $Y_2(15,p)$, $200$ times and for each one we calculated a random discrete Morse function $300$ times. Then we compute the percentage of how often the random discrete Morse function was perfect and again averaged this over the $200$ simplicial complexes drawn for some fixed~$p$. Figure \ref{fig:perfect_rdm_v_apparent} then shows this curve plotted against the percentage of perfect apparent gradients.
+
+
+\begin{figure}[H]
+%\centering%
+\begin{subfigure}[c]{0.95\textwidth}
+\begin{center}
+\input{RandomSimplicialComplexes/Figures/ExperimentsOnApparentPairsInRandomKComplexes/perfect_rdm_v_apparent}
+\end{center}
+\end{subfigure}
+\caption{How often do apparent gradients of  $Y_2(15,p)$ yield perfect Morse matchings (green) compared to how often the random discrete Morse function yields perfect Morse matchings for $Y_2(10,p)$ (blue) and $Y_2(15,p)$ (orange).}
+\label{fig:perfect_rdm_v_apparent}
+\end{figure}
+
+Figure \ref{fig:perfect_rdm_v_apparent} allows two interesting observations. Firstly in terms of the apparent gradients, we see the same behaviour for $Y_2(15,p)$ as for $Y_2(10,p)$, although for $Y_2(15,p)$, the initial decline is steeper and the percentage of perfect apparent gradients also starts to rise again later. Indeed for any $p \notin \{0,1\}$ and $n$ large enough we expect there to be at least one configuration in the filtration where some simplex can not get paired with respect to apparent pairs. Hence the apparent gradient is not perfect. Therefore the larger the value for $n$ the lower the value of $p$ for which we might get a perfect apparent gradient. A similar argument explains the behavior for values of $p$ close to $1$. This means that for $n \rightarrow \infty$ we get perfect gradients if and only if $p \in \{0,1\}$.
+
+Secondly we see that initially the random discrete Morse algorithm has a very high probability of finding a perfect Morse matching for $Y_2(10,p)$ and $Y_2(15,p)$. Then we get a  decline at around $p = 0.25$ and $p = 0.19$ respectively. Afterwards fewer of the found Morse matchings are perfect. It is surprising to see these different levels for different $n$ which seem to be quite stable over large ranges of values for $p$. 
+
+In some future work we would like to find some explanation for this sudden jump in the percentage of perfect Morse matchings found by the random discrete Morse algorithm. The following figure could give a potential clue or starting point for further exploration. It shows a plot of the sum of Betti numbers of random $2$-complexes averaged over $50$ runs.
+
+\begin{figure}[H]
+%\centering%
+\begin{subfigure}[c]{0.95\textwidth}
+\begin{center}
+\input{RandomSimplicialComplexes/Figures/ExperimentsOnApparentPairsInRandomKComplexes/bettis_summed_2_15}
+\end{center}
+\end{subfigure}
+\caption{Sum of Betti numbers for $Y_2(15,p)$.}
+\label{fig:summed_bettis}
+\end{figure}
+
+As we can see the sum of Betti numbers declines until $p$ reaches a value of about $0.2$ which is close to the value at which we see a jump in the percentage of perfect Morse matchings found by the random discrete Morse function. 
+
+If in some practical situation one is interested in a perfect Morse matching on a random $k$-complex, in most cases searching for one via the random discrete Morse algorithm is the better way to go. For very small and very large values of $p$ however it might be a good idea to check the apparent gradient. 
+
+\section{Alpha Complexes on Random Point Clouds}
+
+Recall the definition of alpha complexes from Section \ref{sec:filtrations_from_point_clouds}. The set of points we construct the complex on can have a variety of origins. Maybe it is real world data of some kind or a handpicked set of points or, as in our case, some randomly generated set of points. By randomly generated we mean that each point is sampled via some random distribution. 
+
+We generate point clouds using the \textbf{numpy.random} library for \textbf{Python3}, then we calculate the (inclusion-wise) largest possible Alpha complex on the point cloud and a simplexwise filtration of it using the \textbf{GUDHI} library. The exact construction is specified in \cite{gudhi_alpha}.
+
+We chose the following distributions, since they also appear in real world situations. 
+
+\subsection{Uniform Distribution}
+In this case, we will sample from the $k$-dimensional unit cube.
+For a point $p = (p_1, \dots, p_k)$ this means that each $p_i$ is drawn from the interval $[0,1]$ and that each value in the interval is equally likely. In other words the probability density we draw from equals one on the $k$-dimensional unit cube and zero elsewhere. Figure \ref{fig:uniform} gives an example of a two dimensional point cloud consisting of 100 points drawn like this. Subfigure (b) shows the simplicial complex $K_{\lfloor \frac{n}{2}\rfloor}$ of the filtration $F_* = \{K_1,\dots,K_n\}$, where $K_n$ is the Alpha complex, where $\epsilon > 0$ is so large, that further increasing its value does not change the resulting simplicial complex, which we will call the \textbf{maximal alpha complex}. 
+
+Due to the discrete nature of floating point precision it is possible, although very unlikely, that several simplices appear at the same distance $\epsilon$. In this case we sort the simplices by dimension first and lexicographically second, hence we always get a simplexwise filtration.
+
+\begin{figure}[H]
+%\centering%
+\begin{subfigure}[t]{0.49\textwidth}
+\begin{center}
+\input{RandomSimplicialComplexes/Figures/Distributions/uniform}
+\subcaption{Point cloud $S$}
+\end{center}
+\end{subfigure}
+\begin{subfigure}[t]{0.49\textwidth}
+\begin{center}
+\input{RandomSimplicialComplexes/Figures/Distributions/uniform_complex}
+\subcaption{Intermediate step of the filtration of the largest possible Alpha complex on $S$.}
+\end{center}
+\end{subfigure}
+\caption{Sampled uniform distribution and simplicial complex.}
+\label{fig:uniform}
+\end{figure}
+
+The code that generated the point clouds and the visualizations in the previous and following figures can be found on \href{https://github.com/IvanSpirandelli/Masterarbeit}{[GitHub]}, see \cite{github}.
+
+\subsection{Multivariate Gaussian Distribution}
+In this case we will sample points from a multivariate Gaussian distribution. 
+A $k$-dimensional random variable $X$ is multivariate normal distributed, if its density function is of the following form: \[
+f_X(x) = \frac{\operatorname{exp}(-\frac{1}{2}(x-\mu)^T \Sigma^{-1}(x - \mu))}{\sqrt{(2 \Pi)^k |\Sigma|}},
+\]
+where $x\in \mathbb{R}^k$, $\Sigma$ is the covariance matrix, which we require to be positive definite, and $\mu$ is the mean vector. We write $X \sim \mathcal{N}(\mu,\Sigma)$.
+
+Figure \ref{fig:multivariate} gives an example on 100 points and the median simplicial complex generated in the same manner as before.
+
+\begin{figure}[H]
+%\centering%
+\begin{subfigure}[t]{0.49\textwidth}
+\begin{center}
+\input{RandomSimplicialComplexes/Figures/Distributions/multivariate_gaussian}
+\subcaption{Point cloud $S$.}
+\end{center}
+\end{subfigure}
+\begin{subfigure}[t]{0.49\textwidth}
+\begin{center}
+\input{RandomSimplicialComplexes/Figures/Distributions/multivariate_gaussian_complex}
+\subcaption{Intermediate step of the filtration of the largest possible Alpha complex on $S$.}
+\end{center}
+\end{subfigure}
+\caption{Sampled multivariate distribution.}
+\label{fig:multivariate}
+\end{figure}
+
+\subsection{Gaussian Mixture}
+Finally we will consider point clouds which are drawn from a mixture of $m$ Gaussian distributions. We do this by repeating the following steps: \begin{itemize}
+    \item Choose a value $i= 1,\dots,m$ uniformly.
+    \item Sample a point from $\mathcal{N}_i(\mu_i,\Sigma_i)$.
+\end{itemize}
+Figure \ref{fig:mixture} gives an example on 100 points and the median simplicial complex generated in the same manner as before.
+
+\begin{figure}[H]
+%\centering%
+\begin{subfigure}[t]{0.49\textwidth}
+\begin{center}
+
+\input{RandomSimplicialComplexes/Figures/Distributions/gaussian_mixture}
+\subcaption{Point cloud $S$.}
+\end{center}
+\end{subfigure}
+\begin{subfigure}[t]{0.49\textwidth}
+\begin{center}
+\input{RandomSimplicialComplexes/Figures/Distributions/gaussian_mixture_complex}
+\subcaption{Intermediate step of the filtration of the largest possible Alpha complex on $S$.}
+\end{center}
+\end{subfigure}
+\caption{Sampled Gaussian mixture.}
+\label{fig:mixture}
+\end{figure}
+
+There are a lot of variables here which can be tweaked. We could choose $i$ in a weighted manner or draw means and covariances from some distribution. In the following we will however restrict ourselves to handpicked means, identity matrices for covariance and uniform distribution when choosing the Gaussian to be drawn from.  
+
+\section{Apparent Pairs on Random Alpha Complexes}
+The goal of this section is to explore the relation between expensive persistent homology computations and apparent pairs from an experimental perspective.
+
+The first question we will discuss is: how many pairs of our filtrations are part of an apparent pair? Or alternatively how many simplices of some filtration $F$ of an alpha complex are critical with respect to the apparent gradient $V$?
+
+Each of our constructions has many different possible simplicial complexes and filtrations they can result in, given the same initial parameters. For example, two instances, of drawing $50$ points uniformly and then constructing an alpha complex on them, will most likely not yield the same simplicial complex and filtration. 
+
+That is why we will look at the percentage of elements in our filtrations that are in apparent pairs. This means, given some filtration $F_*$ with $m$ elements and $r$ apparent pairs we calculate the percentage $q$ of elements in $F_*$ that are part of an apparent pair by: \[
+    q \coloneqq \frac{200r}{m}.
+\]
+
+Since every maximal alpha complex is contractible, the $q$-value also gives a good indication of how close the apparent gradient is to the theoretically possible perfect Morse matching with a single critical vertex.
+
+In our first experiment we draw $300$ two dimensional points uniformly $2000$ times. Then we construct the largest possible alpha complexes and the corresponding filtration on each of the point sets. Afterwards we calculate $q$ for each complex. Since we do this $2000$ times we are able to analyze how different $q$-values are distributed. To this end we fit a Gaussian curve to the results using \textbf{scipy.stats.norm.fit} from the Python library \textbf{scipy} which calculates the mean $\mu$ and the standard deviation $\sigma^2$ of the passed data. The Gaussian fits the data quite nicely and furthermore we have observed similar fits in all dimensions and for different sizes of point clouds, which indicates that the $q$-values are normally distributed.
+
+The following plot shows the fitted Gaussian for the aforementioned setup and the calculated $q$ values as a histogram with $25$ bins. This means that several results are combined in the same bin, i.e., we have some information loss here, but it is a good way of visualizing the results. On the $x$-axis we have the values of $q$ and on the $y$-axis we have the values for the density function of the fitted Gaussian. The histogram is scaled such that the integral over it equals $1$. Just like that over the fitted Gaussian.
+
+\begin{figure}[H]
+%\centering%
+\begin{subfigure}[c]{0.95\textwidth}
+\begin{center}
+\input{RandomSimplicialComplexes/Figures/ExperimentsOnPercentageOfApparentPairs/2000_alpha_300}
+\end{center}
+\end{subfigure}
+\caption{2000 alpha complexes on 300 points drawn from a uniform distribution.}
+\label{fig:300fit}
+\end{figure}
+
+What we can take from the plot and the generated data is that we have an average $q$-value of $73.19\%$ and values ranging from  $70\%$ to $76\%$. Meaning that more than two thirds of simplices are part of an apparent pair in all filtrations we constructed, while on average almost three quarters are part of an apparent pair.
+
+The following figure shows a plot where we map the size of the two dimensional point clouds to the average mean $q$-values. We observe an almost monotone downtrend, which indicates that the percentage of simplices in apparent pairs decreases with increasing length of the filtrations. In the following two figures the scattered points are the actually calculated values and the line segments between them are linearly interpolated.
+
+\begin{figure}[H]
+%\centering%
+\begin{subfigure}[c]{0.95\textwidth}
+\begin{center}
+\input{RandomSimplicialComplexes/Figures/ExperimentsOnPercentageOfApparentPairs/2d_mu_steps_50_1000_runs_1000}
+\end{center}
+\end{subfigure}
+\caption{Means of 2000 averaged alpha complexes on differently sized points clouds drawn from a uniform distribution.}
+\label{fig:2d_means}
+\end{figure}
+
+Since the $q$-values are well fitted by normal distributions, we generated a similar plot for the standard deviations.
+
+\begin{figure}[H]
+%\centering%
+\begin{subfigure}[c]{0.95\textwidth}
+\begin{center}
+\input{RandomSimplicialComplexes/Figures/ExperimentsOnPercentageOfApparentPairs/2d_sd_steps_50_1000_runs_1000}
+\end{center}
+\end{subfigure}
+\caption{Standard deviations of 2000 averaged alpha complexes on differently sized points clouds drawn from a uniform distribution.}
+\label{fig:2d_stds}
+\end{figure}
+
+As we can see, the larger the complex, the less variance we have with respect to the $q$-values. This could be explained by some local configurations containing lots of apparent pairs while others are containing only a few. The larger the complex, the more likely that we have these evenly distributed, while in a smaller complex the probability for extreme cases is higher. 
+
+Overall this means the larger the complex the fewer of its elements are part of an apparent pair percentage wise, however larger complexes are more similar to one another in that regard than smaller complexes.
+
+We have also calculated an average $q$-value for two-dimensional alpha complexes on 5000 points and got a mean of $72.20$ and a standard deviation of $0.20$. It would be interesting to explore if and to what value these values converge. Or if they are bounded somehow in a random setting. 
+
+As we have previously seen, it is theoretically possible to have a filtration of any length with a single apparent pair between edges and triangles. 
+
+One might expect a similar looking curve when increasing the dimension of the points instead of their number, since an alpha complex constructed on $100$ points in dimension two is expected to be much smaller than one in dimension three. The mean value of the $q$-values however increases substantially.
+
+\begin{figure}[H]
+%\centering%
+\begin{subfigure}[c]{0.95\textwidth}
+\begin{center}
+\input{RandomSimplicialComplexes/Figures/ExperimentsOnPercentageOfApparentPairs/means_by_dimension}
+\end{center}
+\end{subfigure}
+\caption{Means of alpha complexes on 30 points in varying dimensions, averaged over 50 runs.}
+\label{fig:means_by-dimension}
+\end{figure}
+
+While in dimension two, on average, about three quarters of all simplices are part of an apparent pair on an alpha complex on thirty points, in dimension six we have an average $q$-value of $99.46 \%$. A partial explanation is that with increasing dimension more simplices can be paired with lower or higher dimensional simplices and the number of maximal faces of the complex decreases. 
+
+Note that in the last experiment we averaged the values over $50$ runs instead of $2000$. This is partially caused by the fact that simplicial complexes grow quite fast in higher dimensions and that running time was a limiting factor when performing the experiments. In the remainder of this chapter we will see values averaged over different amounts of tries due to this.
+
+We carried out the same experiments for point clouds sampled from a multivariate Gaussian and a Gaussian mixture model. For the multivariate Gaussian we have taken the point $(0,0)$ as mean and the identity matrix as covariance matrix. For the mixture model we chose $(0,0)$, $(1,1)$ and $(0,3)$ as mean values and each covariance matrix was again the identity matrix. The values for the Gaussian mixture were picked to get some overlap between the areas of high density but not too much, since if they are too close we expect a similar set of points to that of a single multivariate distribution and if they are too far away they locally would also have the same structure as a point cloud drawn from a single multivariate distribution. 
+
+We observe the same general behavior for all three distributions. However there are noteable differences in the values of the means. Figure \ref{fig:2d_all_compared} shows the development of the means for all three generated data sets in one diagram. The continuous line represents the uniform distribution, the dotted line corresponds to the multivariate Gaussian and the dashed line corresponds to the Gaussian mixture model.
+
+\begin{figure}[H]
+%\centering%
+
+\begin{subfigure}[c]{0.99\textwidth}
+\begin{center}
+\input{RandomSimplicialComplexes/Figures/ExperimentsOnPercentageOfApparentPairs/2d_1000_means_all_compared}
+
+\end{center}
+\end{subfigure}
+
+
+%\begin{subfigure}[c]{0.99\textwidth}
+%\begin{center}
+%\input{RandomSimplicialComplexes/Figures/ExperimentsOnPercentageOfApparentPairs/2d_1000_stds_all_compared}
+%\subcaption{Standard deviation of $q$-values compared between differently drawn point clouds.}
+%\end{center}
+%\end{subfigure}
+
+\caption{Mean $q$-values compared between differently drawn point clouds.}
+\label{fig:2d_all_compared}
+\end{figure}
+
+Let us consider the difference we see between the means of the two samples from Gaussian distributions and the uniform distribution. Note that the difference in number of simplices is quite small for all cases we considered. For example the average number of elements in filtrations on $1000$ points is $5957.4$ in case of the uniform distribution and $5971.16$ in case of the Gaussian mixture. Therefore the gap between the curves is not explicable by a difference in number of elements of the filtrations. 
+
+A possible explanation for the differing developments of means is that point sets with one or several clusters and some outliers yield bad local structures with respect to simplices being a part of an apparent pair. Although the difference between the single multivariate Gaussian and the Gaussian mixture model is quite small it is nevertheless consistent for different sizes of point clouds. What exactly this potentially \enquote{bad} structure is remains to be uncovered.
+
+The similar curves in standard deviation strengthen the intuition, that these mainly depend on the size of the complex and that \enquote{good} and \enquote{bad} local configurations appear more evenly distributed. 
+
+%One practical observation that has been made by several authors and people concerned with persistent homology is that although the running time in theory is cubic we only see slightly super linear running times in practice. Perhaps the canonical persistence pairs defined by the apparent pairs might be useful to explore this phenomenon. In the next section we will look at apparent pairs and the running time of the standard reduction scheme.
+
+\section{Apparent Pairs in Standard Reduction}
+
+A natural question is if there is some kind of connection between the value $q$ for some filtration $F$ of simplicial complex $K$ and the number of additions $\operatorname{add}(B)$ needed to reduce the boundary matrix $B$ of $F$. We can guess from what we discussed in Chapter \ref{ch:connection} that only considering the number of apparent pairs does not suffice to explain the number of additions. Nevertheless we checked if there is some linear correlation between the value of $q$ and $\frac{\operatorname{add}(B)}{m}$, where $m$ is the number of elements in $K$. We calculated the correlation coefficient via \textbf{numpy.corrcoef} of the Python library \textbf{numpy}. The following figure shows a scatter plot of $100$ alpha complexes on $100$ points. On the $x$-axis we have the values of $q$ and on the $y$-axis we have $\frac{\operatorname{add}(B)}{m}$. Above the plot we display the calculated linear correlation coefficient.
+
+\begin{figure}[H]
+%\centering%
+\begin{subfigure}[c]{0.95\textwidth}
+\begin{center}
+\input{RandomSimplicialComplexes/Figures/correlation_3d}
+\end{center}
+\end{subfigure}
+\caption{Value of $q$ related to the number of additions per column in the standard reduction scheme for some filtration $F$ with $m$ elements.}
+\label{fig:correlation_3d}
+\end{figure}
+
+Unfortunately but not unsurprisingly there is no or only a very small linear correlation between the number of additions divided by the number of elements in the complex and $q$. This means that the complicatedness of persistent homology computations is not explicable by the number of critical cells of the apparent gradient. \\ 
+
+In the following we will try to illustrate how much of the work during reduction is done on apparent pairs. To be more precise, this means how much work is done on the tails of apparent pairs since the columns corresponding to the heads of the apparent pairs are reduced from the beginning. See the proof of Lemma \ref{lem:app_is_pers}. Note that we are not counting the number of column additions as in Definition \ref{def:col_red_steps} but the total number of addition operations, i.e. the number of additions of non-zero elements during the addition of columns.
+
+As a preprocessing step for reduction we can set all tails of apparent pairs to zero. This will save us all additions needed to reduce the respective columns. It comes at the cost of finding the apparent pairs first however. Furthermore there are other more potent preprocessing steps that can be done. 
+
+For example for each simplex $\sigma$ of a filtration one can just set the column of the youngest facet to zero, since it creates a cycle with the other facets of the simplex that has to be closed by simplex $\sigma$ at the latest. This procedure also implicitly sets the columns corresponding to tails of apparent pairs to zero.
+
+In Section \ref{sec:twist} we already discussed the so called twisted reduction scheme which starts in the highest dimension and works its way down. Preprocessing with apparent pairs yields no improvement for this procedure, as every column corresponding to the tail of an apparent pair will just be set to zero without doing any calculations when its head is processed. Nevertheless the analysis we do in this section still tells us how much of the improvements of the twisted reduction scheme over the standard reduction scheme stem from columns corresponding to tails of apparent pairs. Recall that we refer to the process of setting columns to zero when we know that they correspond to a simplex creating a homology class as \textbf{clearing}. See Section \ref{sec:twist}.
+
+We have already seen that in the setting of alpha complexes on random point clouds of a fixed size that the percentage of simplices that are part of an apparent pair increases with dimension. This means that we would expect higher speedups for the standard reduction scheme, see Algorithm \ref{algo:column_reduction_algorithm}, in higher dimensions. We will try to measure the speedups in the following way. 
+
+For given filtration $F$, let $SRT$ (\textbf{standard reduction time}) denote the time it takes to construct and reduce some boundary matrix via the standard reduction scheme. Let $ART$ (\textbf{apparent reduction time}) denote the time it takes to find all apparent pairs, clear columns in the boundary matrix corresponding to tails of apparent pairs, and do the standard reduction. We will consider \[
+s \coloneqq \frac{SRT}{ART},
+\] i.e., the factor by which the overall reduction time decreases when we do clearing in the preprocessing via apparent pairs. If $s > 1$, we save time, if $s<1$ we loose time, i.e., the cost for finding the apparent pairs and clearing the columns is higher than the gain compared to the standard reduction. 
+
+The implementations of the algorithms can be found on \href{https://github.com/IvanSpirandelli/Masterarbeit/blob/master/Algorithms/column_algo/column_algorithm.py}{[GitHub]}, see \cite{github}.
+
+We will average each setup of parameters over hundreds of runs to make sure the values we are seeing are no anomaly caused by some external factor.
+
+All experiments were done on an \enquote{Intel Core i7-3770 CPU \@ 3.40GHz~x~8} processor. 
+
+Note that the implemented algorithms are not optimized for speed since the primary interest was not to develop a fast persistent homology computation but to analyse and compare examples with respect to additions in the boundary matrices. 
+
+Hence, the consideration of how many additions we save by clearing the apparent columns is more meaningful. For a given filtration $F$, let $SRA$ (\textbf{standard reduction additions}), denote the number of additions in the standard reduction process and let $ARA$ (\textbf{apparent reduction additions}) denote the number of additions on the boundary matrix which was cleared by setting tails of apparent pairs to zero. Then we define
+\[
+a \coloneqq 100 (1- \frac{ARA}{SRA}),
+\]
+i.e., the percentage of additions that are not necessary when reducing the cleared boundary matrix. Or in other words: A high $a$-value implies that the clearing yields a big improvement while a low value implies that even after clearing we still have lots of additions to do. The following table shows the average $s$ and $a$ values for alpha complexes on $30$ points in dimensions two and three drawn from the previously mentioned distributions. We averaged the values over $200$ runs.
+
+
+
+ \begin{table}[H]
+     \begin{center}
+     \begin{tabular}{|c|c|c|c|}
+     \hline
+     & \multicolumn{3}{|c|}{Execution Time Speedup} \\ \cline{1-4}
+     Sample distribution & Uniform & Multivariate Normal & Gaussian 		Mixture\\ \hline
+     dimension two & 1.96 & 2.09 & 2.13\\ \hline
+     dimension three & 3.02 & 3.37 & 3.67\\ \hline
+
+     \end{tabular}
+     
+     \caption{$s$-value for alpha complexes on randomly generated point clouds.}
+     \label{tab:time_STA_TWI}
+     \end{center}
+ \end{table}
+
+
+
+
+ \begin{table}[H]
+     \begin{center}
+     \begin{tabular}{|c|c|c|c|}
+     \hline
+     & \multicolumn{3}{|c|}{Percentage of Saved Additions} \\ \cline{1-4}
+     Sample distribution & Uniform & Multivariate Normal & Gaussian 		Mixture\\ \hline
+     dimension two & 66.64 & 69.90 & 70.98 \\ \hline
+     dimension three & 68.98 & 73.64 & 76.75 \\ \hline
+
+     \end{tabular}
+     
+     \caption{$a$-value for alpha complexes on randomly generated point clouds.}
+     \label{tab:add_STA_TWI}
+     \end{center}
+ \end{table}
+
+Looking at the tables we see that there is substantial time and additions saved in all cases, while the speedup is generally higher on point clouds sampled from Gaussian distribution or a Gaussian mixture. 
+
+When reevaluating Figure \ref{fig:2d_all_compared} we might come to the conclusion that this stems from the fact that for alpha complexes on few points the $q$-value is higher for the Gaussian distribution and mixture than for the uniform distribution. However, as we will see later on, this is not the case.
+
+Note that for the Gaussian mixture model in dimension three, we chose the points $(0,0,0)$, $(1,1,1)$, and $(0,3,0.5)$ as means and the identity matrix as covariance matrix in all cases. 
+
+When looking at the percentages of saved additions and speedups in running time in dimension three in more detail, an interesting pattern emerges. Consider the following plot in which we count how often a percentage of saved additions occurs for the multivariate Gaussian distribution in three dimensions. 
+
+
+\begin{figure}[H]
+%\centering%
+\begin{subfigure}[c]{0.95\textwidth}
+\begin{center}
+\input{RandomSimplicialComplexes/Figures/ExperimentsOnApparentPairsInRandomKComplexes/percentages_of_saved_additions_3d}
+\end{center}
+\end{subfigure}
+\caption{Occurences of percentages of saved additions in three dimensions.}
+\label{fig:saved_additions_3d}
+\end{figure}
+
+As we can see in Figure \ref{fig:saved_additions_3d}, while we have a mean percentage of saved additions of about $73\%$ there is actually a majority of cases with $a$-values of more than $90\%$. On the other hand there are a lot of cases with $a$-values below $20\%$. This is remarkable or even surprising, since it looks like our examples more or less fall into two categories in three dimensions. Namely one, where almost all the work is done on the tails of apparent pairs, and one where almost none of the work is done on the tails of apparent pairs. However this behaviour does not occur in two dimensions as Figure \ref{fig:saved_additions_2d} illustrates. Note in particular that the values on the $x$-axis only go from $55$ to $90$ and not from $0$ to $100$ as in \ref{fig:saved_additions_3d}.
+
+\begin{figure}[H]
+%\centering%
+\begin{subfigure}[c]{0.95\textwidth}
+\begin{center}
+\input{RandomSimplicialComplexes/Figures/ExperimentsOnApparentPairsInRandomKComplexes/percentages_of_saved_additions_2d}
+\end{center}
+\end{subfigure}
+\caption{Occurences of percentages of saved additions in two dimensions.}
+\label{fig:saved_additions_2d}
+\end{figure}
+
+Similar behavior showed for point clouds drawn from the uniform distribution and the Gaussian mixture. However, when increasing the number of points in three dimensions the distribution of $a$-values changes. Consider the following figure.
+
+\begin{figure}[H]
+%\centering%
+\begin{subfigure}[c]{0.95\textwidth}
+\begin{center}
+\input{RandomSimplicialComplexes/Figures/ExperimentsOnApparentPairsInRandomKComplexes/percentages_of_saved_additions_3d_200_points}
+\end{center}
+\end{subfigure}
+\caption{Occurences of percentages of saved additions in three dimensions on point clouds of $200$ points.}
+\label{fig:saved_additions_3d_large_complex}
+\end{figure}
+
+Figure \ref{fig:saved_additions_3d_large_complex} in the vast majority of cases, there are very few additions saved. We still see some rare cases around the $90\%$ mark and some values in between $10\%$ and $60\%$, but we end up with a mean for saved additions of $4.45\%$ which is substantially lower than the $73.64\%$ we saw in Figure~\ref{fig:saved_additions_3d}. Note that all constructed complexes had elements that were part of apparent pairs between $89.5\%$ and $91\%$. Indeed some more detailed analysis in which we split the filtrations into two classes, namely those with $a$-values above and below $50\%$ revealed no other readily accessible differences. The values of the means of the size of the filtrations, the percentage of apparent pairs, and the number of additions needed in the standard reduction without clearing were within $1\%$ of each other for all examples generated on a fixed number of points. 
+
+The following table has the same columns and rows as Table \ref{tab:add_STA_TWI} but this time we are looking at the averaged values of alpha complexes on $300$ points.
+
+ \begin{table}[H]
+     \begin{center}
+     \begin{tabular}{|c|c|c|c|}
+     \hline
+     & \multicolumn{3}{|c|}{Percentage of Saved Additions} \\ \cline{1-4}
+     Sample distribution & Uniform & Multivariate Normal & Gaussian 		Mixture\\ \hline
+     dimension two & 57.53 & 60.63 & 60.91 \\ \hline
+     dimension three & 1.58 & 2.21 & 3.73 \\ \hline
+
+     \end{tabular}
+     
+     \caption{$a$-value for alpha complexes on $300$ points.}
+     \label{tab:add_STA_TWI_300}
+     \end{center}
+ \end{table}
+ 
+As we can see, the percentage of saved additions in dimension two is still significant, while in dimension three it is very small. Assuming that this trend continues as complexes get larger, implies that preprocessing or clearing schemes that implicitly contain the apparent pairs of some filtration generate their speedup outside of them, at least in three dimensions on alpha complexes. This might be of particular interest with respect to the widely used twisted variant of the standard reduction algorithm.
+
+Another interesting thing to note is that again we see bigger improvements for the Gaussian distribution and mixture. But we also know that the average $q$ value in filtrations on $300$ points is lower than for the uniform case. This implies that the percentage of additions saved does not depend on the percentage of elements in apparent pairs but on some structural differences between the filtrations generated on differently sampled point clouds. Furthermore, there is some difference between points drawn from a single or multiple multivariate distributions. This might be within the margin of error for our experiments but might also be caused by structural differences between the two. Further experiments are required to shed further light on this.
+
+\section{Conclusions}
+The experiments we considered in this section are initial observations on the relation between apparent gradients, Betti numbers and complicated persistent homology computations that could give an indication in which direction a closer look might yield results.
+ 
+We have seen that the majority of elements in the filtrations we generated by constructing an alpha complex on a random point cloud is part of an apparent pair. Previously, we showed in Chapter \ref{ch:connection} how the reduction of critical cells with respect to an apparent gradient has a lower bound dependent on $V$-paths defined by the apparent pairs. Perhaps it is possible to find descriptions of filtrations based on their apparent gradients that already give us a good indication on whether the filtration will result in expensive or cheap persistent homology computations. A desired result would be a better understanding of why persistent homology computations in practice show linear or slightly super linear growth although the worst case bound is in $\mathcal{O}(n^3)$ \cite{pershom}. 
+
+The behavior of the random discrete Morse function as seen in Figure~\ref{fig:perfect_rdm_v_apparent} is intriguing.
+
+Finally, the partitioning into two classes for three dimensional alpha complexes on few points, as seen in Figure \ref{fig:saved_additions_3d}, might be an interesting starting point for some further analysis. 
+

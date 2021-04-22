@@ -1,0 +1,21 @@
+\begin{tikzpicture}
+
+\node[b_circle, name path=0, label=below:{0}] (0) at (4,1) {};
+
+\node[b_circle, name path=1, label=above:{1}] (1) at (2,2) {};
+\node[b_circle, name path=2, label=above:{3}] (3) at (0,2) {};
+
+\node[b_circle, name path=1, label=below:{2}] (2) at (2,0) {};
+\node[b_circle, name path=2, label=below:{4}] (4) at (0,0) {};
+
+
+\draw[->-, thick] (1) to (0);
+\draw[->-, thick] (3) to (1);
+
+\draw[->-, thick] (2) to (0);
+\draw[->-, thick] (4) to (2);
+
+\draw[-, thick] (3) to (4);
+\draw[-, thick] (1) to (2);
+
+\end{tikzpicture}

@@ -1,0 +1,60 @@
+\begin{tikzpicture}
+
+\draw (-4,0) ellipse (1 and 2);
+\fill[opacity = 0.1]  (-4,0) ellipse (1 and 2);
+\draw (0,0) ellipse (1 and 2);
+\fill[opacity = 0.1] (0,0) ellipse (1 and 2);
+\draw (4,0) ellipse (1 and 2);
+\fill[opacity = 0.1]  (4,0) ellipse (1 and 2);
+
+\draw (-4,-0.6) ellipse (0.7 and 1.4);
+\fill[opacity = 0.1]  (-4,-0.6) ellipse (0.7 and 1.4);
+\draw (0,-0.6) ellipse (0.7 and 1.4);
+\fill[opacity = 0.1]  (0,-0.6) ellipse (0.7 and 1.4);
+\draw (4,-0.6) ellipse (0.7 and 1.4);
+\fill[opacity = 0.1] (4,-0.6) ellipse (0.7 and 1.4);
+
+\draw (-4,-1.2) ellipse (0.5 and 0.8);
+\fill[opacity = 0.1] (-4,-1.2) ellipse (0.5 and 0.8);
+\draw (0,-1.2) ellipse (0.5 and 0.8);
+\fill[opacity = 0.1] (0,-1.2) ellipse (0.5 and 0.8);
+\draw (4,-1.2) ellipse (0.5 and 0.8);
+\fill[opacity = 0.1] (4,-1.2) ellipse (0.5 and 0.8);
+
+\node[circle, name path=1, label=below:{0}] (1) at  (-4,-2) {};
+\node[circle, name path=1, label=below:{0}] (2) at  (0,-2) {};
+\node[circle, name path=1, label=below:{0}] (3) at  (4,-2) {};
+
+\node[label=below:{$C_{p+1}$}] at (-4,2) {};
+\node[label=below:{$C_{p}$}] at (0,2) {};
+\node[label=below:{$C_{p-1}$}] at (4,2) {};
+
+\node[label=below:{$Z_{p+1}$}] at (-4,0.7) {};
+\node[label=below:{$Z_{p}$}]  at (0,0.7) {};
+\node[label=below:{$Z_{p-1}$}] at (4,0.7) {};
+
+\node[label=below:{$B_{p+1}$}] at (-4,-0.5) {};
+\node[label=below:{$B_{p}$}] at (0,-0.5) {};
+\node[label=below:{$B_{p-1}$}] at (4,-0.5) {};
+
+\node[label=below:{$\partial_{p+2}$}] at (-5,-2) {};
+\node[label=below:{$\partial_{p+1}$}] at (-2,-2) {};
+\node[label=below:{$\partial_{p}$}] at (2,-2) {};
+\node[label=below:{$\partial_{p-1}$}] at (5,-2) {};
+
+\draw [-,thick] (-3.8,0.75) -- (2);
+
+\draw [-,thick] (0.2,0.75) -- (3);
+
+\draw [-,thick] (-3.75,1.95) -- (0.1,-0.4);
+
+\draw [-,thick] (0.25,1.95) -- (4.1,-0.4);
+
+
+\draw [->-,very thick] (1) to (2);
+\draw [->-,very thick] (2) to (3);
+
+\draw [->-,very thick] (-6,-2) to (1);
+\draw [->-,very thick] (3) to (6,-2);
+
+\end{tikzpicture}

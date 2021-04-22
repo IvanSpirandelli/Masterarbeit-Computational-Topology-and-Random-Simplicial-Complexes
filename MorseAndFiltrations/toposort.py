@@ -81,7 +81,7 @@ items in the preceeding sets.
         raise CircularDependencyError(data)
 
 #As order we usually pass the filtration. If we dont want to sort by order, we sort lexicographically.
-def toposort_flatten(data, order, sort_by_order=True):
+def toposort_flatten(data, order, sort_by_order=False):
     """Returns a single list of dependencies. For any set returned by
 toposort(), those items are sorted and appended to the result (just to
 make the results deterministic)."""

@@ -1,0 +1,10 @@
+\begin{tikzpicture}
+
+\node[b_circle, name path=0, label=below:{$v_1$}] (0) at (0,0) {};
+
+
+\node[b_circle, name path=2, label=above:{$v_0$}] (2) at  (1,2) {};
+
+\path[-, draw] (0) to[] node[anchor = center, left] {$\sigma_1$} (2);
+
+\end{tikzpicture}

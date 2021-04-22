@@ -1,0 +1,20 @@
+\begin{tikzpicture}
+
+
+
+\node[b_circle, name path=1, label=right:{c}] (1) at  (2,0,0.25) {};
+\node[b_circle, name path=2, label=left:{a}] (2) at  (0.25,0,1) {};
+\node[b_circle, name path=3, label=below:{b}] (3) at (2,0,2) {};
+\node[b_circle, name path=4, label=above:{d}] (4) at (1,2,2) {};
+
+\fill [opacity = 0.2] (0.25,0,1)--(2,0,2)--(1,2,2)--(0.25,0,1);
+\fill [opacity = 0.2] (2,0,0.25)--(2,0,2)--(1,2,2)--(2,0,0.25);
+
+\draw [dashed, thin] (1) -- (2);
+\draw [-,very thick] (3) -- (2);
+\draw [-,very thick] (3) -- (1);
+\draw [-,very thick] (3) -- (4);
+\draw [-,very thick] (1) -- (4);
+\draw [-,very thick] (2) -- (4);
+
+\end{tikzpicture}

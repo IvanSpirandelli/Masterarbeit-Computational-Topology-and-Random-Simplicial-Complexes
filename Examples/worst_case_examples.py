@@ -23,6 +23,57 @@ def get_n_gon_with_center_and_fins_filtration(n):
 
     return base_vertices + fin_vertices + bounding_edges + fin_edges + base_edges + base_triangles + fin_triangles
 
+def get_3d_extension_of_ngon(n):
+    if (n < 3):
+        raise Warning("Passed n too low. Setting n = 3.")
+        n = 3
+
+    base_vertices = [[i] for i in range(n + 1)]
+    fin_vertices = [[i + n] for i in range(1, n + 1)]
+
+    fin_edges = [[0, i + n] for i in range(1, n + 1)]
+    fin_edges += [[i, i + n] for i in range(1, n + 1)]
+
+    bounding_edges = [[i, i + 1] for i in range(1, n)]
+    bounding_edges.append([1, n])
+
+    base_edges = [[0, i] for i in range(1, n + 1)]
+
+    base_triangles = [[0, i, i + 1] for i in range(1, n)]
+    base_triangles.append([0, 1, n])
+
+    fin_triangles = [[0, i, i + n] for i in range(1, n + 1)]
+
+    top_vertex = [[2*n+1]]
+    rising_edge = [[0,2*n+1]]
+    top_edges = [[i + n, 2*n+1] for i in range(1, n + 1)]
+    top_bounding_edges = [[n + i, n + i + 1] for i in range(1, n)]
+    top_bounding_edges += [[1+n, 2*n]]
+
+    side_cover_edges = [[i, i+n+1] for i in range(1,n)]
+    side_cover_edges += [[1,2*n]]
+
+    upper_fin_triangles = [[0, i + n, 2*n+1] for i in range(1, n + 1)]
+    top_triangles = [[i + n, i + n + 1, 2 * n+1] for i in range(1, n)]
+    top_triangles += [[1+n, 2*n, 2*n+1]]
+
+
+    side_covers_lower = [[i,i+1,i+n+1] for i in range(1,n)]
+    side_covers_lower += [[1,n,2*n]]
+
+    side_covers_upper = [[i,i+n,i+n+1] for i in range(1,n)]
+    side_covers_upper += [[1, 1+n, 2*n]]
+
+    base_tetrahedra = [[0, i, i + 1, i + n] for i in range(1, n)]
+    base_tetrahedra.append([0, 1, n, n + 1])
+
+    return base_vertices + fin_vertices + bounding_edges + fin_edges + base_edges + base_triangles + fin_triangles + \
+           top_vertex + rising_edge + top_edges + top_bounding_edges + side_cover_edges + upper_fin_triangles + \
+           top_triangles + side_covers_lower + side_covers_upper + base_tetrahedra
+
+
+
+
 #This method constructs a filtration, specified by Dimitriy Morozov in the paper:
 #"Persistence Algorithm Takes Cubic Time in the Worst Case",
 #for which the standard persistent homology algorithm achieves its worst case bound.

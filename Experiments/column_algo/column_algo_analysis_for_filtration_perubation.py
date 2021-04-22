@@ -6,7 +6,7 @@ import numpy as np
 
 import Algorithms.column_algo.column_algorithm as ca
 import Algorithms.point_cloud_generator as pcg
-from Algorithms.alpha_complex_wrapper import alpha_complex_wrapper
+from Algorithms.alphacomplexwrapper import AlphaComplexWrapper
 
 def test_all_vertex_permutations(filtration):
     mat = ca.build_boundary_matrix_from_filtration(filtration)
@@ -52,7 +52,7 @@ def test_all_vertex_permutations(filtration):
 
     if(double_check_out[0][1] == min_weight):
         points = pcg.generate_n_points(5, 2)
-        alpha = alpha_complex_wrapper(points)
+        alpha = AlphaComplexWrapper(points)
         filtration =[elem[0] for elem in alpha.filtration]
         test_all_vertex_permutations(filtration)
     else:

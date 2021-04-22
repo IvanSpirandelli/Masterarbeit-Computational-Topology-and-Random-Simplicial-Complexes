@@ -1,0 +1,27 @@
+\begin{tikzpicture}
+    \node[b_circle, name path=1, label=left:{}] (1) at (-1.5,1) {};
+
+    \node[b_circle, name path=2, label=above:{}] (2) at  (0,2) {};
+
+    \node[b_circle, name path=3, label=right:{}] (3) at  (1.5,1) {};
+    \node[b_circle, name path=3, label=right:{}] (31) at  (2,1) {};
+    \node[b_circle, name path=3, label=right:{}] (32) at  (1.75,0.5) {};
+
+
+    \node[b_circle, name path=4, label=below:{}] (4) at (-0.25,-0.25) {};
+
+    \node[b_circle, name path=5, label=below left:{}] (5) at  (-2,-0.6) {};
+    
+    \draw[-] (1) to (2);
+    \draw[-] (2) to (3);
+    \draw[-] (3) to (31);
+    \draw[-] (31) to (32);
+    \draw[-] (3) to (32);
+    \draw[-] (1) to (4);    
+    \draw[-] (4) to (5);
+    \draw[-] (1) to (5);  
+    \draw[-] (2) to (4);
+    \draw[-] (3) to (4);
+    \draw[-] (32) to (4);
+    \draw[-] (31) to (2);
+\end{tikzpicture}

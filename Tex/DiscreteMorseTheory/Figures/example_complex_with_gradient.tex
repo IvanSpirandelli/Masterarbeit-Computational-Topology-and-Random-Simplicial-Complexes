@@ -1,0 +1,18 @@
+\begin{tikzpicture}
+
+\node[b_circle, name path=0, label=left:{$v_0$}] (0) at (0,1) {};
+\node[b_circle, name path=1, label=below:{$v_1$}] (1) at (2,0) {};
+\node[b_circle, name path=2, label=above:{$v_2$}] (2) at  (2,2) {};
+\node[b_circle, name path=2, label=right:{$v_3$}] (3) at  (4,1) {};
+
+\draw[->-, thick] (1) -- (0);
+\draw[->-, thick] (2) -- (0);
+\draw[-, thick] (1) -- (2);
+\draw[-, thick] (2) -- (3);
+\draw[->-, thick] (3) -- (1);
+
+
+\draw[->, thick] (2,1) -- (1.5,1);
+\fill[opacity = 0.2] (0,1) -- (2,0) -- (2,2);
+
+\end{tikzpicture}

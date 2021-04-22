@@ -4,7 +4,7 @@ from datetime import datetime
 from copy import deepcopy
 import itertools as it
 
-from Algorithms.alpha_complex_wrapper import alpha_complex_wrapper
+from Algorithms.alphacomplexwrapper import AlphaComplexWrapper
 from Algorithms.column_algo.column_algorithm import column_algorithm
 import Algorithms.point_cloud_generator as pcg
 from Utilities.csv_file_container import csv_file_container
@@ -118,7 +118,7 @@ def analize_random_points(max_count):
 
     for i in range(3,max_count):
         points = pcg.generate_n_points(i, 3)
-        alpha = alpha_complex_wrapper(points)
+        alpha = AlphaComplexWrapper(points)
         pre_algo = time.time()
         mat = alpha.get_boundary_matrix()
 

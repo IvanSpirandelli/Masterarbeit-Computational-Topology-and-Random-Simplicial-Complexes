@@ -1,4 +1,4 @@
-from Algorithms.alpha_complex_wrapper import alpha_complex_wrapper
+from Algorithms.alphacomplexwrapper import AlphaComplexWrapper
 
 if __name__ == "__main__":
 
@@ -8,5 +8,5 @@ if __name__ == "__main__":
               [0.1660551512734323, 0.14300196258566045],
               [0.7420940369653124, 0.20982985342951765]]
 
-    alpha_complex = alpha_complex_wrapper(points)
+    alpha_complex = AlphaComplexWrapper(points)
     print(alpha_complex.get_all_connected_filtration_steps())

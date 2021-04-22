@@ -1,0 +1,79 @@
+\begin{tikzpicture}
+
+\node[g_circle, name path=1, label=above:{$0$}] (0t) at (3,5.2) {};
+\node[g_circle, name path=1, label=below left:{$0$}] (0l) at (0,0) {};
+\node[g_circle, name path=1, label=below right:{$0$}] (0r) at (6,0) {};
+
+\node[b_circle, name path=1, label=below:{$1$}] (1b) at (2,0) {};
+\node[b_circle, name path=1, label=left:{$1$}] (1l) at ($(0l)!0.33!(0t)$) {};
+\node[b_circle, name path=1, label=right:{$1$}] (1r) at ($(0r)!0.33!(0t)$) {};
+
+\node[b_circle, name path=1, label=below:{$2$}] (2b) at (4,0) {};
+\node[b_circle, name path=1, label=left:{$2$}] (2l) at ($(0l)!0.66!(0t)$) {};
+\node[b_circle, name path=1, label=right:{$2$}] (2r) at ($(0r)!0.66!(0t)$) {};
+
+\node[b_circle, name path=1, label=above:{}] (3) at ($(1l)!0.33!(1b)$) {};
+\node[b_circle, name path=1, label=above right:{}] (4) at ($(1l)!0.66!(1b)$) {};
+
+\node[b_circle, name path=1, label=above right:{}] (5) at ($(2l)!0.33!(2r)$) {};
+\node[b_circle, name path=1, label=below: {}] (6) at ($(2l)!0.66!(2r)$) {};
+
+\node[b_circle, name path=1, label=above:{}] (7) at ($(2b)!0.5!(1r)$) {};
+
+\path[gray, line width = 4pt,draw] (2l) to (1l);
+\path[gray, line width = 4pt,draw] (2r) to (1r);
+\path[gray, line width = 4pt,draw] (2b) to (1b);
+
+\path[-,draw] (1r) to (6);
+\path[-,draw] (1l) to (5);
+\path[-,draw] (3) to (5);
+\path[-,draw] (4) to (5);
+\path[-,draw] (4) to (7);
+\path[-,draw] (2b) to (4);
+\path[-,draw] (7) to (5);
+\path[-,draw] (7) to (6);
+
+\path[-,draw] (1l) to (3) to (4) to (1b);
+\path[-,draw] (2l) to (5) to (6) to (2r);
+\path[-,draw] (2b) to (7) to (1r);
+
+
+\path[->-, draw] (1l) to (0l);
+\path[->-, draw] (3) to (0l);
+\path[->-, draw] (4) to (0l);
+\path[->-, draw] (1b) to (0l);
+
+\path[->-, draw] (2l) to (0t);
+\path[->-, draw] (5) to (0t);
+\path[->-, draw] (6) to (0t);
+\path[->-, draw] (2r) to (0t);
+
+\path[->-, draw] (2b) to (0r);
+\path[->-, draw] (7) to (0r);
+\path[->-, draw] (1r) to (0r);
+
+\path[->, draw] ($(2l)!0.5!(5)$) to ($($(2l)!0.5!(5)$)!0.35!(0t)$);
+\path[->, draw] ($(6)!0.5!(5)$) to ($($(6)!0.5!(5)$)!0.35!(0t)$);
+\path[->, draw] ($(2r)!0.5!(6)$) to ($($(2r)!0.5!(6)$)!0.35!(0t)$);
+
+\path[->, draw] ($(1l)!0.5!(3)$) to ($($(1l)!0.5!(3)$)!0.35!(0l)$);
+\path[->, draw] ($(3)!0.5!(4)$) to ($($(3)!0.5!(4)$)!0.35!(0l)$);
+\path[->, draw] ($(4)!0.5!(1b)$) to ($($(4)!0.5!(1b)$)!0.35!(0l)$);
+
+\path[->, draw] ($(1r)!0.5!(7)$) to ($($(1r)!0.5!(7)$)!0.35!(0r)$);
+\path[->, draw] ($(2b)!0.5!(7)$) to ($($(2b)!0.5!(7)$)!0.35!(0r)$);
+
+\path[->, draw] ($(2b)!0.5!(4)$) to ($($(2b)!0.5!(4)$)!0.35!(1b)$);
+\path[->, draw] ($(4)!0.5!(7)$) to ($($(4)!0.5!(7)$)!0.35!(2b)$);
+
+
+\path[->, draw] ($(5)!0.5!(4)$) to ($($(5)!0.5!(4)$)!0.35!(3)$);
+\path[->, draw] ($(5)!0.5!(3)$) to ($($(5)!0.5!(3)$)!0.35!(1l)$);
+\path[->, draw] ($(5)!0.5!(1l)$) to ($($(5)!0.5!(1l)$)!0.35!(2l)$);
+
+\path[->, draw] ($(5)!0.5!(7)$) to ($($(5)!0.5!(7)$)!0.35!(6)$);
+\path[->, draw] ($(6)!0.5!(7)$) to ($($(6)!0.5!(7)$)!0.35!(1r)$);
+\path[->, draw] ($(6)!0.5!(1r)$) to ($($(6)!0.5!(1r)$)!0.35!(2r)$);
+
+\fill[opacity = 0.2] (4.center) -- (7.center) -- (5.center);
+\end{tikzpicture}

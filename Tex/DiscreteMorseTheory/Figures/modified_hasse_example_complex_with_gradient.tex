@@ -1,0 +1,39 @@
+\begin{tikzpicture}
+
+\node[circle, name path=0, label=below:{$[v_0]$}] (0) at (-1.5,0) {};
+\node[circle, name path=1, label=below:{$[v_1]$}] (1) at (0,0) {};
+\node[circle, name path=2, label=below:{$[v_2]$}] (2) at  (1.5,0) {};
+
+\node[circle, name path=2, label=below:{$[v_3]$}] (3) at  (3,0) {};
+
+\node[circle, name path=0, label=right:{$[v_0,v_1]$}] (01) at (-1.6,1.5) {};
+\node[circle, name path=1, label=right:{$[v_0,v_2]$}] (02) at (0,1.5) {};
+\node[circle, name path=2, label=right:{$[v_1,v_2]$}] (12) at  (1.6,1.5) {};
+
+\node[circle, name path=2, label=above:{$[v_1,v_3]$}] (13) at  (3.5,1.5) {};
+\node[circle, name path=2, label=above:{$[v_2,v_3]$}] (23) at  (5,1.5) {};
+
+\node[circle, name path=1, label=above:{$[v_0,v_1,v_2]$}] (012) at (0,3) {};
+
+\draw[->, thick] (01) to (0);
+\draw[->, thick] (02) to (0);
+
+\draw[->, thick] (1) to (01);
+
+\draw[->, thick] (12) to (1);
+
+\draw[->, thick] (2) to (02);
+
+\draw[->, thick] (12) to (2);
+\draw[->, thick] (13) to (1);
+
+\draw[->, thick] (3) to (13);
+
+\draw[->, thick] (23) to (2);
+\draw[->, thick] (23) to (3);
+\draw[->, thick] (012) to (01);
+\draw[->, thick] (012) to (02);
+
+\draw[->, thick] (12) to (012);
+
+\end{tikzpicture}

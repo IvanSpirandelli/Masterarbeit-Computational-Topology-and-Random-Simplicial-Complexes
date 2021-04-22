@@ -2,7 +2,7 @@ import timeit
 from copy import copy
 
 import Algorithms.point_cloud_generator as pcg
-import Algorithms.alpha_complex_wrapper as acw
+import Algorithms.alphacomplexwrapper as acw
 import Algorithms.random_discrete_morse as rdm
 import Algorithms.column_algo.column_algorithm as ca
 import Examples.rand_k_n_p as rnp
@@ -38,7 +38,7 @@ def uniform_comparison(n,dim, console_outs = False):
                                              [[1, 0, 0], [0, 1, 0], [0 ,0 ,1]],
                                              [[1, 0, 0], [0, 1, 0], [0 ,0 ,1]]])
 
-    alpha = acw.alpha_complex_wrapper(points, False)
+    alpha = acw.AlphaComplexWrapper(points, False)
     filtration = [elem[0] for elem in alpha.filtration]
 
     start = timeit.default_timer()
@@ -153,7 +153,7 @@ def analyse_gap(n, iterations):
         print(i)
         points = pcg.multivariate_gaussian(n, [0, 0, 0], [[1, 0, 0], [0, 1, 0], [0 ,0 ,1]])
 
-        alpha = acw.alpha_complex_wrapper(points, False)
+        alpha = acw.AlphaComplexWrapper(points, False)
         filtration = [elem[0] for elem in alpha.filtration]
 
         mat1 = ca.build_boundary_matrix_from_filtration(filtration)

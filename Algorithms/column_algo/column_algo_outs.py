@@ -28,8 +28,11 @@ def mat_visualization(mat,xticklabels = None, yticklabels = None, xrange = None,
     ax.set_yticks(np.arange(0, len(yticklabels), 1))
 
     # Labels for major ticks
-    ax.set_xticklabels(xticklabels)
-    ax.set_yticklabels(yticklabels)
+    if xticklabels != None:
+        ax.set_xticklabels(xticklabels)
+
+    if yticklabels != None:
+        ax.set_yticklabels(yticklabels)
 
     # Minor ticks
     ax.set_xticks(np.arange(-.5, len(xticklabels), 1), minor=True)
@@ -56,6 +59,49 @@ def mat_visualization(mat,xticklabels = None, yticklabels = None, xrange = None,
 
     plt.show()
     plt.close()
+
+
+def mat_visualization_for_gui(mat, ax, xticklabels = None, yticklabels = None, xrange = None, yrange = None, name = "tmp", index = 0):
+
+    if(xrange == None):
+        xrange = (0,len(mat[0]))
+    if(yrange == None):
+        yrange = (0,len(mat))
+
+
+    cropmat = mat[yrange[0]:yrange[-1], xrange[0]:xrange[-1]]
+    cmap = ListedColormap(['xkcd:lightblue','xkcd:maroon'])
+    im = ax.matshow(cropmat, origin="upper",cmap = cmap)
+
+    # ax = plot.gca()
+
+    # Major ticks
+    ax.set_xticks(np.arange(0, len(xticklabels), 1))
+    ax.set_yticks(np.arange(0, len(yticklabels), 1))
+
+    # Labels for major ticks
+    if xticklabels != None:
+        ax.set_xticklabels(xticklabels)
+
+    if yticklabels != None:
+        ax.set_yticklabels(yticklabels)
+
+    # Minor ticks
+    ax.set_xticks(np.arange(-.5, len(xticklabels), 1), minor=True)
+    ax.set_yticks(np.arange(-.5, len(yticklabels), 1), minor=True)
+
+    fontsize = 12
+
+    for tick in ax.get_xticklabels():
+        tick.set_fontsize(fontsize)
+        tick.set_rotation(90)
+
+    for tick in ax.get_yticklabels():
+        tick.set_fontsize(fontsize)
+    # ax.subplots_adjust(left=-0.25)
+
+    # Gridlines based on minor ticks
+    ax.grid(which='minor', color='w', linestyle='-', linewidth=2)
 
 
 def extract_and_print_pairs(filtration, lowest_ones):

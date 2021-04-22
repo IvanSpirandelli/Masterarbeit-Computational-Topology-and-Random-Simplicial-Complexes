@@ -1,0 +1,74 @@
+\usepackage{tikz}
+\usepackage{xinttools}
+\usetikzlibrary{calc,%
+%    arrows.meta,%
+    intersections,%
+    decorations.pathreplacing,%
+    decorations.markings,
+    arrows,%
+    petri,%
+    topaths}
+    
+\colorlet{customer_col}{myblue}
+\colorlet{facility_col}{myred}
+\colorlet{supplier_col}{mygreen}
+
+\colorlet{cost_col}{olive}
+\colorlet{assignment_col}{black}
+
+\colorlet{d1_col}{white!40!black}
+\colorlet{d2_col}{white!60!black}
+
+\def\n{23} % number of random points
+\def\maxxy{3} % random points are in [-\maxxy,\maxxy]x[-\maxxy,\maxxy]
+
+%\definecolor{customer_col}{RGB}{26,0,192}
+%\definecolor{facility_col}{RGB}{180,0,0}
+%\definecolor{cost_col}{RGB}{255,105,66}
+%\definecolor{assignment_col}{RGB}{255,255,255}
+
+\tikzset{
+customer/.style={draw, circle, fill = customer_col, text height = 0pt, text width = 0pt, text depth = 0pt, inner sep = 0pt, minimum size = 5pt},
+supplier/.style={draw, circle, fill = supplier_col, text height = 0pt, text width = 0pt, text depth = 0pt, inner sep = 0pt, minimum size = 5pt},
+facility/.style={draw, rectangle, fill = facility_col, text height = 0pt, text width = 0pt, text depth = 0pt, inner sep = 0pt, minimum size = 5pt},
+cost/.style={thick,cost_col},
+assignment/.style={ultra thick, assignment_col},
+d1/.style={ultra thick, d1_col},
+d2/.style={ultra thick, d2_col}
+}
+
+\def\biglen{8cm} % playing role of infinity (should be < .25\maxdimen)
+% define the "half plane" to be clipped (#1 = half the distance between cells)
+
+\tikzset{
+  half plane/.style={ to path={
+       ($(\tikztostart)!.5!(\tikztotarget)!#1!(\tikztotarget)!\biglen!90:(\tikztotarget)$)
+    -- ($(\tikztostart)!.5!(\tikztotarget)!#1!(\tikztotarget)!\biglen!-90:(\tikztotarget)$)
+    -- ([turn]0,2*\biglen) -- ([turn]0,2*\biglen) -- cycle}},
+  half plane/.default={0.5pt}
+}
+vechain vs iota
+     
+\tikzset{node1/.style={circle, draw, fill=white, inner sep=0pt, text width=0pt, text height=0pt, text depth=0pt, minimum size = 5pt,}, edge1/.style={draw, thick},
+}
+\tikzset{node2/.style={shape=circle, draw, fill=white, inner sep=0pt, text width=0pt, text height=0pt, text depth=0pt, minimum size = 3pt}, edge2/.style={},
+}
+
+
+\tikzset{circle/.style={shape=circle, draw, fill=white, line width = 1pt,inner sep=0pt, text width=0pt, text height=0pt, text depth=0pt, minimum size = 4pt}, edge2/.style={},
+}
+\tikzset{b_circle/.style={shape=circle, draw, fill=black, inner sep=0pt, text width=0pt, text height=0pt, text depth=0pt, minimum size = 4pt}, edge2/.style={},
+}
+\tikzset{g_circle/.style={shape=circle, fill=gray, inner sep=0pt, text width=0pt, text height=0pt, text depth=0pt, minimum size = 6pt}, edge2/.style={},
+}
+
+\tikzset{->-/.style={decoration={
+  markings,
+  mark=at position .5 with {\arrow{latex}}},postaction={decorate}}}
+
+\tikzset{->/.style={decoration={
+  markings,
+  mark=at position 1 with {\arrow{latex}}},postaction={decorate}}}
+  
+\usepackage{tkz-berge}
+

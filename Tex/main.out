@@ -1,0 +1,30 @@
+\BOOKMARK [0][-]{chapter.1}{Simplicial Complexes}{}% 1
+\BOOKMARK [1][-]{section.1.1}{Basic Definitions}{chapter.1}% 2
+\BOOKMARK [1][-]{section.1.2}{Filtrations from Point Clouds}{chapter.1}% 3
+\BOOKMARK [1][-]{section.1.3}{Simplicial Collapses}{chapter.1}% 4
+\BOOKMARK [0][-]{chapter.2}{Homology}{}% 5
+\BOOKMARK [1][-]{section.2.1}{Homology Groups}{chapter.2}% 6
+\BOOKMARK [1][-]{section.2.2}{Boundary Matrices and Smith Normal Form}{chapter.2}% 7
+\BOOKMARK [1][-]{section.2.3}{Persistent Homology}{chapter.2}% 8
+\BOOKMARK [1][-]{section.2.4}{Matrix Reduction}{chapter.2}% 9
+\BOOKMARK [1][-]{section.2.5}{Reduction with a Twist}{chapter.2}% 10
+\BOOKMARK [0][-]{chapter.3}{Discrete Morse Theory}{}% 11
+\BOOKMARK [1][-]{section.3.1}{Discrete Morse Functions}{chapter.3}% 12
+\BOOKMARK [1][-]{section.3.2}{Gradient Vector Fields}{chapter.3}% 13
+\BOOKMARK [1][-]{section.3.3}{Morse Matchings}{chapter.3}% 14
+\BOOKMARK [0][-]{chapter.4}{Connecting Morse Theory and Persistence Computations}{}% 15
+\BOOKMARK [1][-]{section.4.1}{Discrete Morse Functions and Filtrations}{chapter.4}% 16
+\BOOKMARK [1][-]{section.4.2}{V-Paths and Standard Reduction}{chapter.4}% 17
+\BOOKMARK [1][-]{section.4.3}{Worst Case Example for the running time of the standard reduction algorithm}{chapter.4}% 18
+\BOOKMARK [1][-]{section.4.4}{Conclusions}{chapter.4}% 19
+\BOOKMARK [0][-]{chapter.5}{Random Simplicial Complexes}{}% 20
+\BOOKMARK [1][-]{section.5.1}{Erd\366s\205R\351nyi Analogues}{chapter.5}% 21
+\BOOKMARK [1][-]{section.5.2}{Apparent Pairs on Random 2-Complexes}{chapter.5}% 22
+\BOOKMARK [1][-]{section.5.3}{Perfect Random Discrete Morse}{chapter.5}% 23
+\BOOKMARK [1][-]{section.5.4}{Alpha Complexes on Random Point Clouds}{chapter.5}% 24
+\BOOKMARK [2][-]{subsection.5.4.1}{Uniform Distribution}{section.5.4}% 25
+\BOOKMARK [2][-]{subsection.5.4.2}{Multivariate Gaussian Distribution}{section.5.4}% 26
+\BOOKMARK [2][-]{subsection.5.4.3}{Gaussian Mixture}{section.5.4}% 27
+\BOOKMARK [1][-]{section.5.5}{Apparent Pairs on Random Alpha Complexes}{chapter.5}% 28
+\BOOKMARK [1][-]{section.5.6}{Apparent Pairs in Standard Reduction}{chapter.5}% 29
+\BOOKMARK [1][-]{section.5.7}{Conclusions}{chapter.5}% 30

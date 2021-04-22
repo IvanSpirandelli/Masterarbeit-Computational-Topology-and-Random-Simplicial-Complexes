@@ -1,0 +1,73 @@
+\begin{tikzpicture}
+
+\draw[-, thick, name path = c1] (-1.5,1) circle (0.97);
+\draw[-, thick, name path = c2] (0,2) circle (0.97);
+\draw[-, thick, name path = c3] (1.5,1) circle (0.97);
+\draw[-, thick, name path = c31] (2,1)  circle (0.97);
+\draw[-, thick, name path = c32] (1.75,0.5) circle (0.97);
+\draw[-, thick, name path = c4] (-0.25,-0.25)  circle (0.97);
+\draw[-, thick, name path = c5] (-2,-0.6) circle (0.97);
+
+\node[] (1) at (-1.5,1) {};
+\node[] (2) at  (0,2) {};
+\node[] (3) at  (1.5,1) {};
+\node[] (31) at  (2,1) {};
+\node[] (32) at  (1.75,0.5) {};
+\node[] (4) at (-0.25,-0.25) {};
+\node[] (5) at  (-2,-0.6) {};
+
+\fill[radius=0.96,
+    white]
+      (1) circle[]
+      (2) circle[]
+      (4) circle[]
+      (5) circle[]
+      (31) circle[]
+      (32) circle[]
+      (3) circle[];
+      
+\fill[radius=0.96,
+    opacity = 0.25]
+      (1) circle[]
+      (2) circle[]
+      (4) circle[]
+      (5) circle[]
+      (31) circle[]
+      (32) circle[]
+      (3) circle[];
+      
+\node[b_circle, name path=1, label=left:{}] at (1){};
+\node[b_circle, name path=2, label=above:{}] at (2){};
+\node[b_circle, name path=3, label=right:{}] at (3){};
+\node[b_circle, name path=3, label=right:{}] at (31){};
+\node[b_circle, name path=3, label=right:{}] at (32){};
+\node[b_circle, name path=4, label=below:{}] at (4){};
+\node[b_circle, name path=5, label=below left:{}] at (5){};
+
+\path[name intersections={of= c1 and c2,by={i1,i2}}];
+\draw[-, thick] (i1) to (i2);
+
+\path[name intersections={of= c2 and c3,by={i3,i4}}];
+\draw[-, thick] (i3) to (i4);
+
+\path[name intersections={of= c1 and c4,by={i5,i6}}];
+\draw[-, thick] (i5) to (i6);
+
+\path[name intersections={of= c1 and c5,by={i7,i8}}];
+\draw[-, thick] (i7) to (i8);
+
+\path[name intersections={of= c4 and c5,by={i9,i10}}];
+\draw[-, thick] (i9) to (i10);
+
+\node[inner sep = 0] (i) at (1.75,0.75){};
+
+\path[name intersections={of= c3 and c31,by={i11,i12}}];
+\draw[-, thick] (1.75,0.75) to (i11);
+
+\path[name intersections={of= c31 and c32,by={i13,i14}}];
+\draw[-, thick] (1.75,0.75) to (i14);
+
+\path[name intersections={of= c3 and c32,by={i15,i16}}];
+\draw[-, thick] (1.75,0.75) to (i16);
+
+\end{tikzpicture}

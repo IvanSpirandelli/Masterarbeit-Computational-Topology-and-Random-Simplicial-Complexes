@@ -1,0 +1,16 @@
+\begin{tikzpicture}
+
+
+\node[b_circle, name path=0, label=left:{$v_1$}] (0) at (0,0) {};
+
+\node[b_circle, name path=1, label=right:{$v_2$}] (1) at (2,0) {};
+
+\node[b_circle, name path=2, label=above:{$v_3$}] (2) at  (1,2) {};
+
+
+
+\draw[thick] (2) to (1);
+\draw[thick] (1) to (0);
+\draw[thick] (2) to (0);
+
+\end{tikzpicture}

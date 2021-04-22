@@ -1,0 +1,327 @@
+
+\chapter{Discrete Morse Theory}
+Discrete Morse theory is a toolkit that enables us to study and analyze simplicial complexes. It is a combinatorial adaptation of Morse Theory, which is a powerful tool to study manifolds. In general, discrete Morse theory can applied to finite regular CW complexes but we will restrict ourselves to simplicial complexes. The theory is used in a variety of applications like denoising, mesh compression, topological data analysis, and homology computations. Especially the latter will be of interest later on. This chapter is based on an overview by Robin Foreman who also developed the theory. See \cite{Morse+Users+Guide}. 
+
+\section{Discrete Morse Functions}
+
+\begin{defi}
+\label{def:discrete_morse_function}
+Let $K$ be a simplicial complex. A function $f: K \rightarrow \mathbb{R}$ is called a discrete Morse function, if for every $\sigma^{(k)} \in K$ the following two conditions are fulfilled: 
+\begin{enumerate}
+    \item $|\{\tau^{(k+1)}>\sigma^{(k)} \mid f(\tau) \leq f(\sigma)\}| \leq 1$,
+    \item $|\{\gamma^{(k-1)}<\sigma^{(k)} \mid f(\gamma) \geq f(\sigma)\}| \leq 1$.	
+\end{enumerate}{}
+\end{defi}
+
+This means that a Morse function assigns values to simplices in a simplicial complex, such that simplices of higher dimensions get larger values, with at most one exception for each simplex and its facets and cofacets.
+
+The following Figure \ref{fig:morse_function} illustrates two functions that assign values to the faces of a triangle. The numbers represent the assigned function values. 
+
+\begin{figure}[H]
+%\centering%
+
+\begin{subfigure}[c]{0.49\textwidth}
+\begin{center}
+\input{DiscreteMorseTheory/Figures/no_morse_function_example}
+\subcaption{Not a Morse function}
+\end{center}
+\end{subfigure}
+\begin{subfigure}[c]{0.49\textwidth}
+\begin{center}
+\input{DiscreteMorseTheory/Figures/morse_function_example}
+\subcaption{A Morse function}
+\end{center}
+
+\end{subfigure}
+%\captionsetup{width=0.9\textwidth}
+\caption{Two different functions that assign real values to the simplices of the 1-skeleton of a simplicial complex defined by a  triangle.}
+\label{fig:morse_function}
+\end{figure}
+
+In subfigure (a) the given function is not a Morse function. The vertex at the top gets assigned value 4, while its two adjacent edges get assigned smaller values. I.e., the first condition of Definition \ref{def:discrete_morse_function} is not fulfilled. Furthermore the edge on the right, which gets assigned a value of $2$ has higher values assigned to its two vertices. This violates the second condition of the definition of a discrete Morse function.
+
+The function depicted in Figure \ref{fig:morse_function} (b) however is a Morse function. Note that the vertices with assigned values 3 and 4 have an adjacent edge with a smaller value, but in both cases it is just one. Also the triangle has only one edge with higher function value. 
+
+We now describe faces with exceptional values.
+
+\begin{defi}
+Let $f$ be a discrete Morse function on a simplicial complex $K$. A simplex $\sigma^{(k)} \in K$ is called \textbf{critical} w.r.t $f$, if both of the following conditions hold:
+\begin{enumerate}
+    \item $|\{\tau^{(k+1)}>\sigma \mid f(\tau) \leq f(\sigma)\}| = 0,$
+    \item $|\{\gamma^{(k-1)}<\sigma \mid f(\gamma) \geq f(\sigma)\}| = 0.$
+\end{enumerate}
+\end{defi}
+
+In the example of Figure \ref{fig:morse_function} (b) the vertex $0$ is the only critical face.
+
+One of the central theorems of discrete Morse theory are the so called Morse inequalities which link discrete Morse theory to homology. We will merely state and briefly discuss these results, since the proofs require further theory for which we refer the reader to the aforementioned 
+\enquote{A Users Guide To Discrete Morse Theory} by Robin Forman  \cite{Morse+Users+Guide}. 
+
+Let $K$ be a simplicial complex of dimension $n$ with a discrete Morse function $f$. Let $m_k$ denote the number of critical cells of dimension $k$ with respect to $f$. Finally, recall the definition of the Betti numbers, \[
+\beta_k = \operatorname{rank}(H_k(K)),
+\] from the last chapter. 
+
+\begin{thm} Let $K$, $n$, $f$, $m_k$ and $\beta_k$ be defined as above. Then the following hold. 
+\textbf{Weak Morse Inequalities}: 
+\begin{enumerate}
+    \item for each $k = 0,1,\dots,n$, \[
+        m_k \geq \beta_k.
+    \]
+    \item $m_0 - m_1 + m_2 - \dots + (-1)^n m_n = \beta_0 - \beta_1 + \beta_2 - \dots + (-1)^n \beta_n.$
+\end{enumerate}
+\textbf{Strong Morse Inequalities}: \\
+For each $k = 0,1,2,\dots,n,n+1$, 
+\[
+    m_k - m_{k-1} + \dots + (-1)^k m_0 \geq \beta_k - \beta_{k-1} + \dots + (-1)^k \beta_0.
+\]
+\label{thm:morse_ineq}
+\end{thm}
+
+The weak Morse inequalities tell us that the number of critical cells of some dimension with respect to a given discrete Morse function on $K$ is bounded from below by the Betti number of the same dimension. Furthermore the alternating sums of the Betti numbers and the numbers of critical cells are equal. 
+
+The strong Morse inequalities even show, that the alternating sum of critical cells up to any dimension is an upper bound on the alternating sum of the Betti numbers up to the same dimension.
+
+\section{Gradient Vector Fields}
+In this section we discuss a concept that encodes the information of a discrete Morse function we are usually interested in, without the need to consider the actual function values. 
+
+We will begin by defining discrete vector fields on simplicial complexes.
+
+\begin{defi}
+Let $K$ be a simplicial complex. Consider the set of pairs
+\[
+V = \{(\sigma^{(k)}, \tau^{(k+1)}) \in K \times K \mid \sigma < \tau\}.
+\]
+We call $V$ a \textbf{discrete vector field} of $K$ if each simplex in $K$ is part of at most one pair in $V$.
+\label{def:discrete_vector_field}
+\end{defi}
+
+% Figure \ref{def:discrete_vector_field} gives an example.
+
+% \begin{figure}[H]
+% %\centering%
+
+% \begin{subfigure}[c]{0.99\textwidth}
+% \begin{center}
+% \input{DiscreteMorseTheory/Figures/discrete_vector_field}
+% \end{center}
+% \end{subfigure}
+
+% \caption{A discrete vector field on the triangle complex.}
+% \label{fig:discrete_vector_field}
+% \end{figure}
+
+As we will see, Morse functions can be encoded as a special type of discrete vector fields, which we will call \textbf{gradient vector fields} or \textbf{discrete gradients}. In the following we illustrate how the exceptions of a Morse function in the sense of Definition \ref{def:discrete_morse_function} form the pairs of a discrete vector field.
+
+Let $f$ be the Morse function in Figure \ref{fig:morse_function} (b).
+Consider the preimage $f^{-1}((-\infty,2])$. It is the set consisting of the top vertex and both its adjacent edges. This is not a simplicial complex. But it can be extended to one by including the missing vertices on both ends of the edges.
+
+\begin{defi}
+Let $K$ be a simplicial complex and $f$ a discrete Morse function on $K$. Let $c \in \mathbb{R}$. We define the \textbf{level subcomplex} as 
+\[
+K(c) = \bigcup_{f(\sigma)\leq c} \, \bigcup_{\gamma\leq\sigma} \gamma
+\]
+\end{defi}
+
+\begin{figure}[H]
+%\centering%
+\begin{subfigure}[b]{0.49\textwidth}
+\begin{center}
+\input{DiscreteMorseTheory/Figures/sub_lvl_0}
+\subcaption{Level subcomplex $K(0)$}
+\end{center}
+\end{subfigure}
+\begin{subfigure}[b]{0.49\textwidth}
+\begin{center}
+\input{DiscreteMorseTheory/Figures/sub_lvl_1}
+\subcaption{$K(1)$}
+\end{center}
+\end{subfigure}
+\begin{subfigure}[b]{0.49\textwidth}
+\begin{center}
+\input{DiscreteMorseTheory/Figures/sub_lvl_2}
+\subcaption{$K(2) = K(3) = K(4)$}
+\end{center}
+\end{subfigure}
+\begin{subfigure}[b]{0.49\textwidth}
+\begin{center}
+\input{DiscreteMorseTheory/Figures/sub_lvl_3}
+\subcaption{$K(5) = K(6) = K$}
+\end{center}
+\end{subfigure}
+%\captionsetup{width=0.9\textwidth}
+\caption{Level subcomplexes of the previous example.}
+\label{fig:level_sub_complex}
+\end{figure}
+Note that in Figure \ref{fig:level_sub_complex} the level subcomplex $K(1)$ contains the vertex with assigned value $3$, while being distinct form the level subcomplex $K(3)$.
+
+Now look at simplicial complex $K$ and discrete Morse function $f$ as depicted in Figures \ref{fig:morse_function}(b) and \ref{fig:level_sub_complex}(d). The only critical simplex is the top vertex with assigned value of $0$. When considering the sequence of level subcomplexes, we realize that the non-critical simplices appear in pairs. Depending on the function values several pairs might appear in a single step or the subcomplexes of several levels might be equal. Nonetheless, if simplices appear, they appear in pairs.
+
+In our example, the edge $f^{-1}(1)$ is not critical because it has vertex $f^{-1}(3)$ as a facet. At the same time vertex $f^{-1}(3)$ is not critical because it has the edge $f^{-1}(1)$ as a cofacet. This observation leads us to the following definition.
+
+\begin{defi}
+Let $K$ be a simplicial complex and $f$ a discrete Morse function on $K$.
+We call the set of pairs \[
+    V = \{(\sigma^{(k)}, \tau^{(k+1)}) \in K \times K  \mid  \sigma < \tau, f(\sigma) \geq f(\tau)\}
+\]
+the \textbf{gradient vector field} of $f$ on $K$. 
+\end{defi}
+
+Notice, that if there were two cofacets of some $\sigma^{(k)}$ with smaller function values, then $f$ would not be a discrete Morse function. The same holds true if there were a face $\tau^{(k+1)}$ with two facets with higher function values.
+
+We will visualize the pairs as arrows pointing from the lower dimensional simplex to the higher dimensional one. This visualization also motivates that we sometimes call the lower dimensional element of a pair in a discrete gradient its \textbf{tail} and the higher dimensional element its \textbf{head}. We will also refer to these pairs as the \textbf{gradient pairs} of $f$.
+
+The following figure illustrates this in the case of our previous example.
+
+\begin{figure}[H]
+%\centering%
+
+\begin{subfigure}[c]{0.99\textwidth}
+\begin{center}
+\input{DiscreteMorseTheory/Figures/discrete_gradient_simple}
+\end{center}
+\end{subfigure}
+
+\caption{The discrete gradient of $f$ and $K$.}
+\label{fig:discrete_gradient}
+\end{figure}
+
+This might remind us of the simplicial collapses discussed in Section \ref{sec:simplicial_collapses} and indeed a sequence of collapses defines a discrete gradient. 
+
+A natural interest regarding vector fields is the analysis of the flows they induce. In our case this motivates the following definition.
+
+\begin{defi}
+Let $V$ be a discrete vector field on some simplicial complex~$K$. Then a sequence of simplices \[
+P = \sigma_0^{(k)}, \tau_0^{(k+1)}, \sigma_1^{(k)}, \tau_1^{(k+1)}, \dots , \sigma_m^{(k)}, \tau_m^{(k+1)}, \sigma_{m+1}^{(k)}
+\]
+is called \textbf{$\bm{V}$-path}, if $(\sigma_i, \tau_i) \in V$ and $\tau_i > \sigma_{i+1} \neq \sigma_i$ for $i = 0,\dots,m$. 
+\end{defi}
+
+The \textbf{length} of the $V$-path is $m+1$ and is denoted as $\operatorname{length}(P)$. We call the $(k+1)$-dimensional elements the \textbf{higher dimensional elements} of the path and the $k$-dimensional elements its \textbf{lower dimensional elements}. Furthermore, as the following theorem
+shows, a discrete gradient of a Morse function $f$ is decreasing along its $V$-paths.
+
+\begin{thm}
+\label{thm:vpath_decrease}
+Let $f$ be a discrete Morse function and $V$ its gradient vector field. A sequence of simplices \[
+\sigma_0^{(k)}, \tau_0^{(k+1)}, \sigma_1^{(k)}, \tau_1^{(k+1)}, \dots , \sigma_m^{(k)}, \tau_m^{(k+1)}, \sigma_{m+1}^{(k)}
+\] is a $V$-path if and only if $\sigma_i < \tau_i > \sigma_{i+1}$ for each $i = 0,\dots,m$ and 
+\[
+f(\sigma_0) \geq f(\tau_0) > f(\sigma_1) \geq \dots \geq f(\tau_m) > f(\sigma_{m+1}).
+\]
+\end{thm}
+\begin{proof}
+The definitions of the discrete gradient and $V$-path imply that $f(\sigma_i) \geq f(\tau_i)$ for each $i = 0,\dots,m$. Furthermore, the definition of $V$-paths also implies that $\tau_i > \sigma_{i+1}$. Now, for the sake of contradiction assume that $f(\tau_i) \leq f(\sigma_{i+1})$. This means $\tau_i$ has two facets with function values that are greater or equal to that of $\tau$. This contradicts the assumption that $f$ is a discrete Morse function. Hence $f(\tau_i) < f(\sigma_{i+1})$.
+\end{proof}
+This theorem implies that if $f$ is a Morse function, then there are no nontrivial closed $V$-paths. The following theorem states that also the converse is true. This gives us a characterization of discrete vector fields, that are gradient vector fields of a Morse function.
+
+\begin{thm}
+\label{thm:closed_v_paths}
+A discrete vector field $V$ is the gradient vector field of a discrete Morse function if and only if there are no non-trivial closed $V$-paths.
+\end{thm}
+
+We will get back to this theorem in the next section, since we will establish some further theory that simplifies the proof. 
+
+To conclude and summarize this section we state: Every gradient vector field is a discrete vector field and every discrete vector field without non-trivial closed $V$-paths is a gradient vector field. We will sometimes refer to $V$-paths of gradient vector fields as gradient paths. Note that a gradient vector field corresponds to a whole family of discrete Morse functions.
+
+\section{Morse Matchings}
+The combinatorial point of view, we will discuss now, was originally explored in \cite{CHARI2000101} and then also included and extended in \cite{Morse+Users+Guide}[Chapter 6]. 
+
+Consider a simplicial complex $K$. The \textbf{Hasse diagram} $H_K = (W_K, E_K)$ of $K$ is a directed graph with the elements of $K$ being the vertices $W_K$ and $E_K \coloneqq \{(\tau^{(p+1)},\sigma^{(p)}) \mid \sigma, \tau \in K, \sigma < \tau)\}$ the directed edges from a simplex to its facets. 
+
+We deviate from the popular notation of graphs, where vertex sets are denoted by $V$, since we stick to Forman's notation of gradient vector fields being denoted by $V$. 
+
+In the following Figure \ref{fig:hasse_diagram_example} we see the same simplicial complex as in Figure \ref{fig:simplicial_homology_example} and its corresponding Hasse diagram.
+
+\begin{figure}[H]
+%\centering%
+\begin{subfigure}[c]{0.99\textwidth}
+\begin{center}
+\input{DiscreteMorseTheory/Figures/example_complex}
+\end{center}
+\end{subfigure}
+\begin{subfigure}[c]{0.99\textwidth}
+\begin{center}
+\input{DiscreteMorseTheory/Figures/hasse_example_complex}
+\end{center}
+\end{subfigure}
+\caption{Simplical complex $K$ and the corresponding Hasse diagram $H_K$.}
+\label{fig:hasse_diagram_example}
+\end{figure}
+
+Note that usually Hasse diagrams also include the empty set, which is excluded in our case. We will now modify the Hasse diagram with respect to a discrete vector field as specified in the following definition.
+
+\begin{defi}
+Let $H_K = (W_K, E_K)$ be the Hasse diagram of a simplicial complex $K$ and let $V$ be a discrete vector field on $K$. Define $E_K^V$ as the set of edges where for each edge $e = (\tau^{(p+1)}, \sigma^{(p)}) \in E_K$ we include $e$ in $E_K^V$ if the pair $(\sigma^{(p)}, \tau^{(p+1)})$ is not in $V$ and otherwise include $e^{-1}$. We call $H_K^V = (W_K, E_K^V)$ the \textbf{modified Hasse diagram} of $K$ and $V$.
+\end{defi}
+
+What this means is, that we just flip all edges in the Hasse diagram that correspond to pairs in the discrete vector field. Note, that a pair $(\sigma, \tau) \in V$ corresponds to an reversed edge from $\sigma$ to $\tau$ in the modified Hasse diagram $H_K^V$. In the following figure we depict a gradient vector field on the simplicial complex from Figure \ref{fig:hasse_diagram_example} and its modified Hasse diagram. Looking at this example we can see that $V$-paths in our gradient vector field correspond to directed paths in the modified Hasse diagram.
+
+\begin{figure}[H]
+%\centering%
+\begin{subfigure}[c]{0.99\textwidth}
+\begin{center}
+\input{DiscreteMorseTheory/Figures/example_complex_with_gradient}
+\end{center}
+\end{subfigure}
+\begin{subfigure}[c]{0.99\textwidth}
+\begin{center}
+\input{DiscreteMorseTheory/Figures/modified_hasse_example_complex_with_gradient}
+\end{center}
+\end{subfigure}
+\caption{Simplical complex $K$ and the corresponding Hasse diagram $H_K$.}
+\label{fig:modified_hasse_diagram_example}
+\end{figure}
+
+\begin{thm}
+\label{thm:v_paths_hasse}
+For simplicial complex $K$, discrete vector field $V$ and modified Hasse diagram $H_K^V$, it holds that there are no nontrivial closed $V$-paths if and only if there are no closed directed paths in $H_K^V$. 
+\end{thm}
+\begin{proof}
+We will prove the negated equivalence, i.e., there is a nontrivial closed $V$-path in $V$ if and only if there is a closed directed path in $H_K^V$.
+
+\enquote{$\Rightarrow$}: Assume we have a discrete vector field $V$ on $K$ and a nontrivial closed directed path $P = \sigma_0, \tau_0, \dots ,\tau_n, \sigma_0$. By definition of the $V$-path we know that $(\sigma_0,\tau_0) \in V$ hence there is a directed edge from $\sigma_i$ to $\tau_i$ in $H_K^V$. Further we know by definition of the $V$-path, that $\tau_i > \sigma_{i+1}$, and since every simplex can only be part of a single pair in $V$ we have that $(\sigma_{i+1}, \tau_i) \notin V$, hence we have a directed edge in $H_K^V$. In summary this means there is a directed edge in $H_K^V$ between any two consecutive elements of $P$ and therefore a closed directed path. 
+
+\enquote{$\Leftarrow$} Whenever we have a directed edge $e = (\sigma^{(k)}, \tau^{(k+1)})$ pointing upwards with respect to dimension of the simplices corresponding to its vertices, then all outgoing edges of $\tau^{(k+1)}$ point to a vertex corresponding to a $k$-dimensional simplex. Otherwise, $\tau$ would need to be paired with a higher dimensional simplex in $V$, which would mean that $\tau$ is part of two pairs in $V$, which contradicts the definition of discrete vector fields. 
+
+Hence any closed directed path in $H_K^V$ can only consist of vertices that correspond to simplices from two consecutive dimensions. We have already seen the one to one correspondence of these closed directed paths to nontrivial closed $V$-paths when proving the other direction. Therefore the existence of a closed directed path in $H_K^V$ implies the existence of a nontrivial closed $V$-path. 
+\end{proof}
+A standard result from graph theory states that for a directed graph $G$ there exists a real valued function of the vertices that is strictly decreasing along each directed path if and only if there are no directed cycles in $G$. This together with Theorem \ref{thm:v_paths_hasse} implies Theorem \ref{thm:closed_v_paths}. \\
+
+When only considering the edges in $H_K^V$ that were flipped by some gradient vector field $V$ it follows from the definition that each simplex is only part of one such edge. Furthermore, from Theorem \ref{thm:v_paths_hasse} we get that there are no directed cycles. In a combinatorial sense, $V$ defines a partial matching of $H_K$, which motivates the following definition.
+
+\begin{defi}
+For simplicial complex $K$ and directed Hasse diagram $H_K = (W_K, E_K)$ let $E_* \subseteq E_K$ be a subset of edges and let $E_*^{-1} \coloneqq \{e^{-1} \mid e \in E_*\}$. If every $w \in W_K$ is incident to at most one edge in $E_*^{-1}$ and there are no closed directed paths in $H_K^V \coloneqq (W_K, E_*^{-1} \cup (E_K \setminus E_*) )$, we call $E_*$ a \textbf{Morse matching} of $K$.
+\end{defi}
+
+As we have already indicated in terms of notation, the edges of a Morse matching $E_*$ correspond to a discrete vector field $V$ and the resulting modified Hasse diagram has no closed directed paths. Therefore $V$ is a gradient vector field. From now on we will not distinguish between a Morse matching and a gradient vector field, since they encapsulate the same information. 
+
+Imagine we have some simplicial complex $K$ and a Morse matching on it. Let us denote the number of critical cells with respect to the Morse matching in dimension $k$ by $m_k$. Then by the Morse inequalities, i.e., Theorem \ref{thm:morse_ineq}, we know that the Betti numbers $\beta_k$ of this complex are bounded from above by $m_k$, i.e., \[
+\beta_k \leq m_k, \text{ for all }  k \in \mathbb{N}_0.
+\]
+
+\begin{defi}
+Let $K$ be a simplicial complex with Morse matching $E_*$. If $m_k = \beta_k$ for all $k$ we say that $E_*$ is a \textbf{perfect} Morse matching. If there is no other Morse matching with fewer critical cells, we say that the Morse matching is \textbf{optimal}.
+\end{defi}
+
+Optimal Morse matchings need not be perfect. After stating a slight reformulation of Theorem 6.4 from \cite{Morse+Users+Guide}, we will discuss a particular example.
+
+\begin{thm}
+\label{thm:matching_collapse}
+Let $K$ be a simplicial complex and let $E_*$ be a Morse matching of $K$, such that the single critical face of $K$ with respect to $E_*$ is a vertex. Then $K$ is collapsible and hence contractible.
+\end{thm}
+
+Now recall the example of the Dunce hat from Figure \ref{fig:dunce}. The Dunce hat is contractible, i.e., is homotopic to a point. Therefore all homology groups of dimension one or higher are trivial and the zeroth Betti number equals one \cite{MunkresElements}[Chapter 2], i.e., $\beta_0 = 1$ and $\beta_k = 0$, for all $k\in \mathbb{N}_{\geq 1}$. This means a perfect Morse matching has a single critical vertex. For the sake of contradiction, assume that we have a perfect Morse matching for the Dunce hat. Theorem \ref{thm:matching_collapse} implies that the Dunce hat is collapsible, which is a contradiction. Therefore there can be no perfect Morse matching for the Dunce hat or any other simplicial complex that is contractible but not collapsible. Figure \ref{fig:morse_dunce} shows an optimal Morse matching for the Dunce hat.
+
+\begin{figure}[H]
+%\centering%
+\begin{subfigure}[c]{0.95\textwidth}
+\begin{center}
+\input{DiscreteMorseTheory/Figures/morse_dunce}
+\end{center}
+\end{subfigure}
+\caption{The dunce hat with an optimal Morse matching.}
+\label{fig:morse_dunce}
+\end{figure}
+
+In Figure \ref{fig:morse_dunce}, the critical cells of the depicted discrete gradient are in gray, while all other cells are part of a pair indicated by an arrow. Since we know there can be no perfect Morse matching, the minimal number of critical cells has to be at least two. We also know that the alternating sums of Betti numbers and critical cells must be equal by the discrete Morse inequalities. Hence, if we have a critical edge, there also must be at least an additional critical vertex or a critical triangle. Yielding a total number of critical cells of at least three. This suffices to know that the matching in our example is indeed optimal. 
+
+As Joswig and Pfetsch have shown in \cite{joswig2004computing}, the computation of optimal Morse matchings is NP-hard. In the same article they introduce a linear program that computes optimal Morse matchings, which works well for small instances, but takes too long to solve for large instances, as would be expected. A random approach to compute Morse matchings was developed by Benedetti and Lutz \cite{lutzbenedetti}, in which they try to match and collapse free faces until this is not possible, in which case a random maximum dimensional face is declared critical and deleted. This approach sometimes yields a perfect Morse matching, which is a certificate for the complex being collapsible. A Python version of the random discrete Morse algorithm, which was developed for this thesis, can be found on: \href{https://github.com/IvanSpirandelli/Masterarbeit/blob/master/Algorithms/random_discrete_morse.py}{[GitHub]}, also see \cite{github}. 

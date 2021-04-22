@@ -1,0 +1,37 @@
+\begin{tikzpicture}
+
+\node[circle, name path=0, label=below:{0}] (0) at (0,0,-0.5) {};
+
+\node[circle, name path=1, label=below:{3}] (3) at (0,0,4) {};
+
+\node[circle, name path=2, label=right:{2}] (2) at  (3,0,-3) {};
+
+\node[circle, name path=2, label=left:{1}] (1) at  (-3,0,-3) {};
+
+\node[b_circle, name path=1, label=left:{6}] (6) at (0,0.75,2) {};
+
+\node[b_circle, name path=1, label=left:{5}] (5) at (0.5,.075,-2) {};
+
+
+\node[b_circle, name path=1, label=right:{4}] (4) at (-1.5,0.75,-1.5) {};
+
+\draw[dashed, thick] (1) to (2) to (3) to (1);
+\draw[dotted, thick] (0) to (1);
+\draw[dotted, thick] (0) to (2);
+\draw[dotted, thick] (0) to (3);
+
+\draw[thick] (3) to (6);
+\draw[thick] (0) to (6);
+
+
+\draw[thick] (2) to (5);
+\draw[thick] (0) to (5);
+
+\draw[thick] (1) to (4);
+\draw[thick] (0) to (4);
+
+\fill[opacity = 0.4] (0.center) -- (1.center) -- (4.center);
+\fill[opacity = 0.4] (0.center) -- (2.center) -- (5.center);
+\fill[opacity = 0.4] (0.center) -- (3.center) -- (6.center);
+
+\end{tikzpicture}

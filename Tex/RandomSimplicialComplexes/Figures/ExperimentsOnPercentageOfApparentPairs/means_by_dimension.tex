@@ -1,0 +1,32 @@
+% This file was created by tikzplotlib v0.9.2.
+\begin{tikzpicture}
+
+\definecolor{color0}{rgb}{0.12156862745098,0.466666666666667,0.705882352941177}
+
+\begin{axis}[
+tick align=outside,
+tick pos=left,
+xlabel = dimension,
+ylabel = average $q$,
+ylabel style={rotate=-90},
+x grid style={white!69.0196078431373!black},
+xmin=1.8, xmax=6.2,
+xtick style={color=black},
+y grid style={white!69.0196078431373!black},
+ymin=72.9311706171997, ymax=100.719766845615,
+ytick style={color=black},
+scatter/classes={%
+    a={mark=o,draw=color0}}
+]
+\addplot [scatter,only marks,%
+    scatter src=explicit symbolic,color0]
+table {%
+2 74.1942886275822
+3 90.1118873880867
+4 95.401135865881
+5 98.4740519194136
+6 99.4566488352329
+};
+\end{axis}
+
+\end{tikzpicture}
